@@ -1,3 +1,5 @@
+export type PageTab = 'home' | 'work' | 'profile' | 'contact';
+
 export interface Project {
   id: number;
   title: string;

@@ -7,11 +7,38 @@ import Footer from './components/Footer';
 import AIChat from './components/AIChat';
 import LiquidBackground from './components/LiquidBackground';
 import ScrollHUD from './components/ScrollHUD';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { PageTab } from './types';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
 const App: React.FC = () => {
-  const [isHovering, setIsHovering] = useState(false);
-  
+  const [activePage, setActivePage] = useState<PageTab>(() => {
+    const hash = window.location.hash.replace('#', '') as PageTab;
+    if (['home', 'work', 'profile', 'contact'].includes(hash)) {
+      return hash;
+    }
+    return 'home';
+  });
+
+  const handleNavigate = (page: PageTab) => {
+    setActivePage(page);
+    window.location.hash = page === 'home' ? '' : page;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '') as PageTab;
+      if (['home', 'work', 'profile', 'contact'].includes(hash)) {
+        setActivePage(hash);
+      } else if (!window.location.hash) {
+        setActivePage('home');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   // Mouse position for custom cursor
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -25,19 +52,16 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      // Offset by 10px to center the 20px cursor
       mouseX.set(e.clientX - 10);
       mouseY.set(e.clientY - 10);
     };
 
     const handleMouseEnter = () => {
-      setIsHovering(true);
-      cursorScale.set(2.5); // Scale up smoothly on hover
+      cursorScale.set(2.2);
     };
     
     const handleMouseLeave = () => {
-      setIsHovering(false);
-      cursorScale.set(1); // Scale down smoothly
+      cursorScale.set(1);
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -51,10 +75,8 @@ const App: React.FC = () => {
       });
     };
 
-    // Initial add
     addHoverListeners();
 
-    // Re-add listeners when DOM changes (simple observer)
     const observer = new MutationObserver(addHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -67,21 +89,66 @@ const App: React.FC = () => {
         el.removeEventListener('mouseleave', handleMouseLeave);
       });
     };
-  }, [mouseX, mouseY, cursorScale]);
+  }, [mouseX, mouseY, cursorScale, activePage]);
 
   return (
     <>
       <LiquidBackground />
       <ScrollHUD />
       
-      <div className="relative z-10 cursor-none">
-        <Header />
+      <div className="relative z-10 cursor-none min-h-screen flex flex-col justify-between">
+        <Header activePage={activePage} onNavigate={handleNavigate} />
         
-        <main>
-          <Hero />
-          <ProjectList />
-          <About />
-          <Footer />
+        <main className="flex-grow">
+          <AnimatePresence mode="wait">
+            {activePage === 'home' && (
+              <motion.div
+                key="home"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <Hero onNavigate={handleNavigate} />
+              </motion.div>
+            )}
+
+            {activePage === 'work' && (
+              <motion.div
+                key="work"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <ProjectList />
+              </motion.div>
+            )}
+
+            {activePage === 'profile' && (
+              <motion.div
+                key="profile"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <About />
+              </motion.div>
+            )}
+
+            {activePage === 'contact' && (
+              <motion.div
+                key="contact"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <Footer />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
 
         <AIChat />
@@ -89,7 +156,7 @@ const App: React.FC = () => {
 
       {/* Custom Liquid Glass Cursor */}
       <motion.div
-        className="glass-cursor fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999]"
+        className="glass-cursor fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999] hidden md:block"
         style={{
           x: cursorX,
           y: cursorY,

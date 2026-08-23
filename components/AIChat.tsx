@@ -102,11 +102,19 @@ const AIChat: React.FC = () => {
               <button 
                 onClick={handleSend}
                 disabled={isLoading}
-                className="w-10 h-10 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00cce6] disabled:opacity-50 transition-colors"
+                aria-label="Send message"
+                className="w-10 h-10 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00cce6] hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                  className="w-[26px] h-[26px] translate-x-[-1.5px] translate-y-[-0.5px]"
+                >
+                  {/* Top Wing */}
+                  <path d="M 2.8 13.2 L 21.2 3.2 L 10.6 12.8 L 8.0 13.8 Z" />
+                  {/* Bottom Wing & Ventral Keel */}
+                  <path d="M 21.2 3.2 L 16.8 17.8 L 12.0 16.0 L 10.0 20.8 L 10.0 14.6 L 12.6 13.6 Z" />
                 </svg>
               </button>
             </div>
