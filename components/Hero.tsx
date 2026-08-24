@@ -32,7 +32,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   const handleWorkClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onNavigate) {
-      onNavigate('work');
+      onNavigate('projects');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };

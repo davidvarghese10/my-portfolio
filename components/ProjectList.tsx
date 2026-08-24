@@ -8,7 +8,7 @@ const ProjectList: React.FC = () => {
 
   return (
     <div 
-      id="work" 
+      id="projects" 
       ref={containerRef}
       className="pt-36 pb-24 px-6 md:px-12 bg-transparent relative z-10 min-h-screen flex flex-col justify-between"
     >

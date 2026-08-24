@@ -2,8 +2,10 @@ import { Project, NavItem, SkillData } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: 'home' },
-  { label: 'Work', href: 'work' },
   { label: 'Profile', href: 'profile' },
+  { label: 'Projects', href: 'projects' },
+  { label: 'Certificates', href: 'certificates' },
+  { label: 'Achievements', href: 'achievements' },
   { label: 'Contact', href: 'contact' },
 ];
 
