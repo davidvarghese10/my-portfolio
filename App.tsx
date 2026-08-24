@@ -51,6 +51,11 @@ const App: React.FC = () => {
   const cursorScale = useSpring(1, { stiffness: 200, damping: 25 });
 
   useEffect(() => {
+    // Only activate cursor tracking on pointer/hover capable desktop devices
+    if (typeof window === 'undefined' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      return;
+    }
+
     const moveCursor = (e: MouseEvent) => {
       mouseX.set(e.clientX - 10);
       mouseY.set(e.clientY - 10);
@@ -64,7 +69,7 @@ const App: React.FC = () => {
       cursorScale.set(1);
     };
 
-    window.addEventListener('mousemove', moveCursor);
+    window.addEventListener('mousemove', moveCursor, { passive: true });
 
     // Add hover listeners to interactive elements
     const addHoverListeners = () => {
@@ -96,7 +101,7 @@ const App: React.FC = () => {
       <LiquidBackground />
       <ScrollHUD />
       
-      <div className="relative z-10 cursor-none min-h-screen flex flex-col justify-between">
+      <div className="relative z-10 md:cursor-none min-h-screen flex flex-col justify-between">
         <Header activePage={activePage} onNavigate={handleNavigate} />
         
         <main className="flex-grow">
