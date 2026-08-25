@@ -9,10 +9,12 @@ import Footer from './components/Footer';
 import AIChat from './components/AIChat';
 import LiquidBackground from './components/LiquidBackground';
 import ScrollHUD from './components/ScrollHUD';
+import AppleHelloLoader from './components/AppleHelloLoader';
 import { PageTab } from './types';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
 const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState<PageTab>(() => {
     const hash = window.location.hash.replace('#', '') as PageTab;
     if (['home', 'projects', 'profile', 'achievements', 'certificates', 'contact'].includes(hash)) {
@@ -106,6 +108,10 @@ const App: React.FC = () => {
 
   return (
     <>
+      {isLoading && (
+        <AppleHelloLoader onComplete={() => setIsLoading(false)} />
+      )}
+
       <LiquidBackground />
       <ScrollHUD />
       
