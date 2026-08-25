@@ -34,6 +34,9 @@ jobs:
         run: npm ci || npm install
 
       - name: Build production bundle
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npm run build
 
       - name: Setup Pages
@@ -42,7 +45,7 @@ jobs:
       - name: Upload dist artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
