@@ -1,17 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Loader2, Sparkles, Send } from 'lucide-react';
 import { sendChatMessage } from '../services/geminiService';
 import { ChatMessage } from '../types';
+
+const SUGGESTIONS = [
+  "Tell me about Intevra",
+  "What is David's tech stack?",
+  "Show me his certifications",
+  "How can I contact David?"
+];
 
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: "Hi! I'm Livoq. Ask me anything about my projects or skills." }
+    { role: 'model', text: "Hi! I'm Livoq, David Varghese's AI assistant. Ask me anything about his projects, skills, certifications, or how to get in touch!" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,24 +27,57 @@ const AIChat: React.FC = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isOpen]);
+  }, [messages, isLoading, isOpen]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 150);
+    }
+  }, [isOpen]);
 
-    const userMsg = input.trim();
+  const executeSend = async (textToSend: string) => {
+    if (!textToSend.trim() || isLoading) return;
+
+    const userMsg = textToSend.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    const newHistory: ChatMessage[] = [...messages, { role: 'user', text: userMsg }];
+    setMessages(newHistory);
     setIsLoading(true);
 
-    const responseText = await sendChatMessage(userMsg);
+    try {
+      const responseText = await sendChatMessage(userMsg, newHistory);
+      setMessages(prev => [...prev, { role: 'model', text: responseText }]);
+    } catch (err) {
+      console.error("Chat error:", err);
+      setMessages(prev => [...prev, { 
+        role: 'model', 
+        text: "I'm available to answer any questions about David's projects, skills, or contact info. Feel free to ask or reach out to david3005.scd@gmail.com!" 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    setMessages(prev => [...prev, { role: 'model', text: responseText }]);
-    setIsLoading(false);
+  const handleSend = () => {
+    executeSend(input);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleSend();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  // Helper to format text with bold styling
+  const renderFormattedText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
   };
 
   return (
@@ -44,78 +85,104 @@ const AIChat: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            initial={{ opacity: 0, y: 20, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="mb-4 w-80 md:w-96 bg-black/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col"
-            style={{ maxHeight: '500px', minHeight: '400px' }}
+            exit={{ opacity: 0, y: 20, scale: 0.92 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-4 w-[90vw] sm:w-96 bg-black/80 backdrop-blur-2xl rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,243,255,0.15)] border border-white/10 overflow-hidden flex flex-col"
+            style={{ maxHeight: '540px', minHeight: '440px' }}
           >
             {/* Header */}
-            <div className="bg-black/40 text-white p-4 flex justify-between items-center border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#00f3ff] animate-pulse"></div>
-                <span className="font-medium text-sm">Livoq Assistant</span>
+            <div className="bg-black/50 text-white p-4 flex justify-between items-center border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="relative flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#00f3ff] animate-pulse"></div>
+                  <div className="absolute w-4 h-4 rounded-full bg-[#00f3ff]/20 animate-ping"></div>
+                </div>
+                <div>
+                  <span className="font-medium text-sm text-white tracking-wide block">Livoq Assistant</span>
+                  <span className="text-[10px] font-mono text-[#00f3ff]/80 block -mt-0.5">David's AI Intelligence</span>
+                </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-[#00f3ff] transition-colors">
+              <button 
+                onClick={() => setIsOpen(false)} 
+                aria-label="Close assistant"
+                className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors"
+              >
                 <X size={18} />
               </button>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-transparent scroll-smooth">
+            {/* Messages Container */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-transparent scroll-smooth">
               {messages.map((msg, idx) => (
                 <div 
                   key={idx} 
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div 
-                    className={`max-w-[80%] p-3 rounded-2xl text-sm backdrop-blur-sm ${
+                    className={`max-w-[85%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
                       msg.role === 'user' 
-                        ? 'bg-[#00f3ff] text-black rounded-tr-none font-medium' 
-                        : 'bg-white/10 border border-white/5 text-gray-200 rounded-tl-none'
+                        ? 'bg-[#00f3ff] text-black font-medium rounded-tr-none shadow-[0_2px_12px_rgba(0,243,255,0.25)]' 
+                        : 'bg-white/10 border border-white/10 text-neutral-200 rounded-tl-none backdrop-blur-md'
                     }`}
                   >
-                    {msg.text}
+                    {renderFormattedText(msg.text)}
                   </div>
                 </div>
               ))}
+
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white/10 border border-white/5 p-3 rounded-2xl rounded-tl-none">
+                  <div className="bg-white/10 border border-white/10 p-3 rounded-2xl rounded-tl-none flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-[#00f3ff]" />
+                    <span className="text-xs text-neutral-400 font-mono">Thinking...</span>
                   </div>
                 </div>
               )}
+
+              {/* Quick suggestions if few messages */}
+              {messages.length <= 2 && !isLoading && (
+                <div className="pt-2">
+                  <div className="flex items-center gap-1 text-[11px] font-mono text-neutral-400 mb-2">
+                    <Sparkles size={11} className="text-[#00f3ff]" />
+                    Suggested queries:
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SUGGESTIONS.map((suggestion, sIdx) => (
+                      <button
+                        key={sIdx}
+                        onClick={() => executeSend(suggestion)}
+                        className="text-[11px] font-mono text-neutral-300 bg-white/5 hover:bg-[#00f3ff]/10 hover:border-[#00f3ff]/40 hover:text-[#00f3ff] border border-white/10 px-2.5 py-1 rounded-full transition-all text-left"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
-            <div className="p-3 bg-black/40 border-t border-white/10 flex gap-2">
+            {/* Input Bar */}
+            <div className="p-3 bg-black/60 border-t border-white/10 flex items-center gap-2">
               <input
+                ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
-                placeholder="Type a message..."
-                className="flex-1 bg-white/5 text-white placeholder-neutral-500 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#00f3ff] border border-white/5"
+                placeholder="Ask about projects, skills, contact..."
+                className="flex-1 bg-white/5 text-white placeholder-neutral-500 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#00f3ff] border border-white/10"
               />
               <button 
                 onClick={handleSend}
-                disabled={isLoading}
+                disabled={isLoading || !input.trim()}
                 aria-label="Send message"
-                className="w-10 h-10 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00cce6] hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]"
+                className="w-9 h-9 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00d9e6] hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shadow-[0_0_12px_rgba(0,243,255,0.3)]"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="currentColor"
-                  className="w-[26px] h-[26px] translate-x-[-1.5px] translate-y-[-0.5px]"
-                >
-                  {/* Top Wing */}
-                  <path d="M 2.8 13.2 L 21.2 3.2 L 10.6 12.8 L 8.0 13.8 Z" />
-                  {/* Bottom Wing & Ventral Keel */}
-                  <path d="M 21.2 3.2 L 16.8 17.8 L 12.0 16.0 L 10.0 20.8 L 10.0 14.6 L 12.6 13.6 Z" />
-                </svg>
+                <Send size={15} className="translate-x-[0.5px]" />
               </button>
             </div>
           </motion.div>
@@ -127,27 +194,27 @@ const AIChat: React.FC = () => {
         whileHover="hover"
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="liquid-glass-button p-4 rounded-full flex items-center overflow-hidden"
+        className="liquid-glass-button p-4 rounded-full flex items-center overflow-hidden shadow-2xl"
       >
         <div className="relative z-10">
-            {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+          {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
         </div>
         
         {!isOpen && (
-            <motion.div
-                variants={{
-                    idle: { width: 0, opacity: 0, marginLeft: 0 },
-                    hover: { 
-                        width: "auto", 
-                        opacity: 1, 
-                        marginLeft: 12,
-                        transition: { type: "spring", stiffness: 300, damping: 30, mass: 0.8 }
-                    }
-                }}
-                className="overflow-hidden whitespace-nowrap text-sm font-bold"
-            >
-                Ask AI
-            </motion.div>
+          <motion.div
+            variants={{
+              idle: { width: 0, opacity: 0, marginLeft: 0 },
+              hover: { 
+                width: "auto", 
+                opacity: 1, 
+                marginLeft: 12,
+                transition: { type: "spring", stiffness: 300, damping: 30, mass: 0.8 }
+              }
+            }}
+            className="overflow-hidden whitespace-nowrap text-sm font-bold tracking-wide"
+          >
+            Ask AI
+          </motion.div>
         )}
       </motion.button>
     </div>
