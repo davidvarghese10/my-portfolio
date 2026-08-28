@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NAV_ITEMS } from '../constants';
 import { PageTab } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,108 +9,188 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNav = (page: PageTab) => {
     onNavigate(page);
-    setMobileMenuOpen(false);
+    setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Find active label for center indicator
+  const currentItem = NAV_ITEMS.find((item) => (item.href as PageTab) === activePage);
+  const activeLabel = currentItem ? currentItem.label : 'Home';
+
+  // Close menu on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
-    <motion.header 
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 md:py-6 text-[#00f3ff] bg-black/40 backdrop-blur-md border-b border-white/5"
-    >
-      <button 
-        onClick={() => handleNav('home')} 
-        className="text-md font-bold tracking-tighter uppercase flex flex-col leading-none text-left cursor-pointer hover:opacity-80 transition-opacity"
+    <>
+      <motion.header 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 md:py-6 text-[#00f3ff] bg-black/40 backdrop-blur-md border-b border-white/5"
       >
-        <span className="text-[#00f3ff]">David</span>
-        <span className="text-white">Varghese</span>
-      </button>
-      
-      <nav className="hidden md:block">
-        <ul className="flex items-center space-x-10">
-          {NAV_ITEMS.map((item) => {
-            const pageKey = item.href as PageTab;
-            const isActive = activePage === pageKey;
-            return (
-              <li key={item.label} className="relative">
-                <button 
-                  onClick={() => handleNav(pageKey)}
-                  className={`text-xs font-bold transition-all duration-300 uppercase tracking-widest px-3 py-1.5 rounded-full cursor-pointer flex items-center ${
-                    isActive 
-                      ? 'text-[#00f3ff] bg-[#00f3ff]/10 shadow-[0_0_15px_rgba(0,243,255,0.2)] border border-[#00f3ff]/30' 
-                      : 'text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+        {/* Brand / Logo */}
+        <button 
+          onClick={() => handleNav('home')} 
+          className="text-md font-bold tracking-tighter uppercase flex flex-col leading-none text-left cursor-pointer hover:opacity-80 transition-opacity z-50"
+        >
+          <span className="text-[#00f3ff]">David</span>
+          <span className="text-white">Varghese</span>
+        </button>
 
-      <div className="text-xs font-mono font-medium tracking-widest uppercase hidden md:block text-neutral-400">
-        Kerala, IN
-      </div>
+        {/* Selected Tab Display at Center Top (hidden on Home) */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center pointer-events-none">
+          <AnimatePresence mode="wait">
+            {activePage !== 'home' && (
+              <motion.div
+                key={activePage}
+                initial={{ opacity: 0, scale: 0.9, y: -4 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 4 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-[#00f3ff] bg-[#00f3ff]/10 shadow-[0_0_15px_rgba(0,243,255,0.25)] border border-[#00f3ff]/30 backdrop-blur-md pointer-events-auto"
+              >
+                <span>{activeLabel}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-      {/* Mobile Hamburger Button */}
-      <button 
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="md:hidden text-white p-2 focus:outline-none cursor-pointer"
-        aria-label="Toggle menu"
-      >
-        {mobileMenuOpen ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        )}
-      </button>
-
-      {/* Mobile Drawer Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col gap-4 md:hidden shadow-2xl"
+        {/* Animated Hamburger Button (3 lines directly morph into Over-Under Interlaced 'X') */}
+        <motion.button 
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="relative z-50 flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#00f3ff]/40 shadow-lg cursor-pointer transition-all duration-300 group"
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          whileTap={{ scale: 0.94 }}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className={`w-6 h-6 transition-all duration-300 ${
+              menuOpen ? 'text-[#00f3ff] drop-shadow-[0_0_8px_rgba(0,243,255,0.7)]' : 'text-white group-hover:text-[#00f3ff]'
+            }`}
+            fill="none"
           >
-            {NAV_ITEMS.map((item) => {
-              const pageKey = item.href as PageTab;
-              const isActive = activePage === pageKey;
-              return (
-                <button
-                  key={item.label}
-                  onClick={() => handleNav(pageKey)}
-                  className={`text-left text-sm font-bold uppercase tracking-widest py-2 px-3 rounded-lg flex items-center justify-between ${
-                    isActive 
-                      ? 'text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30' 
-                      : 'text-neutral-300 hover:text-white'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {isActive && <span className="w-2 h-2 rounded-full bg-[#00f3ff]" />}
-                </button>
-              );
-            })}
+            {/* Top Line -> Top-Left Branch of Interlaced X */}
+            <motion.line
+              animate={
+                menuOpen
+                  ? { x1: 4.5, y1: 4.5, x2: 9.5, y2: 9.5, stroke: '#00f3ff' }
+                  : { x1: 3.5, y1: 6.5, x2: 20.5, y2: 6.5, stroke: 'currentColor' }
+              }
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+
+            {/* Middle Line -> Continuous Bottom-Left to Top-Right Diagonal of Interlaced X */}
+            <motion.line
+              animate={
+                menuOpen
+                  ? { x1: 4.5, y1: 19.5, x2: 19.5, y2: 4.5, stroke: '#00f3ff' }
+                  : { x1: 3.5, y1: 12, x2: 20.5, y2: 12, stroke: 'currentColor' }
+              }
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+
+            {/* Bottom Line -> Bottom-Right Branch of Interlaced X */}
+            <motion.line
+              animate={
+                menuOpen
+                  ? { x1: 14.5, y1: 14.5, x2: 19.5, y2: 19.5, stroke: '#00f3ff' }
+                  : { x1: 3.5, y1: 17.5, x2: 20.5, y2: 17.5, stroke: 'currentColor' }
+              }
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </motion.button>
+      </motion.header>
+
+      {/* Fullscreen Cyberpunk Glass Overlay Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-2xl flex flex-col justify-between px-8 md:px-20 pt-28 pb-12 overflow-y-auto"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setMenuOpen(false);
+            }}
+          >
+            {/* Ambient Background Glows */}
+            <div className="absolute top-1/4 right-10 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#00f3ff]/5 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Navigation List */}
+            <div className="relative z-10 my-auto py-6 max-w-4xl">
+              <ul className="space-y-4 md:space-y-6">
+                {NAV_ITEMS.map((item, idx) => {
+                  const pageKey = item.href as PageTab;
+                  const isActive = activePage === pageKey;
+                  return (
+                    <motion.li
+                      key={item.label}
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.35, delay: idx * 0.04 }}
+                    >
+                      <button
+                        onClick={() => handleNav(pageKey)}
+                        className={`group flex items-baseline gap-4 md:gap-8 text-left cursor-pointer transition-all duration-300 w-full py-1 ${
+                          isActive ? 'text-[#00f3ff]' : 'text-neutral-400 hover:text-white'
+                        }`}
+                      >
+                        <span className="font-mono text-xs md:text-sm text-neutral-600 group-hover:text-[#00f3ff] transition-colors">
+                          {String(idx + 1).padStart(2, '0')} //
+                        </span>
+                        <span className="text-3xl sm:text-4xl md:text-6xl font-bold uppercase tracking-tight font-poppins group-hover:translate-x-3 md:group-hover:translate-x-4 transition-transform duration-300 flex items-center gap-4">
+                          {item.label}
+                          {isActive && (
+                            <span className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full bg-[#00f3ff] shadow-[0_0_15px_#00f3ff]" />
+                          )}
+                        </span>
+                      </button>
+                    </motion.li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* Menu Footer Info */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="relative z-10 pt-8 border-t border-white/10 flex justify-between items-center text-xs font-mono text-neutral-400"
+            >
+              <div>
+                <span className="text-white font-semibold">David Varghese</span> &bull; Kerala, India
+              </div>
+              <div className="text-neutral-500">
+                Portfolio &bull; 2026
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 };
 

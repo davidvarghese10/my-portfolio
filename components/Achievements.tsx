@@ -15,39 +15,39 @@ interface Achievement {
 const ACHIEVEMENTS: Achievement[] = [
   {
     id: 1,
-    title: "National Level Hackathon Finalist",
-    category: "Hackathon & Innovation",
+    title: "3rd Prize — Vibe Night Hackathon",
+    category: "Hackathon & Competition",
     year: "2025",
-    issuer: "TechFest / National Hackathon Series",
-    description: "Developed Intevra, an AI-powered interview integrity monitoring and fraud detection system, recognized among the top competing teams nationwide.",
-    highlight: "Top Finalist"
+    issuer: "Abhiyanthriki Tech Fest • Rajagiri School of Engineering & Technology",
+    description: "Secured 3rd Prize at Vibe Night, a hackathon conducted as part of the Abhiyanthriki Tech Fest at Rajagiri School of Engineering & Technology.",
+    highlight: "3rd Prize Winner"
   },
   {
     id: 2,
+    title: "National Level Hackathon Finalist — Hacksus",
+    category: "Hackathon & Innovation",
+    year: "2025",
+    issuer: "Hacksus • Rajagiri School of Engineering & Technology",
+    description: "Developed Intevra, an AI-powered interview integrity monitoring and fraud detection system, recognized among the top competing teams nationwide at Hacksus.",
+    highlight: "Top Finalist"
+  },
+  {
+    id: 3,
+    title: "Smart India Hackathon (SIH)",
+    category: "National Hackathon",
+    year: "2024 — 2025",
+    issuer: "Ministry of Education & AICTE",
+    description: "Participated in the Smart India Hackathon, gaining hands-on experience in problem solving and collaborative development.",
+    highlight: "Participant"
+  },
+  {
+    id: 4,
     title: "Algorithmic Problem Solving & Competitive Coding",
     category: "Algorithms & Logic",
     year: "2024 — Present",
     issuer: "LeetCode & Coding Platforms",
     description: "Actively solving algorithmic challenges across data structures, graph theory, dynamic programming, and mathematical optimization.",
     highlight: "Active Contributor"
-  },
-  {
-    id: 3,
-    title: "AI & Emerging Tech Research Showcase",
-    category: "Research & Systems",
-    year: "2024",
-    issuer: "Academic Symposium",
-    description: "Presented research and prototype implementations on symptom-based disease prediction models (MediSense AI) with high accuracy and explainability.",
-    highlight: "Showcase Selection"
-  },
-  {
-    id: 4,
-    title: "Open Source Development & Tooling",
-    category: "Open Source",
-    year: "2024 — 2025",
-    issuer: "GitHub Ecosystem",
-    description: "Created Equora (mathematical expression solver) and Aether (spatial weather dashboard) with modern TypeScript and responsive web motion physics.",
-    highlight: "Featured Projects"
   }
 ];
 

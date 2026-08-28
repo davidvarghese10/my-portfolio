@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import ProjectList from './components/ProjectList';
 import About from './components/About';
+import Experience from './components/Experience';
 import Education from './components/Education';
 import Achievements from './components/Achievements';
 import Certificates from './components/Certificates';
@@ -18,7 +19,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState<PageTab>(() => {
     const hash = window.location.hash.replace('#', '') as PageTab;
-    if (['home', 'profile', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
+    if (['home', 'profile', 'experience', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
       return hash;
     }
     // Backward compatibility for old #work link
@@ -29,6 +30,7 @@ const App: React.FC = () => {
   });
 
   const handleNavigate = (page: PageTab) => {
+    cursorScale.set(1);
     setActivePage(page);
     window.location.hash = page === 'home' ? '' : page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -36,8 +38,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleHashChange = () => {
+      cursorScale.set(1);
       const hash = window.location.hash.replace('#', '') as PageTab;
-      if (['home', 'profile', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
+      if (['home', 'profile', 'experience', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
         setActivePage(hash);
       } else if (hash === ('work' as any)) {
         setActivePage('projects');
@@ -51,8 +54,8 @@ const App: React.FC = () => {
   }, []);
 
   // Mouse position for custom cursor
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
   // Smooth spring animation for cursor movement
   const cursorX = useSpring(mouseX, { stiffness: 150, damping: 20 });
@@ -61,51 +64,60 @@ const App: React.FC = () => {
   // Smooth spring animation for cursor scale
   const cursorScale = useSpring(1, { stiffness: 200, damping: 25 });
 
+  // Reset cursor scale on page changes
+  useEffect(() => {
+    cursorScale.set(1);
+  }, [activePage]);
+
   useEffect(() => {
     // Only activate cursor tracking on pointer/hover capable desktop devices
     if (typeof window === 'undefined' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       return;
     }
 
-    const moveCursor = (e: MouseEvent) => {
-      mouseX.set(e.clientX - 10);
-      mouseY.set(e.clientY - 10);
+    const isHoverable = (target: EventTarget | null): boolean => {
+      if (!target || !(target instanceof Element)) return false;
+      return !!target.closest('a, button, input, textarea, select, [role="button"], .cursor-pointer');
     };
 
-    const handleMouseEnter = () => {
-      cursorScale.set(2.2);
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX - 10);
+      mouseY.set(e.clientY - 10);
+      if (isHoverable(e.target)) {
+        cursorScale.set(2.2);
+      } else {
+        cursorScale.set(1);
+      }
     };
-    
-    const handleMouseLeave = () => {
+
+    const handleMouseOver = (e: MouseEvent) => {
+      if (isHoverable(e.target)) {
+        cursorScale.set(2.2);
+      }
+    };
+
+    const handleMouseOut = (e: MouseEvent) => {
+      if (!e.relatedTarget || !isHoverable(e.relatedTarget)) {
+        cursorScale.set(1);
+      }
+    };
+
+    const handlePointerDown = () => {
       cursorScale.set(1);
     };
 
-    window.addEventListener('mousemove', moveCursor, { passive: true });
-
-    // Add hover listeners to interactive elements
-    const addHoverListeners = () => {
-      const hoverables = document.querySelectorAll('a, button, input, .cursor-pointer');
-      hoverables.forEach(el => {
-        el.addEventListener('mouseenter', handleMouseEnter);
-        el.addEventListener('mouseleave', handleMouseLeave);
-      });
-    };
-
-    addHoverListeners();
-
-    const observer = new MutationObserver(addHoverListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseover', handleMouseOver, { passive: true });
+    window.addEventListener('mouseout', handleMouseOut, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', moveCursor);
-      observer.disconnect();
-      const hoverables = document.querySelectorAll('a, button, input, .cursor-pointer');
-      hoverables.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mouseout', handleMouseOut);
+      window.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [mouseX, mouseY, cursorScale, activePage]);
+  }, [mouseX, mouseY, cursorScale]);
 
   return (
     <>
@@ -154,6 +166,18 @@ const App: React.FC = () => {
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               >
                 <About />
+              </motion.div>
+            )}
+
+            {activePage === 'experience' && (
+              <motion.div
+                key="experience"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <Experience />
               </motion.div>
             )}
 

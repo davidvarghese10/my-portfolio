@@ -29,10 +29,10 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
   const scrollIndicatorY = useTransform(scrollYProgress, [0, 0.25], [0, 30]);
 
-  const handleWorkClick = (e: React.MouseEvent) => {
+  const handleAboutClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onNavigate) {
-      onNavigate('projects');
+      onNavigate('profile');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -103,11 +103,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         className="flex justify-between items-end border-t border-neutral-800/80 pt-6 mt-6"
       >
         <button 
-          onClick={handleWorkClick}
+          onClick={handleAboutClick}
           className="group flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 hover:text-[#00f3ff] transition-colors cursor-pointer"
         >
           <span className="w-6 h-[1px] bg-neutral-600 group-hover:w-10 group-hover:bg-[#00f3ff] transition-all duration-300" />
-          Explore Works &rarr;
+          About Me &rarr;
         </button>
         <div className="text-xs font-mono text-neutral-500 hidden sm:block">
           &copy; 2026 David Varghese

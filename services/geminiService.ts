@@ -60,6 +60,7 @@ const SYSTEM_INSTRUCTION = `You are "Livoq", the intelligent, friendly, and arti
 ABOUT DAVID VARGHESE:
 - Identity: Computer Science and Engineering (CSE) student at Rajagiri School of Engineering & Technology, Kakkanad (2025–2029) and aspiring software developer based in Kerala, India.
 - Academic Excellence: Holds a perfect 10.00 / 10.00 SGPA across Semester 1 and Semester 2 in B.Tech CSE. Higher Secondary (XII) in Computer Science (with Maths) Stream from Devamatha CMI Public School (CBSE - 96.0%, 2023–2025). High School (X) from CMI Public School, Chalakudy (CBSE - 97.6%, 2022–2023).
+- Work Experience & Internship: 4-week Technical Internship at Edunet Foundation in collaboration with IBM SkillsBuild, covering cloud computing paradigms, AI foundations, and industry software workflows.
 - Focus Areas: Full-stack web development, software engineering, cybersecurity threat modeling, machine learning pipelines, and interactive UI design.
 - Email: david3005.scd@gmail.com
 - GitHub: https://github.com/davidvarghese10
@@ -86,10 +87,10 @@ VERIFIED CERTIFICATIONS (41 total accreditations, with 18 featured across IBM, C
 - Full Registry: https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/
 
 HONORS & ACHIEVEMENTS:
-- 5+ Hackathons Participated & National Level Hackathon Finalist with Intevra
+- 3rd Prize at Vibe Night Hackathon (Abhiyanthriki Tech Fest, Rajagiri School of Engineering & Technology)
+- National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology) with Intevra (AI fraud detection)
+- Smart India Hackathon (SIH) participant (problem solving & collaborative development)
 - Active algorithmic problem solver on LeetCode (profile: david_1000)
-- AI Research Showcase Selection for MediSense AI
-- Open-Source Contributor on GitHub (davidvarghese10)
 
 INSTRUCTIONS:
 - Answer naturally, helpfully, and concisely (typically 2-4 sentences or clean bullet points).
@@ -220,7 +221,12 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
     return "David's core technical toolkit comprises:\n• **Languages & Core**: OOP in Java, C Programming, DSA, Python, TypeScript, JavaScript, C/C++, SQL\n• **Frontend**: React, Tailwind CSS, Framer Motion, HTML5/CSS3\n• **Backend & ML**: Node.js, Express, REST APIs, Scikit-learn\n• **Core Disciplines**: Cybersecurity Threat Defense, DSA / LeetCode, UI/UX Motion Design";
   }
 
-  // 8. Bio, Background, Education & Location
+  // 8. Experience & Internship
+  if (query.includes('experience') || query.includes('internship') || query.includes('intern') || query.includes('edunet') || query.includes('ibm skillsbuild') || query.includes('skillsbuild') || query.includes('job') || query.includes('work experience')) {
+    return "David completed an intensive **4-Week Technical Internship at Edunet Foundation in collaboration with IBM SkillsBuild**. The program encompassed hands-on learning across foundational cloud architectures, artificial intelligence concepts, and real-world software engineering workflows. You can explore full details in the **Experience** tab!";
+  }
+
+  // 9. Bio, Background, Education & Location
   if (query.includes('education') || query.includes('college') || query.includes('university') || query.includes('degree') || query.includes('student') || query.includes('study') || query.includes('studying') || query.includes('school') || query.includes('rajagiri') || query.includes('sgpa') || query.includes('marks') || query.includes('grade')) {
     return "David Varghese is pursuing a **B.Tech in Computer Science and Engineering (CSE)** at **Rajagiri School of Engineering & Technology, Kakkanad** (2025–2029), maintaining a perfect **10.00 / 10.00 SGPA** in S1 & S2. He completed Class XII in the **Computer Science (with Maths) Stream** at **Devamatha CMI Public School** (CBSE, 96.0%) and Class X at **CMI Public School, Chalakudy** (CBSE, 97.6%). You can explore his full academic record in the **Education** tab!";
   }
@@ -239,8 +245,8 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
   }
 
   // 10. Achievements & Milestones
-  if (query.includes('achievement') || query.includes('award') || query.includes('hackathon') || query.includes('finalist') || query.includes('milestone') || query.includes('honor') || query.includes('won')) {
-    return "Key achievements for David include:\n• **National Level Hackathon Finalist (2025)** with Intevra\n• **Active Algorithmic Problem Solver** on LeetCode (`david_1000`)\n• **AI Research Showcase Selection (2024)** for MediSense AI\n• **Open-Source Software Development** on GitHub (`davidvarghese10`)";
+  if (query.includes('achievement') || query.includes('award') || query.includes('hackathon') || query.includes('finalist') || query.includes('milestone') || query.includes('honor') || query.includes('won') || query.includes('vibe night') || query.includes('hacksus') || query.includes('smart india')) {
+    return "Key achievements for David include:\n• **3rd Prize at Vibe Night Hackathon** (Abhiyanthriki Tech Fest, Rajagiri School of Engineering & Technology)\n• **National Level Hackathon Finalist — Hacksus** (Rajagiri School of Engineering & Technology) with Intevra\n• **Smart India Hackathon (SIH)** participant (hands-on problem solving & collaborative development)\n• **Algorithmic Problem Solving & Competitive Coding** on LeetCode (`david_1000`)";
   }
 
   // 11. Contact, Socials, Hiring & Collaboration
