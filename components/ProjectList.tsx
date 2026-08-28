@@ -31,7 +31,7 @@ const ProjectList: React.FC = () => {
           </div>
           <div className="text-right hidden md:block">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block mb-1">
-              (2024 — 2026)
+              (2023 — 2026)
             </span>
             <span className="text-[11px] font-mono text-[#00f3ff]/80">
               {PROJECTS.length} Featured Projects

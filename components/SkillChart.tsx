@@ -13,11 +13,11 @@ const SkillChart: React.FC = () => {
         className="w-full h-full"
       >
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SKILLS_DATA}>
+          <RadarChart cx="50%" cy="50%" outerRadius="65%" data={SKILLS_DATA}>
             <PolarGrid stroke="#333333" />
             <PolarAngleAxis 
               dataKey="subject" 
-              tick={{ fill: '#a3a3a3', fontSize: 12, fontWeight: 500 }} 
+              tick={{ fill: '#a3a3a3', fontSize: 11, fontWeight: 500 }} 
             />
             <Radar
               name="Skills"

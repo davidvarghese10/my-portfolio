@@ -71,7 +71,7 @@ const About: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 <div className="flex items-baseline gap-1">
-                  <h4 className="text-4xl font-bold font-oswald text-white">ACTIVE</h4>
+                  <h4 className="text-4xl font-bold font-oswald text-white">5+</h4>
                 </div>
                 <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#00f3ff] mt-1">
                   Hackathons
@@ -110,8 +110,9 @@ const About: React.FC = () => {
                   </h5>
                 </div>
                 <ul className="space-y-1.5 text-sm text-neutral-400 font-light">
-                  <li>Python &bull; Algorithms &amp; Math</li>
-                  <li>React &bull; TypeScript &bull; Web Tech</li>
+                  <li>OOP in Java &bull; C Programming</li>
+                  <li>DSA &bull; Algorithms &amp; Math</li>
+                  <li>Python &bull; React &bull; TypeScript</li>
                   <li>Cybersecurity &amp; Threat Detection</li>
                   <li>REST APIs &bull; System Architecture</li>
                 </ul>

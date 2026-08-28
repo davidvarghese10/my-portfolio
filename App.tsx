@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import ProjectList from './components/ProjectList';
 import About from './components/About';
+import Education from './components/Education';
 import Achievements from './components/Achievements';
 import Certificates from './components/Certificates';
 import Footer from './components/Footer';
@@ -17,7 +18,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState<PageTab>(() => {
     const hash = window.location.hash.replace('#', '') as PageTab;
-    if (['home', 'projects', 'profile', 'achievements', 'certificates', 'contact'].includes(hash)) {
+    if (['home', 'profile', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
       return hash;
     }
     // Backward compatibility for old #work link
@@ -36,7 +37,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as PageTab;
-      if (['home', 'projects', 'profile', 'achievements', 'certificates', 'contact'].includes(hash)) {
+      if (['home', 'profile', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
         setActivePage(hash);
       } else if (hash === ('work' as any)) {
         setActivePage('projects');
@@ -153,6 +154,18 @@ const App: React.FC = () => {
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               >
                 <About />
+              </motion.div>
+            )}
+
+            {activePage === 'education' && (
+              <motion.div
+                key="education"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                <Education />
               </motion.div>
             )}
 

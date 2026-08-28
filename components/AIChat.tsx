@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Loader2, Sparkles, Send } from 'lucide-react';
-import { sendChatMessage } from '../services/geminiService';
+import { MessageSquare, X, Loader2, Sparkles, Send, Key, Check, HelpCircle } from 'lucide-react';
+import { sendChatMessage, getStoredApiKey, setStoredApiKey } from '../services/geminiService';
 import { ChatMessage } from '../types';
 
 const SUGGESTIONS = [
@@ -13,13 +13,24 @@ const SUGGESTIONS = [
 
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [customKeyInput, setCustomKeyInput] = useState('');
+  const [hasCustomKey, setHasCustomKey] = useState(false);
+  const [keySavedMessage, setKeySavedMessage] = useState(false);
+
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: "Hi! I'm Livoq, David Varghese's AI assistant. Ask me anything about his projects, skills, certifications, or how to get in touch!" }
+    { role: 'model', text: "Hi! I'm Livoq, David Varghese's AI assistant. Ask me anything about David's projects, technical skills, cybersecurity background, certifications, or how to get in touch!" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const key = getStoredApiKey();
+    setHasCustomKey(Boolean(key && key.trim().length > 0));
+    setCustomKeyInput(key);
+  }, [isOpen]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,10 +41,28 @@ const AIChat: React.FC = () => {
   }, [messages, isLoading, isOpen]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !showKeyModal) {
       setTimeout(() => inputRef.current?.focus(), 150);
     }
-  }, [isOpen]);
+  }, [isOpen, showKeyModal]);
+
+  const handleSaveApiKey = () => {
+    setStoredApiKey(customKeyInput);
+    const key = getStoredApiKey();
+    setHasCustomKey(Boolean(key && key.trim().length > 0));
+    setKeySavedMessage(true);
+    setTimeout(() => {
+      setKeySavedMessage(false);
+      setShowKeyModal(false);
+    }, 1200);
+  };
+
+  const handleRemoveApiKey = () => {
+    setStoredApiKey('');
+    setCustomKeyInput('');
+    setHasCustomKey(false);
+    setShowKeyModal(false);
+  };
 
   const executeSend = async (textToSend: string) => {
     if (!textToSend.trim() || isLoading) return;
@@ -51,7 +80,7 @@ const AIChat: React.FC = () => {
       console.error("Chat error:", err);
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: "I'm available to answer any questions about David's projects, skills, or contact info. Feel free to ask or reach out to david3005.scd@gmail.com!" 
+        text: "I'm here to answer questions about David's projects, skills, or background. Feel free to ask or reach out to david3005.scd@gmail.com!" 
       }]);
     } finally {
       setIsLoading(false);
@@ -69,12 +98,14 @@ const AIChat: React.FC = () => {
     }
   };
 
-  // Helper to format text with bold styling
   const renderFormattedText = (text: string) => {
-    const parts = text.split(/(\*\*.*?\*\*)/g);
+    const parts = text.split(/(\*\*.*?\*\*|\`.*?\`)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return <code key={i} className="bg-white/10 px-1 py-0.5 rounded text-[#00f3ff] text-xs font-mono">{part.slice(1, -1)}</code>;
       }
       return part;
     });
@@ -89,29 +120,89 @@ const AIChat: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.92 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-4 w-[90vw] sm:w-96 bg-black/80 backdrop-blur-2xl rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,243,255,0.15)] border border-white/10 overflow-hidden flex flex-col"
-            style={{ maxHeight: '540px', minHeight: '440px' }}
+            className="mb-4 w-[90vw] sm:w-96 bg-black/85 backdrop-blur-2xl rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,243,255,0.15)] border border-white/10 overflow-hidden flex flex-col relative"
+            style={{ maxHeight: '560px', minHeight: '460px' }}
           >
             {/* Header */}
-            <div className="bg-black/50 text-white p-4 flex justify-between items-center border-b border-white/10">
+            <div className="bg-black/60 text-white p-3.5 flex justify-between items-center border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#00f3ff] animate-pulse"></div>
                   <div className="absolute w-4 h-4 rounded-full bg-[#00f3ff]/20 animate-ping"></div>
                 </div>
                 <div>
-                  <span className="font-medium text-sm text-white tracking-wide block">Livoq Assistant</span>
-                  <span className="text-[10px] font-mono text-[#00f3ff]/80 block -mt-0.5">David's AI Intelligence</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-sm text-white tracking-wide">Livoq Assistant</span>
+                    <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-full border ${hasCustomKey ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'bg-white/10 text-neutral-300 border-white/10'}`}>
+                      {hasCustomKey ? 'Gemini 2.5 Active' : 'Smart Engine'}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#00f3ff]/80 block">David's Interactive AI</span>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)} 
-                aria-label="Close assistant"
-                className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors"
-              >
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setShowKeyModal(!showKeyModal)}
+                  title="Configure Gemini API Key"
+                  className={`p-1.5 rounded-lg transition-colors ${showKeyModal ? 'bg-[#00f3ff]/20 text-[#00f3ff]' : 'text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5'}`}
+                >
+                  <Key size={16} />
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)} 
+                  aria-label="Close assistant"
+                  className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
+
+            {/* Optional API Key Configuration Panel */}
+            <AnimatePresence>
+              {showKeyModal && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="bg-black/90 border-b border-cyan-500/20 p-4 text-xs overflow-hidden"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-white flex items-center gap-1.5">
+                      <Key size={14} className="text-[#00f3ff]" />
+                      Gemini API Key (Optional)
+                    </span>
+                    <span className="text-[10px] text-neutral-400 font-mono">Stored in browser</span>
+                  </div>
+                  <p className="text-neutral-300 text-[11px] mb-3 leading-relaxed">
+                    Paste a free Google Gemini API key to enable live cloud LLM reasoning on any static host, or leave blank to use the built-in portfolio intelligence engine.
+                  </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      type="password"
+                      value={customKeyInput}
+                      onChange={(e) => setCustomKeyInput(e.target.value)}
+                      placeholder="AIzaSy..."
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#00f3ff]"
+                    />
+                    <button
+                      onClick={handleSaveApiKey}
+                      className="bg-[#00f3ff] hover:bg-[#00d9e6] text-black font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 text-xs shrink-0"
+                    >
+                      {keySavedMessage ? <Check size={14} /> : 'Save'}
+                    </button>
+                  </div>
+                  {hasCustomKey && (
+                    <button
+                      onClick={handleRemoveApiKey}
+                      className="text-[10px] text-red-400 hover:underline hover:text-red-300 font-mono"
+                    >
+                      Clear saved key
+                    </button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-transparent scroll-smooth">
@@ -141,7 +232,7 @@ const AIChat: React.FC = () => {
                 </div>
               )}
 
-              {/* Quick suggestions if few messages */}
+              {/* Quick suggestions */}
               {messages.length <= 2 && !isLoading && (
                 <div className="pt-2">
                   <div className="flex items-center gap-1 text-[11px] font-mono text-neutral-400 mb-2">
@@ -173,7 +264,7 @@ const AIChat: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
-                placeholder="Ask about projects, skills, contact..."
+                placeholder="Ask about projects, skills, certifications..."
                 className="flex-1 bg-white/5 text-white placeholder-neutral-500 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#00f3ff] border border-white/10"
               />
               <button 

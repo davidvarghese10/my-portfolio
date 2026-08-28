@@ -3,6 +3,7 @@ import { Project, NavItem, SkillData } from './types';
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: 'home' },
   { label: 'Profile', href: 'profile' },
+  { label: 'Education', href: 'education' },
   { label: 'Projects', href: 'projects' },
   { label: 'Certificates', href: 'certificates' },
   { label: 'Achievements', href: 'achievements' },
@@ -14,7 +15,7 @@ export const PROJECTS: Project[] = [
     id: 1,
     title: "Intevra",
     category: "AI & Security",
-    year: "2025",
+    year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=10",
     description: "AI integrated interview fraud detection system."
   },
@@ -22,7 +23,7 @@ export const PROJECTS: Project[] = [
     id: 2,
     title: "Aether",
     category: "Interactive Web",
-    year: "2025",
+    year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=20",
     description: "Immersive Regional Weather Experience Application."
   },
@@ -30,7 +31,7 @@ export const PROJECTS: Project[] = [
     id: 3,
     title: "MediSense AI",
     category: "Healthcare AI",
-    year: "2024",
+    year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=30",
     description: "A disease prediction system based on the symptoms provided."
   },
@@ -38,7 +39,7 @@ export const PROJECTS: Project[] = [
     id: 4,
     title: "Equora",
     category: "Python & Algorithms",
-    year: "2024",
+    year: "2023",
     image: "https://picsum.photos/800/600?grayscale&random=40",
     description: "Python-Based Mathematical Equation Solver."
   }
@@ -47,8 +48,10 @@ export const PROJECTS: Project[] = [
 export const SKILLS_DATA: SkillData[] = [
   { subject: 'Python & AI', A: 95, fullMark: 100 },
   { subject: 'React & TS', A: 90, fullMark: 100 },
+  { subject: 'OOP in Java', A: 88, fullMark: 100 },
+  { subject: 'C Programming', A: 92, fullMark: 100 },
+  { subject: 'DSA', A: 90, fullMark: 100 },
   { subject: 'Cybersecurity', A: 85, fullMark: 100 },
-  { subject: 'Algorithms', A: 90, fullMark: 100 },
   { subject: 'Cloud & Tools', A: 80, fullMark: 100 },
   { subject: 'UI / UX Design', A: 85, fullMark: 100 },
 ];
