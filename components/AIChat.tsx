@@ -1,8 +1,137 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Loader2, Sparkles, Send, Key, Check, HelpCircle } from 'lucide-react';
+import { MessageSquare, Loader2, Sparkles, Send, Key, Check, HelpCircle } from 'lucide-react';
 import { sendChatMessage, getStoredApiKey, setStoredApiKey } from '../services/geminiService';
 import { ChatMessage } from '../types';
+
+const AnimatedChatToggleIcon: React.FC<{ isOpen: boolean; size?: number }> = ({ isOpen, size = 24 }) => (
+  <motion.svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    animate={{ rotate: isOpen ? 90 : 0 }}
+    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+    className={`transition-colors duration-300 ${
+      isOpen ? 'text-[#00f3ff] drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]' : 'text-white group-hover:text-[#00f3ff]'
+    }`}
+    fill="none"
+  >
+    {/* Speech Bubble Icon (visible when closed, dissolves/contracts when open) */}
+    <motion.path
+      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      initial={false}
+      animate={
+        isOpen
+          ? { pathLength: 0, opacity: 0, scale: 0.3, rotate: -45 }
+          : { pathLength: 1, opacity: 1, scale: 1, rotate: 0 }
+      }
+      style={{ originX: '12px', originY: '12px' }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+    />
+
+    {/* Interlaced X - Continuous bottom-left to top-right diagonal */}
+    <motion.line
+      x1="4.5"
+      y1="19.5"
+      x2="19.5"
+      y2="4.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      initial={false}
+      animate={
+        isOpen
+          ? { pathLength: 1, opacity: 1, scale: 1 }
+          : { pathLength: 0, opacity: 0, scale: 0.4 }
+      }
+      style={{ originX: '12px', originY: '12px' }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.05 : 0 }}
+    />
+
+    {/* Interlaced X - Top-left branch of broken diagonal */}
+    <motion.line
+      x1="4.5"
+      y1="4.5"
+      x2="9.5"
+      y2="9.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      initial={false}
+      animate={
+        isOpen
+          ? { pathLength: 1, opacity: 1, scale: 1 }
+          : { pathLength: 0, opacity: 0, scale: 0.4 }
+      }
+      style={{ originX: '12px', originY: '12px' }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.1 : 0 }}
+    />
+
+    {/* Interlaced X - Bottom-right branch of broken diagonal */}
+    <motion.line
+      x1="14.5"
+      y1="14.5"
+      x2="19.5"
+      y2="19.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      initial={false}
+      animate={
+        isOpen
+          ? { pathLength: 1, opacity: 1, scale: 1 }
+          : { pathLength: 0, opacity: 0, scale: 0.4 }
+      }
+      style={{ originX: '12px', originY: '12px' }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.1 : 0 }}
+    />
+  </motion.svg>
+);
+
+const InterlacedX: React.FC<{ size?: number; className?: string }> = ({ size = 20, className = "" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    className={className}
+    fill="none"
+  >
+    {/* Continuous bottom-left to top-right diagonal */}
+    <line
+      x1="4.5"
+      y1="19.5"
+      x2="19.5"
+      y2="4.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    />
+    {/* Top-left segment of broken diagonal */}
+    <line
+      x1="4.5"
+      y1="4.5"
+      x2="9.5"
+      y2="9.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    />
+    {/* Bottom-right segment of broken diagonal */}
+    <line
+      x1="14.5"
+      y1="14.5"
+      x2="19.5"
+      y2="19.5"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 const SUGGESTIONS = [
   "Tell me about Intevra",
@@ -151,9 +280,9 @@ const AIChat: React.FC = () => {
                 <button 
                   onClick={() => setIsOpen(false)} 
                   aria-label="Close assistant"
-                  className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors"
+                  className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors flex items-center justify-center group"
                 >
-                  <X size={18} />
+                  <InterlacedX size={17} className="group-hover:drop-shadow-[0_0_6px_rgba(0,243,255,0.6)]" />
                 </button>
               </div>
             </div>
@@ -287,8 +416,8 @@ const AIChat: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="liquid-glass-button p-4 rounded-full flex items-center overflow-hidden shadow-2xl"
       >
-        <div className="relative z-10">
-          {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        <div className="relative z-10 flex items-center justify-center">
+          <AnimatedChatToggleIcon isOpen={isOpen} size={24} />
         </div>
         
         {!isOpen && (
