@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Loader2, Sparkles, Key, Check, HelpCircle } from 'lucide-react';
-import { sendChatMessage, getStoredApiKey, setStoredApiKey } from '../services/geminiService';
+import { Loader2, Sparkles } from 'lucide-react';
+import { sendChatMessage } from '../services/geminiService';
 import { ChatMessage } from '../types';
 
 const PaperAirplaneSendIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
@@ -156,11 +156,6 @@ const SUGGESTIONS = [
 
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showKeyModal, setShowKeyModal] = useState(false);
-  const [customKeyInput, setCustomKeyInput] = useState('');
-  const [hasCustomKey, setHasCustomKey] = useState(false);
-  const [keySavedMessage, setKeySavedMessage] = useState(false);
-
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: "Hi! I'm Livoq, David Varghese's AI assistant. Ask me anything about David's projects, technical skills, cybersecurity background, certifications, or how to get in touch!" }
   ]);
@@ -168,12 +163,6 @@ const AIChat: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const key = getStoredApiKey();
-    setHasCustomKey(Boolean(key && key.trim().length > 0));
-    setCustomKeyInput(key);
-  }, [isOpen]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -184,28 +173,10 @@ const AIChat: React.FC = () => {
   }, [messages, isLoading, isOpen]);
 
   useEffect(() => {
-    if (isOpen && !showKeyModal) {
+    if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 150);
     }
-  }, [isOpen, showKeyModal]);
-
-  const handleSaveApiKey = () => {
-    setStoredApiKey(customKeyInput);
-    const key = getStoredApiKey();
-    setHasCustomKey(Boolean(key && key.trim().length > 0));
-    setKeySavedMessage(true);
-    setTimeout(() => {
-      setKeySavedMessage(false);
-      setShowKeyModal(false);
-    }, 1200);
-  };
-
-  const handleRemoveApiKey = () => {
-    setStoredApiKey('');
-    setCustomKeyInput('');
-    setHasCustomKey(false);
-    setShowKeyModal(false);
-  };
+  }, [isOpen]);
 
   const executeSend = async (textToSend: string) => {
     if (!textToSend.trim() || isLoading) return;
@@ -276,76 +247,21 @@ const AIChat: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-medium text-sm text-white tracking-wide">Livoq Assistant</span>
-                    <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-full border ${hasCustomKey ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'bg-white/10 text-neutral-300 border-white/10'}`}>
-                      {hasCustomKey ? 'Gemini 2.5 Active' : 'Smart Engine'}
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
+                      Online
                     </span>
                   </div>
                   <span className="text-[10px] font-mono text-[#00f3ff]/80 block">David's Interactive AI</span>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setShowKeyModal(!showKeyModal)}
-                  title="Configure Gemini API Key"
-                  className={`p-1.5 rounded-lg transition-colors ${showKeyModal ? 'bg-[#00f3ff]/20 text-[#00f3ff]' : 'text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5'}`}
-                >
-                  <Key size={16} />
-                </button>
-                <button 
-                  onClick={() => setIsOpen(false)} 
-                  aria-label="Close assistant"
-                  className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors flex items-center justify-center group"
-                >
-                  <InterlacedX size={17} className="group-hover:drop-shadow-[0_0_6px_rgba(0,243,255,0.6)]" />
-                </button>
-              </div>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                aria-label="Close assistant"
+                className="text-neutral-400 hover:text-[#00f3ff] hover:bg-white/5 p-1.5 rounded-lg transition-colors flex items-center justify-center group"
+              >
+                <InterlacedX size={17} className="group-hover:drop-shadow-[0_0_6px_rgba(0,243,255,0.6)]" />
+              </button>
             </div>
-
-            {/* Optional API Key Configuration Panel */}
-            <AnimatePresence>
-              {showKeyModal && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="bg-black/90 border-b border-cyan-500/20 p-4 text-xs overflow-hidden"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-white flex items-center gap-1.5">
-                      <Key size={14} className="text-[#00f3ff]" />
-                      Gemini API Key (Optional)
-                    </span>
-                    <span className="text-[10px] text-neutral-400 font-mono">Stored in browser</span>
-                  </div>
-                  <p className="text-neutral-300 text-[11px] mb-3 leading-relaxed">
-                    Paste a free Google Gemini API key to enable live cloud LLM reasoning on any static host, or leave blank to use the built-in portfolio intelligence engine.
-                  </p>
-                  <div className="flex items-center gap-2 mb-2">
-                    <input
-                      type="password"
-                      value={customKeyInput}
-                      onChange={(e) => setCustomKeyInput(e.target.value)}
-                      placeholder="AIzaSy..."
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#00f3ff]"
-                    />
-                    <button
-                      onClick={handleSaveApiKey}
-                      className="bg-[#00f3ff] hover:bg-[#00d9e6] text-black font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 text-xs shrink-0"
-                    >
-                      {keySavedMessage ? <Check size={14} /> : 'Save'}
-                    </button>
-                  </div>
-                  {hasCustomKey && (
-                    <button
-                      onClick={handleRemoveApiKey}
-                      className="text-[10px] text-red-400 hover:underline hover:text-red-300 font-mono"
-                    >
-                      Clear saved key
-                    </button>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-transparent scroll-smooth">
