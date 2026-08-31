@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, Building2, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, Building2, CheckCircle2, ExternalLink } from 'lucide-react';
 
 interface ExperienceItem {
   id: string;
@@ -14,6 +14,7 @@ interface ExperienceItem {
   highlights: string[];
   skills: string[];
   featured?: boolean;
+  link?: string;
 }
 
 const EXPERIENCES: ExperienceItem[] = [
@@ -32,7 +33,8 @@ const EXPERIENCES: ExperienceItem[] = [
       "Collaborated with peers and industry mentors to analyze real-world case studies and implement technical problem-solving workflows."
     ],
     skills: ["IBM SkillsBuild", "Cloud Computing", "AI Foundations", "Technical Problem Solving", "Software Paradigms", "Collaborative Engineering"],
-    featured: true
+    featured: true,
+    link: "https://www.linkedin.com/posts/david-varghese-solchadav-group_agenticai-artificialintelligence-cybersecurity-share-7489700363810512897-vtuz/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE1mKBQBAY-lduBX-6jQZce4wl-HDnqorgs"
   }
 ];
 
@@ -69,39 +71,52 @@ const Experience: React.FC = () => {
         {/* Experience Timeline / Cards */}
         <div className="space-y-8 mb-16">
           {EXPERIENCES.map((exp, idx) => (
-            <motion.div
+            <motion.a
               key={exp.id}
+              href={exp.link}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.7, delay: idx * 0.12 }}
-              className={`relative bg-black/40 backdrop-blur-xl border rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden transition-all ${
+              className={`group block relative bg-black/40 backdrop-blur-xl border rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden transition-all cursor-pointer ${
                 exp.featured
-                  ? 'border-[#00f3ff]/30 hover:border-[#00f3ff]/60 bg-gradient-to-br from-black/60 via-black/40 to-[#00f3ff]/5'
+                  ? 'border-[#00f3ff]/30 hover:border-[#00f3ff]/80 hover:shadow-[0_0_40px_rgba(0,243,255,0.25)] bg-gradient-to-br from-black/60 via-black/40 to-[#00f3ff]/5'
                   : 'border-white/10 hover:border-white/20 hover:bg-black/60'
               }`}
             >
               {/* Subtle ambient glow */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-0 right-0 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00f3ff]/20 transition-all duration-500" />
 
               <div className="relative z-10 space-y-6">
                 {/* Badges & Meta */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] shadow-[0_0_15px_rgba(0,243,255,0.3)]">
-                    {exp.type}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
-                    <Calendar size={13} className="text-[#00f3ff]" />
-                    {exp.duration}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
-                    <MapPin size={13} className="text-[#00f3ff]" />
-                    {exp.location}
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] shadow-[0_0_15px_rgba(0,243,255,0.3)]">
+                      {exp.type}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
+                      <Calendar size={13} className="text-[#00f3ff]" />
+                      {exp.duration}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
+                      <MapPin size={13} className="text-[#00f3ff]" />
+                      {exp.location}
+                    </span>
+                  </div>
+
+                  {exp.link && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-[#00f3ff] group-hover:bg-[#00f3ff] group-hover:text-black group-hover:border-[#00f3ff] transition-all duration-300">
+                      <span>View LinkedIn Post</span>
+                      <ExternalLink size={12} />
+                    </div>
+                  )}
                 </div>
 
                 {/* Role & Org */}
                 <div className="space-y-2">
-                  <h3 className="text-2xl md:text-4xl font-bold font-poppins text-white tracking-tight leading-tight">
+                  <h3 className="text-2xl md:text-4xl font-bold font-poppins text-white tracking-tight leading-tight group-hover:text-[#00f3ff] transition-colors">
                     {exp.role}
                   </h3>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-base md:text-lg font-medium text-neutral-200">
@@ -142,7 +157,7 @@ const Experience: React.FC = () => {
                     {exp.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-neutral-300 hover:border-[#00f3ff]/40 hover:text-white transition-colors"
+                        className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-neutral-300 group-hover:border-[#00f3ff]/40 group-hover:text-white transition-colors"
                       >
                         {skill}
                       </span>
@@ -150,7 +165,7 @@ const Experience: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>

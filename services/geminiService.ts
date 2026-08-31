@@ -58,44 +58,81 @@ const getAIClient = (): GoogleGenAI | null => {
 const SYSTEM_INSTRUCTION = `You are "Livoq", the intelligent, friendly, and articulate personal AI assistant on David Varghese's software engineering portfolio website.
 
 ABOUT DAVID VARGHESE:
-- Identity: Computer Science and Engineering (CSE) student at Rajagiri School of Engineering & Technology, Kakkanad (2025–2029) and aspiring software developer based in Kerala, India.
-- Academic Excellence: Holds a perfect 10.00 / 10.00 SGPA across Semester 1 and Semester 2 in B.Tech CSE. Higher Secondary (XII) in Computer Science (with Maths) Stream from Devamatha CMI Public School (CBSE - 96.0%, 2023–2025). High School (X) from CMI Public School, Chalakudy (CBSE - 97.6%, 2022–2023).
-- Work Experience & Internship: 4-week Technical Internship at Edunet Foundation in collaboration with IBM SkillsBuild, covering cloud computing paradigms, AI foundations, and industry software workflows.
-- Focus Areas: Full-stack web development, software engineering, cybersecurity threat modeling, machine learning pipelines, and interactive UI design.
-- Email: david3005.scd@gmail.com
-- GitHub: https://github.com/davidvarghese10
-- LinkedIn: https://www.linkedin.com/in/david-varghese-solchadav-group/
-- LeetCode: https://leetcode.com/u/david_1000/
+- Identity: Computer Science and Engineering (CSE) student at Rajagiri School of Engineering & Technology (RSET), Kakkanad, Kochi, Kerala, India (2025–2029) and an aspiring software developer.
+- Academic Excellence: Perfect 10.00 / 10.00 SGPA in Semester 1 (S1) and Semester 2 (S2) in B.Tech CSE.
+- Schooling:
+  • Higher Secondary (Class XII): Devamatha CMI Public School, Thrissur (CBSE - 96.0%, 2023–2025) in Computer Science with Mathematics stream.
+  • Secondary School (Class X): CMI Public School, Chalakudy (CBSE - 97.6%, 2022–2023).
+- Focus Disciplines: Full-stack web development, cybersecurity & vulnerability management, applied machine learning pipelines, algorithmic problem solving (DSA), and interactive motion design.
+- Contact & Profiles:
+  • Email: david3005.scd@gmail.com
+  • GitHub: https://github.com/davidvarghese10
+  • LinkedIn: https://www.linkedin.com/in/david-varghese-solchadav-group/
+  • LeetCode: https://leetcode.com/u/david_1000/
 
 FEATURED PROJECTS:
-1. Intevra (2026): AI-powered interview fraud detection and integrity monitoring system. Analyzes multi-modal data (video, audio, browser signals) to detect cheating, multiple voices, and screen anomalies in real time. Recognized as a National Level Hackathon Finalist.
-2. Aether (2026): Immersive Regional Weather Experience Application built with React, TypeScript, and Framer Motion, delivering fluid 60fps meteorological visual simulation layers.
-3. MediSense AI (2026): Healthcare disease prediction system using ML classification models to forecast potential illnesses from user-reported symptoms with high accuracy.
-4. Equora (2023): High-performance Python-based mathematical and symbolic equation solver engineered for rapid numerical computation and algebraic analysis.
+1. Intevra (2026) — Category: AI & Security
+   • Overview: AI-integrated interview fraud detection and integrity monitoring platform.
+   • Features: Multi-modal anomaly detection analyzing facial posture, eye gaze, multiple voices, background acoustic discrepancies, and browser focus/window switching.
+   • Recognition: National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology).
+2. Aether (2026) — Category: Interactive Web & UI Engineering
+   • Overview: Immersive Regional Weather Experience Application.
+   • Tech Stack: React, TypeScript, Tailwind CSS, Framer Motion, Recharts.
+   • Features: 60fps GPU-accelerated atmospheric visual layers, particle rain/cloud simulations, real-time regional meteorological metrics, and responsive interactive telemetry.
+3. MediSense AI (2026) — Category: Healthcare AI
+   • Overview: Machine learning disease prediction system evaluating patient-reported symptoms.
+   • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
+   • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
+4. Equora (2023) — Category: Python & Algorithms
+   • Overview: High-performance mathematical and symbolic equation solver in Python.
+   • Features: Custom algebraic parser, polynomial root-finder, calculus differentiation & integration engines, and step-by-step mathematical reasoning.
+
+WORK EXPERIENCE & INTERNSHIPS:
+- Technical Intern at Edunet Foundation in collaboration with IBM SkillsBuild (4-Week Intensive Program):
+  • Focused on cloud computing architectures, AI foundations, software engineering paradigms, and practical problem solving.
+  • Completed technical evaluations and practical project implementations in the IBM SkillsBuild ecosystem.
+
+VERIFIED CERTIFICATIONS (41 Total Accreditations; 18 Key Featured across 9 Prestigious Organizations):
+- IBM:
+  • Vulnerability Management (2026)
+  • Cybersecurity Fundamentals (2025)
+  • Quantum Machine Learning (2025)
+  • AI Fundamentals (2024)
+  • Developing Front-End Apps with React (2024)
+  • Software Engineering Essentials (2024)
+  • Introduction to Software Engineering with Honors (2024)
+- Cisco:
+  • Cyber Threat Management (2025)
+  • Introduction to IoT and Digital Transformation (2025)
+  • Introduction to Cybersecurity (2024)
+- Microsoft: Describe the Concepts of Cybersecurity (2026)
+- HP: Data Science & Analytics (2026)
+- Infosys Springboard:
+  • Programming Fundamentals Using Python (2026)
+  • Artificial Intelligence (2026)
+- FutureSkills Prime: Digital 101 (30 Hours) (2026)
+- Deloitte: Technology Job Simulation (2025)
+- IEEE: English for Technical Professionals (2025)
+- Google: Fundamentals of Digital Marketing (2023)
+- Full 41-certificate registry: https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/
+
+KEY ACHIEVEMENTS & MILESTONES:
+- 3rd Prize at Vibe Night Hackathon (Abhiyanthriki Tech Fest, Rajagiri School of Engineering & Technology)
+- National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology) with Intevra
+- Smart India Hackathon (SIH) Participant (Ministry of Education & AICTE)
+- Active LeetCode problem solver (Profile: david_1000) focusing on Graphs, Trees, Dynamic Programming, and Greedy algorithms.
 
 TECHNICAL TOOLKIT:
 - Languages & Core: OOP in Java, C Programming, DSA, Python, TypeScript, JavaScript, C/C++, SQL, HTML5/CSS3
-- Frontend: React, Tailwind CSS, Framer Motion, Recharts, Lucide Icons
-- Backend & ML: Node.js, Express, REST APIs, Scikit-learn, ML pipelines
-- CS & Security: Cybersecurity Fundamentals, Vulnerability Assessment, Network Defense, Cryptography, DSA (Data Structures & Algorithms), LeetCode problem solving, System Architecture
+- Frontend: React, Tailwind CSS, Framer Motion, Recharts, Lucide Icons, Vite
+- Backend & Systems: Node.js, Express, REST APIs, Git, GitHub
+- Security: Vulnerability Assessment, Network Defense, Cryptography, Threat Modeling, Security Auditing
+- Data & AI: Machine Learning, Scikit-learn, Data Analysis, Statistical Modeling
 
-VERIFIED CERTIFICATIONS (41 total accreditations, with 18 featured across IBM, Cisco, Microsoft, HP, Infosys, FutureSkills Prime, Google, IEEE, Deloitte):
-- 2026: Vulnerability Management (IBM), Data Science & Analytics (HP), Programming Fundamentals using Python (Infosys), Artificial Intelligence (Infosys), Describe the Concepts of Cybersecurity (Microsoft), Digital 101 (30 Hours) (FutureSkills Prime)
-- 2025: Cybersecurity Fundamentals (IBM), Cyber Threat Management (Cisco), Introduction to IoT & Digital Transformation (Cisco), Technology Job Simulation (Deloitte), English for Technical Professionals (IEEE), Quantum Machine Learning (IBM)
-- 2024: AI Fundamentals (IBM), Developing Front-End Apps with React (IBM), Software Engineering Essentials (IBM), Introduction to Software Engineering with Honors (IBM), Introduction to Cybersecurity (Cisco)
-- 2023: Fundamentals of Digital Marketing (Google)
-- Full Registry: https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/
-
-HONORS & ACHIEVEMENTS:
-- 3rd Prize at Vibe Night Hackathon (Abhiyanthriki Tech Fest, Rajagiri School of Engineering & Technology)
-- National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology) with Intevra (AI fraud detection)
-- Smart India Hackathon (SIH) participant (problem solving & collaborative development)
-- Active algorithmic problem solver on LeetCode (profile: david_1000)
-
-INSTRUCTIONS:
-- Answer naturally, helpfully, and concisely (typically 2-4 sentences or clean bullet points).
-- You can explain computer science concepts, discuss David's work in detail, answer general tech/coding questions, or provide contact details.
-- For hiring, collaboration, or general inquiries, invite the user to email david3005.scd@gmail.com.`;
+INSTRUCTIONS FOR RESPONSES:
+- Provide friendly, intelligent, crisp, and helpful answers.
+- Highlight David's strengths in academic rigor, problem-solving, cybersecurity, and modern UI engineering.
+- For hiring, collaboration, or general inquiries, invite users to contact david3005.scd@gmail.com.`;
 
 const MODELS_TO_TRY = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
 
@@ -117,7 +154,7 @@ const tryEvaluateMath = (query: string): string | null => {
   return null;
 };
 
-// Comprehensive offline intelligence engine with semantic pattern matching
+// Comprehensive offline intelligence engine with multi-layered semantic matching
 export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = []): string => {
   const query = msg.toLowerCase().trim();
 
@@ -126,182 +163,209 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
   if (mathResult) return mathResult;
 
   // 2. Greetings & Salutations
-  if (/^(hi|hello|hey|greetings|howdy|sup|yo|hiya|good\s+(morning|afternoon|evening)|namaste)[\s!.,?]*$/i.test(query) ||
+  if (/^(hi|hello|hey|greetings|howdy|sup|yo|hiya|good\s+(morning|afternoon|evening)|namaste|vanakkam)[\s!.,?]*$/i.test(query) ||
       /^(hi|hello|hey)\s+(there|livoq|bot|assistant|david)/i.test(query)) {
-    return "Hello! I'm Livoq, David Varghese's AI assistant. Ask me anything about David's projects (like Intevra or Aether), technical skills, cybersecurity background, certifications, hackathon awards, or how to get in touch!";
+    return "Hello! I'm **Livoq**, David Varghese's personal AI assistant. I'm ready to answer anything about David's projects (like Intevra or Aether), technical skills, academic record at Rajagiri, 41+ certifications, hackathon awards, or how to get in touch!";
   }
 
   // 3. Identity & Assistant Purpose
-  if (query.includes('who are you') || query.includes('what is your name') || query.includes('what are you') || query.includes('introduce yourself') || query.includes('who made you') || query.includes('tell me about yourself')) {
-    return "I am **Livoq**, the interactive AI assistant on David Varghese's portfolio. I can answer questions about David's software engineering background, full-stack & machine learning projects, cybersecurity training, certifications, and collaboration opportunities.";
+  if (query.includes('who are you') || query.includes('what is your name') || query.includes('what are you') || query.includes('introduce yourself') || query.includes('who made you') || query.includes('tell me about yourself') || query.includes('what is livoq') || query.includes('who is livoq')) {
+    return "I am **Livoq**, the interactive AI assistant on David Varghese's software engineering portfolio. I have deep knowledge of David's academic journey at Rajagiri (10.00 SGPA), his 4 major software projects, his 41+ professional accreditations (IBM, Cisco, Microsoft, HP, etc.), his internship with Edunet/IBM SkillsBuild, and his hackathon achievements.";
   }
 
-  // 4. Capabilities & Help
-  if (query.includes('what can you do') || query.includes('how can you help') || query.includes('help me') || query === 'help' || query.includes('commands') || query.includes('menu')) {
-    return "Here are key topics you can ask me about:\n• **Featured Projects**: Intevra (AI fraud detection), Aether (interactive weather), MediSense AI (disease predictor), Equora (equation solver)\n• **Technical Toolkit**: Python, React, TypeScript, Tailwind, Cybersecurity, Machine Learning, DSA\n• **Verified Credentials**: Meta Full-Stack, Cisco Cybersecurity, Stanford ML, Data Structures\n• **Achievements**: National Hackathon Finalist, LeetCode problem solving (`david_1000`)\n• **Contact & Hiring**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub";
+  // 4. Capabilities & Help / Menu
+  if (query.includes('what can you do') || query.includes('how can you help') || query.includes('help me') || query === 'help' || query.includes('commands') || query.includes('menu') || query.includes('topics')) {
+    return "Here are the key areas you can ask me about:\n\n• **Featured Projects**: Intevra (AI fraud detection), Aether (interactive weather platform), MediSense AI (disease predictor), Equora (equation solver)\n• **Academic Background**: B.Tech CSE at Rajagiri School of Engineering & Technology (10.00 / 10.00 SGPA), Devamatha CMI (96%), CMI Chalakudy (97.6%)\n• **Technical Toolkit**: Python, Java (OOP), C Programming, DSA, React, TypeScript, Tailwind CSS, Cybersecurity, Machine Learning\n• **Industry Experience**: 4-Week Technical Internship at Edunet Foundation & IBM SkillsBuild\n• **Verified Certifications**: 41 total accreditations spanning IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE, Google\n• **Hackathons & Honors**: Vibe Night 3rd Prize, National Finalist at Hacksus, SIH participant, LeetCode (`david_1000`)\n• **Contact & Socials**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub, LeetCode";
   }
 
   // 5. Conversational & Pleasantries
-  if (query.includes('how are you') || query.includes('how are u') || query.includes('how is it going') || query.includes('how do you do')) {
-    return "I'm running at full speed and ready to help! What would you like to know about David's work or technical projects?";
+  if (query.includes('how are you') || query.includes('how are u') || query.includes('how is it going') || query.includes('how do you do') || query.includes('whats up') || query.includes("what's up")) {
+    return "I'm running smoothly at 60fps and ready to help! Feel free to ask about David's projects, academic track record, technical toolkit, or upcoming collaboration opportunities.";
   }
 
-  if (query.includes('thank') || query.includes('thx') || query.includes('appreciate') || query.includes('good job') || query.includes('great job') || query.includes('awesome') || query.includes('cool')) {
-    return "You're very welcome! If you have any more questions about David's code, projects, or background, feel free to ask anytime.";
+  if (query.includes('thank') || query.includes('thx') || query.includes('appreciate') || query.includes('good job') || query.includes('great job') || query.includes('awesome') || query.includes('cool') || query.includes('nice') || query.includes('well done')) {
+    return "You're very welcome! If you have any more questions about David's code, engineering projects, or background, feel free to ask anytime.";
   }
 
-  if (query.includes('bye') || query.includes('goodbye') || query.includes('see you') || query.includes('cya')) {
-    return "Have a great day! Don't hesitate to reach out to David directly at **david3005.scd@gmail.com** for collaborations or inquiries.";
+  if (query.includes('bye') || query.includes('goodbye') || query.includes('see you') || query.includes('cya') || query.includes('good night') || query.includes('take care')) {
+    return "Have a wonderful day! Don't hesitate to reach out to David directly at **david3005.scd@gmail.com** for collaborations, hiring inquiries, or discussions.";
   }
 
   if (query.includes('joke') || query.includes('funny') || query.includes('make me laugh')) {
-    return "Why do programmers prefer dark mode? Because light attracts bugs! 😄 Speaking of code, feel free to ask about any of David's software projects!";
+    const jokes = [
+      "Why do programmers prefer dark mode? Because light attracts bugs! 😄",
+      "There are 10 types of people in the world: those who understand binary, and those who don't!",
+      "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?' 🍺",
+      "Why do Java programmers wear glasses? Because they don't C#! ☕"
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)] + " Speaking of programming, ask me anything about David's software work!";
   }
 
   // 6. Deep Project Knowledge
   // Intevra
-  if (query.includes('intevra') || (query.includes('fraud') && query.includes('interview')) || query.includes('interview integrity') || query.includes('cheating detection')) {
-    return "**Intevra (2026)** is an AI-powered interview fraud detection and integrity monitoring platform. It uses multi-modal intelligence (facial posture analysis, voice verification, and browser signal tracking) to identify unfair practices and proxy candidates in real time. It was selected as a **National Level Hackathon Finalist**!";
+  if (query.includes('intevra') || (query.includes('fraud') && query.includes('interview')) || query.includes('interview integrity') || query.includes('cheating detection') || query.includes('hacksus')) {
+    return "**Intevra (2026)** is an AI-powered interview fraud detection and integrity monitoring system.\n\n• **Core Purpose**: Prevents unfair practices and proxy test-taking in remote technical interviews.\n• **Technology & Intelligence**: Utilizes multi-modal machine learning signals to monitor facial posture, eye gaze tracking, background voices/speech anomalies, and real-time browser focus/window switching.\n• **Achievement**: Selected as a **National Level Hackathon Finalist** at Hacksus (Rajagiri School of Engineering & Technology).";
   }
 
   // Aether
-  if (query.includes('aether') || (query.includes('weather') && !query.includes('whether'))) {
-    return "**Aether (2026)** is an immersive regional weather experience application engineered with **React, TypeScript, Tailwind CSS, and Framer Motion**. It presents meteorological data through dynamic 60fps atmospheric visualizations and responsive particle simulations.";
+  if (query.includes('aether') || (query.includes('weather') && !query.includes('whether')) || query.includes('meteorolog') || query.includes('atmosphere')) {
+    return "**Aether (2026)** is an immersive regional weather experience application.\n\n• **Tech Stack**: Built with **React, TypeScript, Tailwind CSS, and Framer Motion** with Recharts.\n• **Key Features**: Delivers fluid 60fps atmospheric visualizations, GPU-accelerated particle rain/cloud simulation layers, and comprehensive regional telemetry (humidity, wind speed, precipitation curves, and UV indices).\n• **UI/UX Craft**: Focuses on micro-animations, glassmorphism aesthetics, and clean data visualizations.";
   }
 
   // MediSense AI
-  if (query.includes('medisense') || query.includes('disease') || query.includes('symptom') || query.includes('health') || query.includes('medical')) {
-    return "**MediSense AI (2026)** is an intelligent healthcare disease prediction system. Built with Python and Scikit-learn classification pipelines, it accurately evaluates user-reported symptoms to predict potential conditions with explainable diagnostic insights.";
+  if (query.includes('medisense') || query.includes('disease') || query.includes('symptom') || query.includes('health') || query.includes('medical') || query.includes('diagnosis')) {
+    return "**MediSense AI (2026)** is an intelligent healthcare disease prediction system.\n\n• **Core Purpose**: Predicts potential illnesses from user-reported symptom combinations with high statistical confidence.\n• **Tech Stack**: Engineered in **Python** using **Scikit-learn classification pipelines** and structured health datasets.\n• **Capabilities**: Provides probabilistic illness likelihoods, diagnostic explanations, and risk-factor breakdowns to assist users in understanding their symptoms.";
   }
 
   // Equora
-  if (query.includes('equora') || query.includes('equation') || query.includes('math solver') || query.includes('symbolic math') || query.includes('calculus')) {
-    return "**Equora (2023)** is a high-performance mathematical and symbolic equation solver written in Python. It features custom algebraic simplification engines, numerical root finders, and step-by-step calculus solving.";
+  if (query.includes('equora') || query.includes('equation') || query.includes('math solver') || query.includes('symbolic math') || query.includes('calculus') || query.includes('algebra')) {
+    return "**Equora (2023)** is a high-performance Python-based mathematical and symbolic equation solver.\n\n• **Capabilities**: Parses and evaluates complex algebraic expressions, computes polynomial roots, and performs step-by-step calculus (differentiation and integration).\n• **Architecture**: Features a custom symbolic parsing engine designed for rapid numerical evaluation and clean step-by-step mathematical reasoning.";
   }
 
-  // All Projects
-  if (query.includes('project') || query.includes('portfolio') || query.includes('built') || query.includes('work') || query.includes('app') || query.includes('showcase')) {
-    return "David has developed 4 major projects:\n1. **Intevra (2026)**: AI interview fraud detection platform (National Hackathon Finalist)\n2. **Aether (2026)**: Immersive weather visualization experience (React & Framer Motion)\n3. **MediSense AI (2026)**: Machine learning symptom-based disease predictor\n4. **Equora (2023)**: Python mathematical and symbolic equation solver\n\nYou can explore interactive cards for each in the **Projects** section!";
+  // General Projects Overview
+  if (query.includes('project') || query.includes('portfolio') || query.includes('built') || query.includes('work') || query.includes('apps') || query.includes('showcase')) {
+    return "David has developed 4 major projects featured in his portfolio:\n\n1. **Intevra (2026)** — AI Interview Fraud Detection System (National Hackathon Finalist)\n2. **Aether (2026)** — Immersive Regional Weather Experience Application (React + Framer Motion)\n3. **MediSense AI (2026)** — Machine Learning Disease Prediction System (Python + Scikit-learn)\n4. **Equora (2023)** — High-Performance Python Mathematical & Symbolic Equation Solver\n\nYou can explore each project interactively in the **Projects** section!";
   }
 
-  // 7. Technical Skills & Languages
-  if (query.includes('java') || query.includes('oop')) {
-    return "David possesses strong proficiency in **Object-Oriented Programming (OOP) in Java**, utilizing principles like encapsulation, polymorphism, inheritance, and modular design patterns to build structured software systems.";
+  // 7. Academic Record & Education
+  if (query.includes('education') || query.includes('college') || query.includes('university') || query.includes('degree') || query.includes('student') || query.includes('study') || query.includes('studying') || query.includes('school') || query.includes('rajagiri') || query.includes('rset') || query.includes('sgpa') || query.includes('marks') || query.includes('grade') || query.includes('academic') || query.includes('cgpa') || query.includes('gpa') || query.includes('tenth') || query.includes('twelfth') || query.includes('cbse') || query.includes('devamatha')) {
+    return "**David Varghese's Academic Credentials**:\n\n• **B.Tech in Computer Science & Engineering (2025–2029)**:\n  Rajagiri School of Engineering & Technology (RSET), Kakkanad, Kochi, Kerala.\n  *Academic Distinction*: Perfect **10.00 / 10.00 SGPA** in Semester 1 (S1) and Semester 2 (S2).\n\n• **Higher Secondary (Class XII, 2023–2025)**:\n  Devamatha CMI Public School, Thrissur (CBSE) — **96.0%** in Computer Science with Mathematics stream.\n\n• **High School (Class X, 2022–2023)**:\n  CMI Public School, Chalakudy (CBSE) — **97.6%** with top academic honors.\n\nExplore full details in the **Education** section!";
   }
 
-  if (query.includes('dsa') || query.includes('c programming') || query.includes('c language') || query.includes('c code')) {
-    return "David has comprehensive hands-on expertise in **C Programming & DSA (Data Structures and Algorithms)**, including manual memory management (pointers/malloc), linked lists, binary trees, heaps, graphs, sorting algorithms, and time/space complexity optimization.";
-  }
-
-  if (query.includes('python')) {
-    return "Python is one of David's primary languages, used extensively for machine learning modeling (MediSense AI), symbolic computation engines (Equora), and data structure algorithms.";
-  }
-
-  if (query.includes('react') || query.includes('typescript') || query.includes('javascript') || query.includes('frontend') || query.includes('tailwind') || query.includes('css')) {
-    return "David builds modern web applications using **React, TypeScript, Tailwind CSS, and Framer Motion**, specializing in fluid 60fps micro-interactions, responsive design, and modular state management.";
-  }
-
-  if (query.includes('cyber') || query.includes('security') || query.includes('hack') || query.includes('pentest') || query.includes('vulnerab') || query.includes('threat') || query.includes('defense')) {
-    return "David has foundational expertise in **Cybersecurity & Threat Defense**, backed by Cisco & Google certifications covering network defense protocols, vulnerability assessment, cryptographic security, and secure software engineering.";
-  }
-
-  if (query.includes('machine learning') || query.includes('ai') || query.includes('deep learning') || query.includes('scikit') || query.includes('model') || query.includes('neural')) {
-    return "David applies Machine Learning across predictive classification and computer vision, including training symptom classifiers in MediSense AI and multi-modal fraud detection in Intevra.";
-  }
-
-  if (query.includes('leetcode') || query.includes('dsa') || query.includes('algorithm') || query.includes('data structure') || query.includes('competitive') || query.includes('problem solving')) {
-    return "David actively solves algorithmic problems on **LeetCode** under the profile **david_1000** and implements **DSA in C and Java**, with a focus on graph traversal, dynamic programming, tree algorithms, and asymptotic complexity optimization.";
-  }
-
-  if (query.includes('c++') || query.includes('c lang') || query.includes('sql') || query.includes('database') || query.includes('backend') || query.includes('node') || query.includes('express') || query.includes('api') || query.includes('rest')) {
-    return "David's backend and systems toolkit includes **Node.js, Express, REST APIs, and SQL** for database architecture, along with **C/C++ & Java** for low-level systems programming and DSA.";
-  }
-
-  if (query.includes('skill') || query.includes('stack') || query.includes('tech') || query.includes('language') || query.includes('framework') || query.includes('tool')) {
-    return "David's core technical toolkit comprises:\n• **Languages & Core**: OOP in Java, C Programming, DSA, Python, TypeScript, JavaScript, C/C++, SQL\n• **Frontend**: React, Tailwind CSS, Framer Motion, HTML5/CSS3\n• **Backend & ML**: Node.js, Express, REST APIs, Scikit-learn\n• **Core Disciplines**: Cybersecurity Threat Defense, DSA / LeetCode, UI/UX Motion Design";
-  }
-
-  // 8. Experience & Internship
+  // 8. Work Experience & Internship
   if (query.includes('experience') || query.includes('internship') || query.includes('intern') || query.includes('edunet') || query.includes('ibm skillsbuild') || query.includes('skillsbuild') || query.includes('job') || query.includes('work experience')) {
-    return "David completed an intensive **4-Week Technical Internship at Edunet Foundation in collaboration with IBM SkillsBuild**. The program encompassed hands-on learning across foundational cloud architectures, artificial intelligence concepts, and real-world software engineering workflows. You can explore full details in the **Experience** tab!";
+    return "**Technical Internship — Edunet Foundation in collaboration with IBM SkillsBuild**:\n\n• **Format & Duration**: Intensive 4-Week Technical Internship Program.\n• **Curriculum & Focus**: Covered cloud computing foundations, artificial intelligence paradigms, enterprise software engineering workflows, and hands-on collaborative problem solving.\n• **Outcome**: Successfully completed practical project modules and technical evaluations within the IBM SkillsBuild learning ecosystem.\n\nSee the **Experience** section for more!";
   }
 
-  // 9. Bio, Background, Education & Location
-  if (query.includes('education') || query.includes('college') || query.includes('university') || query.includes('degree') || query.includes('student') || query.includes('study') || query.includes('studying') || query.includes('school') || query.includes('rajagiri') || query.includes('sgpa') || query.includes('marks') || query.includes('grade')) {
-    return "David Varghese is pursuing a **B.Tech in Computer Science and Engineering (CSE)** at **Rajagiri School of Engineering & Technology, Kakkanad** (2025–2029), maintaining a perfect **10.00 / 10.00 SGPA** in S1 & S2. He completed Class XII in the **Computer Science (with Maths) Stream** at **Devamatha CMI Public School** (CBSE, 96.0%) and Class X at **CMI Public School, Chalakudy** (CBSE, 97.6%). You can explore his full academic record in the **Education** tab!";
+  // 9. Detailed Certifications & Accreditations (41 Total, 18 Featured)
+  if (query.includes('certificat') || query.includes('credential') || query.includes('accreditation') || query.includes('ibm') || query.includes('cisco') || query.includes('microsoft') || query.includes('hp') || query.includes('infosys') || query.includes('deloitte') || query.includes('ieee') || query.includes('futureskills') || query.includes('google')) {
+    if (query.includes('ibm')) {
+      return "**David's IBM Certifications** include:\n• Vulnerability Management (2026)\n• Cybersecurity Fundamentals (2025)\n• Quantum Machine Learning (2025)\n• AI Fundamentals (2024)\n• Developing Front-End Apps with React (2024)\n• Software Engineering Essentials (2024)\n• Introduction to Software Engineering with Honors (2024)";
+    }
+    if (query.includes('cisco')) {
+      return "**David's Cisco Certifications** include:\n• Cyber Threat Management (2025) — Threat hunting, SOC analysis, incident response\n• Introduction to IoT and Digital Transformation (2025)\n• Introduction to Cybersecurity (2024) — Network defense protocols";
+    }
+    if (query.includes('microsoft')) {
+      return "**David's Microsoft Certification**: *Describe the Concepts of Cybersecurity* (2026), focusing on Zero Trust architecture, threat protection, and cloud security.";
+    }
+    if (query.includes('hp')) {
+      return "**David's HP Certification**: *Data Science & Analytics* (2026), covering exploratory data analysis, predictive modeling, and statistical workflows.";
+    }
+    if (query.includes('infosys')) {
+      return "**David's Infosys Springboard Certifications**:\n• Programming Fundamentals Using Python (2026)\n• Artificial Intelligence (2026)";
+    }
+    return "David holds **41 verified professional accreditations**, with 18 prominently featured:\n\n• **IBM (7 Credentials)**: Vulnerability Management, Cybersecurity Fundamentals, Quantum ML, React Apps, AI Fundamentals, Software Engineering with Honors\n• **Cisco (3 Credentials)**: Cyber Threat Management, IoT & Digital Transformation, Cybersecurity\n• **Microsoft**: Describe the Concepts of Cybersecurity (2026)\n• **HP**: Data Science & Analytics (2026)\n• **Infosys Springboard**: Python Fundamentals & AI (2026)\n• **FutureSkills Prime**: Digital 101 (30 Hours) (2026)\n• **Deloitte**: Technology Job Simulation (2025)\n• **IEEE**: English for Technical Professionals (2025)\n• **Google**: Fundamentals of Digital Marketing (2023)\n\nBrowse all cards in the **Certificates** section or view the complete 41-credential registry on [LinkedIn](https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/)!";
   }
 
-  if (query.includes('where') || query.includes('location') || query.includes('live') || query.includes('based') || query.includes('india') || query.includes('kerala') || query.includes('city') || query.includes('country')) {
-    return "David Varghese is based in **Kerala, India**.";
+  // 10. Achievements & Hackathons
+  if (query.includes('achievement') || query.includes('award') || query.includes('hackathon') || query.includes('finalist') || query.includes('milestone') || query.includes('honor') || query.includes('won') || query.includes('vibe night') || query.includes('smart india') || query.includes('sih') || query.includes('prize')) {
+    return "**Key Honors & Hackathon Achievements**:\n\n1. **3rd Prize — Vibe Night Hackathon (2025)**:\n   Conducted as part of the Abhiyanthriki Tech Fest at Rajagiri School of Engineering & Technology.\n2. **National Level Hackathon Finalist — Hacksus (2025)**:\n   Selected among top teams nationwide with **Intevra**, an AI interview integrity and fraud detection system.\n3. **Smart India Hackathon (SIH, 2024–2025)**:\n   Participant in India's flagship national hackathon organized by the Ministry of Education & AICTE.\n4. **Competitive Coding on LeetCode**:\n   Active problem solver under handle **david_1000** practicing graph theory, dynamic programming, and data structures.";
   }
 
-  if (query.includes('who is david') || query.includes('about david') || query.includes('tell me about david') || query.includes('bio') || query.includes('background') || query.includes('resume') || query.includes('profile')) {
-    return "David Varghese is a Computer Science & Engineering student and software developer from Kerala, India. He builds robust, visually engaging applications combining full-stack web technologies, applied machine learning, and cybersecurity principles.";
+  // 11. Technical Skills, Languages & Tools
+  // Java & OOP
+  if (query.includes('java') || query.includes('oop') || query.includes('object oriented')) {
+    return "David has extensive proficiency in **Object-Oriented Programming (OOP) in Java**, utilizing principles like encapsulation, polymorphism, inheritance, and modular design patterns to build structured, maintainable software systems.";
   }
 
-  // 9. Certifications & Accreditations
-  if (query.includes('certificat') || query.includes('credential') || query.includes('coursera') || query.includes('cisco') || query.includes('stanford') || query.includes('meta') || query.includes('ibm') || query.includes('microsoft') || query.includes('hp') || query.includes('infosys') || query.includes('ieee') || query.includes('deloitte') || query.includes('futureskills')) {
-    return "David holds 41 verified professional certifications (including 18 featured across IBM, Cisco, Microsoft, HP, Infosys Springboard, FutureSkills Prime, Google, IEEE, and Deloitte, spanning Vulnerability Management, Cyber Threat Management, AI Fundamentals, and React Application Development). You can view the highlight cards in the **Certificates** tab or browse his full 41-certificate registry on [LinkedIn](https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/)!";
+  // C Programming & Low-level
+  if (query.includes('c programming') || query.includes('c language') || query.includes('c code') || query.includes('pointers') || query.includes('memory management')) {
+    return "David has comprehensive hands-on expertise in **C Programming & low-level memory management**, including pointer arithmetic, manual heap allocations (`malloc`/`free`), system calls, and core data structure implementations from scratch.";
   }
 
-  // 10. Achievements & Milestones
-  if (query.includes('achievement') || query.includes('award') || query.includes('hackathon') || query.includes('finalist') || query.includes('milestone') || query.includes('honor') || query.includes('won') || query.includes('vibe night') || query.includes('hacksus') || query.includes('smart india')) {
-    return "Key achievements for David include:\n• **3rd Prize at Vibe Night Hackathon** (Abhiyanthriki Tech Fest, Rajagiri School of Engineering & Technology)\n• **National Level Hackathon Finalist — Hacksus** (Rajagiri School of Engineering & Technology) with Intevra\n• **Smart India Hackathon (SIH)** participant (hands-on problem solving & collaborative development)\n• **Algorithmic Problem Solving & Competitive Coding** on LeetCode (`david_1000`)";
+  // DSA & LeetCode
+  if (query.includes('dsa') || query.includes('data structure') || query.includes('algorithm') || query.includes('leetcode') || query.includes('competitive') || query.includes('problem solving') || query.includes('binary tree') || query.includes('graph') || query.includes('dynamic programming')) {
+    return "David actively practices Data Structures & Algorithms on **LeetCode** (profile: **david_1000**) and implements core DSA in C and Java. His toolkit covers:\n• **Data Structures**: Arrays, Linked Lists, Stacks, Queues, Binary Trees, BSTs, Heaps, Hash Maps, Graphs\n• **Algorithms**: Graph Traversals (BFS/DFS, Dijkstra), Dynamic Programming, Divide & Conquer, Two Pointers, Sliding Window, Asymptotic Complexity (Big-O) optimization.";
   }
 
-  // 11. Contact, Socials, Hiring & Collaboration
-  if (query.includes('hire') || query.includes('job') || query.includes('intern') || query.includes('freelance') || query.includes('opportunity') || query.includes('collaborat') || query.includes('work with') || query.includes('why should i hire')) {
-    return "David is actively seeking software engineering internships and technical collaborations! He brings strong problem-solving skills (LeetCode), modern full-stack capabilities, and cybersecurity awareness. Reach him directly at **david3005.scd@gmail.com**.";
+  // Python
+  if (query.includes('python')) {
+    return "Python is one of David's core languages, used for machine learning pipelines (MediSense AI), symbolic algebra and numerical computation engines (Equora), and automation scripts. He holds verified Python certifications from Infosys Springboard.";
   }
 
-  if (query.includes('contact') || query.includes('email') || query.includes('mail') || query.includes('reach') || query.includes('message') || query.includes('phone') || query.includes('touch')) {
-    return "You can get in touch with David directly:\n• **Email**: david3005.scd@gmail.com\n• **LinkedIn**: https://www.linkedin.com/in/david-varghese-solchadav-group/\n• **GitHub**: https://github.com/davidvarghese10\n• **LeetCode**: https://leetcode.com/u/david_1000/";
+  // React & Web Development
+  if (query.includes('react') || query.includes('typescript') || query.includes('javascript') || query.includes('frontend') || query.includes('tailwind') || query.includes('css') || query.includes('framer') || query.includes('html')) {
+    return "David develops modern, responsive web applications using **React, TypeScript, Tailwind CSS, and Framer Motion**. He focuses on 60fps micro-interactions, clean glassmorphism UI/UX, robust component architectures, and certified IBM Front-End React practices.";
   }
 
-  if (query.includes('github') || query.includes('repo') || query.includes('git') || query.includes('code')) {
-    return "You can view David's public source code repositories on GitHub at **https://github.com/davidvarghese10**.";
+  // Cybersecurity
+  if (query.includes('cyber') || query.includes('security') || query.includes('hack') || query.includes('vulnerab') || query.includes('threat') || query.includes('defense') || query.includes('zero trust') || query.includes('soc') || query.includes('cryptography')) {
+    return "David has robust foundational expertise in **Cybersecurity & Threat Defense**, backed by verified certifications from **IBM, Cisco, and Microsoft**. His knowledge covers Vulnerability Management, Cyber Threat Intelligence, Network Defense Protocols, Incident Response, Cryptography, and Zero Trust security models.";
+  }
+
+  // Machine Learning & AI
+  if (query.includes('machine learning') || query.includes('ai') || query.includes('deep learning') || query.includes('scikit') || query.includes('model') || query.includes('neural') || query.includes('predict')) {
+    return "David applies Machine Learning across predictive classification and computer vision, such as symptom classification in **MediSense AI**, multi-modal fraud detection in **Intevra**, and quantum algorithms through IBM's **Quantum Machine Learning** certification.";
+  }
+
+  // Backend & Databases
+  if (query.includes('backend') || query.includes('node') || query.includes('express') || query.includes('sql') || query.includes('database') || query.includes('api') || query.includes('rest') || query.includes('c++')) {
+    return "David's backend and systems toolkit includes **Node.js, Express, RESTful APIs, and SQL** for database design, complemented by **C/C++ and Java** for systems-level programming and algorithmic implementations.";
+  }
+
+  // General Skills Overview
+  if (query.includes('skill') || query.includes('stack') || query.includes('tech') || query.includes('tool') || query.includes('toolkit')) {
+    return "David's technical toolkit includes:\n\n• **Languages**: Python, Java (OOP), C, C++, TypeScript, JavaScript, SQL\n• **Frontend**: React, Tailwind CSS, Framer Motion, Recharts, HTML5/CSS3\n• **Backend & Systems**: Node.js, Express, REST APIs, Git, GitHub\n• **Cybersecurity**: Vulnerability Assessment, Threat Defense, Network Security, Cryptography\n• **Data & AI**: Machine Learning, Scikit-learn, Data Analytics (HP certified)\n• **Core CS**: Data Structures & Algorithms (DSA), LeetCode (`david_1000`), System Design Principles";
+  }
+
+  // 12. Location, Bio & Background
+  if (query.includes('where') || query.includes('location') || query.includes('live') || query.includes('based') || query.includes('india') || query.includes('kerala') || query.includes('city') || query.includes('kochi') || query.includes('kakkanad') || query.includes('chalakudy') || query.includes('thrissur')) {
+    return "David Varghese is based in **Kerala, India** and currently studies in **Kakkanad, Kochi** at Rajagiri School of Engineering & Technology.";
+  }
+
+  if (query.includes('who is david') || query.includes('about david') || query.includes('tell me about david') || query.includes('bio') || query.includes('background') || query.includes('summary') || query.includes('profile')) {
+    return "**David Varghese** is a Computer Science and Engineering student at Rajagiri School of Engineering & Technology, Kerala (10.00 SGPA) and an aspiring software developer. He combines full-stack web engineering, applied machine learning, and cybersecurity to build resilient, real-world solutions.";
+  }
+
+  // 13. Hiring, Collaboration & Contact
+  if (query.includes('hire') || query.includes('job') || query.includes('intern') || query.includes('freelance') || query.includes('opportunity') || query.includes('collaborat') || query.includes('work with') || query.includes('why should i hire') || query.includes('strengths') || query.includes('resume') || query.includes('cv')) {
+    return "**Why Work with David Varghese?**\n\n• **Academic Distinction**: Flawless 10.00 / 10.00 SGPA in B.Tech CSE at Rajagiri.\n• **Proven Hackathon Execution**: National Level Finalist at Hacksus with Intevra; 3rd Prize winner at Vibe Night.\n• **Strong Algorithmic Foundation**: Deep DSA expertise in C/Java and regular problem-solving on LeetCode (`david_1000`).\n• **Security & Full-Stack Rigor**: 41+ verified certifications (IBM, Cisco, Microsoft, HP).\n\nDavid is open to software engineering internships, technical collaborations, and hackathon teams! Reach him at **david3005.scd@gmail.com**.";
+  }
+
+  if (query.includes('contact') || query.includes('email') || query.includes('mail') || query.includes('reach') || query.includes('message') || query.includes('phone') || query.includes('touch') || query.includes('social')) {
+    return "You can get in touch with David directly:\n\n• **Email**: david3005.scd@gmail.com\n• **LinkedIn**: https://www.linkedin.com/in/david-varghese-solchadav-group/\n• **GitHub**: https://github.com/davidvarghese10\n• **LeetCode**: https://leetcode.com/u/david_1000/";
+  }
+
+  if (query.includes('github') || query.includes('repo') || query.includes('git') || query.includes('source code')) {
+    return "Check out David's open-source projects and code repositories on GitHub: **https://github.com/davidvarghese10**.";
   }
 
   if (query.includes('linkedin')) {
-    return "Connect with David on LinkedIn at **https://www.linkedin.com/in/david-varghese-solchadav-group/**.";
+    return "Connect with David on LinkedIn: **https://www.linkedin.com/in/david-varghese-solchadav-group/**.";
   }
 
-  // 12. Portfolio Design & Tech Stack
-  if (query.includes('how was this website') || query.includes('how did you build this') || query.includes('liquid glass') || query.includes('portfolio design') || query.includes('theme') || query.includes('animation')) {
-    return "This portfolio is built with **React 19, TypeScript, Tailwind CSS, and Framer Motion**. It features a 60fps liquid neon blue glassmorphism theme, GPU-accelerated canvas lighting, an Apple-inspired hello intro animation, and an interactive AI assistant!";
+  if (query.includes('leetcode')) {
+    return "View David's algorithmic problem-solving track record on LeetCode: **https://leetcode.com/u/david_1000/**.";
   }
 
-  // 13. Computer Science & Software Concepts
+  // 14. Portfolio Design & Aesthetic
+  if (query.includes('how was this website') || query.includes('how did you build this') || query.includes('liquid glass') || query.includes('portfolio design') || query.includes('theme') || query.includes('animation') || query.includes('tech stack of this site')) {
+    return "This portfolio is crafted using **React 19, TypeScript, Tailwind CSS, and Framer Motion**:\n\n• **Design Language**: Futuristic Liquid Glassmorphism with electric cyan (#00f3ff) accents.\n• **Performance**: 60fps GPU-accelerated interactive canvas lighting and fluid section transitions.\n• **Features**: Apple-inspired multilingual loader, radar skills visualization, interactive project galleries, and the built-in Livoq AI engine.";
+  }
+
+  // 15. Core Computer Science & Concept Explanations
   if (query.includes('what is react')) {
-    return "React is a component-driven JavaScript/TypeScript UI library. David uses React with TypeScript and Framer Motion to build reactive, high-performance web applications.";
+    return "**React** is a popular component-driven JavaScript/TypeScript UI library. David uses React with TypeScript and Framer Motion to build responsive, reactive web applications with state-driven modular architectures.";
   }
 
-  if (query.includes('what is cybersecurity') || query.includes('what is threat modeling')) {
-    return "Cybersecurity protects computer systems, networks, and data against digital threats. Threat modeling identifies potential vulnerabilities and vectors so proactive defenses can be implemented.";
+  if (query.includes('what is cybersecurity') || query.includes('what is vulnerability')) {
+    return "**Cybersecurity** is the practice of protecting computer networks, systems, and programs from digital attacks. David has completed IBM Vulnerability Management and Cisco Cyber Threat Management training to audit and secure software architectures.";
   }
 
   if (query.includes('what is machine learning') || query.includes('what is ai')) {
-    return "Machine Learning involves algorithms that learn patterns from training data to make predictions or classifications without manual rule programming. David has implemented ML classification models in MediSense AI and Intevra.";
+    return "**Machine Learning** is a branch of artificial intelligence where algorithms identify patterns in data to make classifications or predictions. David implements ML classification pipelines in projects like MediSense AI and Intevra.";
   }
 
-  if (query.includes('what is dynamic programming')) {
-    return "Dynamic Programming is an optimization technique that breaks complex problems into simpler subproblems, storing the results (memoization/tabulation) to avoid redundant computations. David practices DP problems frequently on LeetCode.";
-  }
+  // 16. Fallback Synthesizer
+  return `David Varghese is a Computer Science & Engineering student at Rajagiri (10.00 SGPA) specializing in full-stack web engineering, cybersecurity, and machine learning.
 
-  if (query.includes('what is an api') || query.includes('rest api')) {
-    return "An API (Application Programming Interface) allows different software applications to communicate. REST APIs use standard HTTP verbs (GET, POST, PUT, DELETE) to manage data exchange between client and server.";
-  }
+I can share details on:
+• **Featured Projects**: Intevra (AI fraud detection), Aether (interactive weather), MediSense AI, Equora
+• **Academic Record**: Perfect 10.00 SGPA at RSET, Class XII (96.0%), Class X (97.6%)
+• **Certifications & Skills**: 41+ credentials across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE
+• **Contact & Hiring**: Email him at **david3005.scd@gmail.com**!
 
-  // 14. Intelligent Semantic Keyword Synthesizer for Any Open Question
-  return `David Varghese is a Computer Science & Engineering student specializing in full-stack web development, cybersecurity, and machine learning.
-
-I can provide details about:
-• **Projects**: Intevra (AI fraud detection), Aether (weather visualizer), MediSense AI, Equora
-• **Technical Skills**: Python, React, TypeScript, C/C++, SQL, Cybersecurity, DSA
-• **Credentials**: Meta Full-Stack, Cisco Cybersecurity, Stanford ML certifications
-• **Collaboration**: Reach David at **david3005.scd@gmail.com**!
-
-*(Tip: You can also tap the key icon at the top of this chat to connect your personal Gemini API Key for unlimited open-ended AI conversation!)*`;
+*(Tip: You can also click the 🔑 key icon in the chat header to connect your personal Gemini API Key for unlimited open-ended AI conversation!)*`;
 };
 
 export const sendChatMessage = async (message: string, history: ChatMessage[] = []): Promise<string> => {
