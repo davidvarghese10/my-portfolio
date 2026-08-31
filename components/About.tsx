@@ -47,10 +47,10 @@ const About: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
                 <div className="flex items-baseline gap-1">
-                  <h4 className="text-4xl font-bold font-oswald text-white">CSE</h4>
+                  <h4 className="text-4xl font-bold font-oswald text-white">40+</h4>
                 </div>
                 <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#00f3ff] mt-1">
-                  Student
+                  Certificates
                 </p>
               </motion.div>
               <motion.div

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, Building2, CheckCircle2, Award, Sparkles, ExternalLink, Laptop, ShieldCheck } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, Building2, CheckCircle2 } from 'lucide-react';
 
 interface ExperienceItem {
   id: string;
@@ -153,60 +153,12 @@ const Experience: React.FC = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Additional Milestone / Recognition Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="p-6 md:p-8 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-[#00f3ff]/30 transition-all"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-[#00f3ff]/10 border border-[#00f3ff]/20 flex items-center justify-center mb-6">
-              <Laptop size={22} className="text-[#00f3ff]" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2 font-poppins">Industry Collaboration</h4>
-            <p className="text-xs md:text-sm text-neutral-400 leading-relaxed">
-              Curated by Edunet Foundation in direct partnership with IBM SkillsBuild for applied technical training.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="p-6 md:p-8 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-[#00f3ff]/30 transition-all"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-[#00f3ff]/10 border border-[#00f3ff]/20 flex items-center justify-center mb-6">
-              <Sparkles size={22} className="text-[#00f3ff]" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2 font-poppins">Practical Implementations</h4>
-            <p className="text-xs md:text-sm text-neutral-400 leading-relaxed">
-              Focused on foundational cloud paradigms, artificial intelligence concepts, and real-world system modeling.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="p-6 md:p-8 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-[#00f3ff]/30 transition-all"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-[#00f3ff]/10 border border-[#00f3ff]/20 flex items-center justify-center mb-6">
-              <ShieldCheck size={22} className="text-[#00f3ff]" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2 font-poppins">Continuous Growth</h4>
-            <p className="text-xs md:text-sm text-neutral-400 leading-relaxed">
-              Bridging academic rigour with professional industry workflows and real-world engineering standards.
-            </p>
-          </motion.div>
-        </div>
       </div>
 
       {/* Footer */}
       <div className="max-w-[90vw] mx-auto w-full mt-20 pt-8 border-t border-neutral-900 flex justify-between items-center text-xs font-mono text-neutral-600">
         <p>&copy; 2026 David Varghese</p>
-        <p className="text-neutral-500">Edunet Foundation &bull; IBM SkillsBuild Internship</p>
+        <p className="text-neutral-500">Aspiring Software Developer</p>
       </div>
     </div>
   );

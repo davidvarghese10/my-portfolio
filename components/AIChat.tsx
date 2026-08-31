@@ -1,8 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Loader2, Sparkles, Send, Key, Check, HelpCircle } from 'lucide-react';
+import { MessageSquare, Loader2, Sparkles, Key, Check, HelpCircle } from 'lucide-react';
 import { sendChatMessage, getStoredApiKey, setStoredApiKey } from '../services/geminiService';
 import { ChatMessage } from '../types';
+
+const PaperAirplaneSendIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    fill="currentColor"
+    className={`shrink-0 ${className}`}
+  >
+    <g transform="translate(-2.5, -1.2)">
+      <path d="M21.92 3.63a1.2 1.2 0 0 0-1.25-.26L2.61 10.66a1.2 1.2 0 0 0 .08 2.26l5.05 1.95 1.9 5.86a1.2 1.2 0 0 0 1.83.6l3.18-2.65 4.58 3.39a1.2 1.2 0 0 0 1.89-.72l3-16.5a1.2 1.2 0 0 0-.21-1.22zM9.54 14.12l8.8-7.92-7.05 9.16-.33 3.4-1.42-4.64z" />
+    </g>
+  </svg>
+);
 
 const AnimatedChatToggleIcon: React.FC<{ isOpen: boolean; size?: number }> = ({ isOpen, size = 24 }) => (
   <motion.svg
@@ -400,9 +414,9 @@ const AIChat: React.FC = () => {
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
                 aria-label="Send message"
-                className="w-9 h-9 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00d9e6] hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shadow-[0_0_12px_rgba(0,243,255,0.3)]"
+                className="w-10 h-10 flex items-center justify-center shrink-0 bg-[#00f3ff] text-black rounded-full hover:bg-[#00d9e6] hover:scale-105 active:scale-95 disabled:opacity-35 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all shadow-[0_0_14px_rgba(0,243,255,0.4)] hover:shadow-[0_0_20px_rgba(0,243,255,0.7)]"
               >
-                <Send size={15} className="translate-x-[0.5px]" />
+                <PaperAirplaneSendIcon size={19} />
               </button>
             </div>
           </motion.div>
@@ -414,6 +428,7 @@ const AIChat: React.FC = () => {
         whileHover="hover"
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close AI Assistant" : "Ask AI Assistant"}
         className="liquid-glass-button p-4 rounded-full flex items-center overflow-hidden shadow-2xl"
       >
         <div className="relative z-10 flex items-center justify-center">

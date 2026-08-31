@@ -82,7 +82,7 @@ const ProjectList: React.FC = () => {
 
       <div className="max-w-[90vw] mx-auto w-full mt-20 pt-8 border-t border-neutral-900 flex justify-between items-center text-xs font-mono text-neutral-600">
         <p>&copy; 2026 David Varghese</p>
-        <p className="text-neutral-500">4 Works in Total</p>
+        <p className="text-neutral-500">More Works Loading</p>
       </div>
     </div>
   );

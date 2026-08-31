@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BadgeCheck, CheckCircle2, Calendar, Award, ExternalLink, Filter } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { BadgeCheck, CheckCircle2, Calendar, Award, ExternalLink } from 'lucide-react';
 
 interface Certificate {
   id: number;
@@ -165,15 +165,7 @@ const CERTIFICATES: Certificate[] = [
   }
 ];
 
-const FILTER_YEARS = ['All', '2026', '2025', '2024', '2023'];
-
 const Certificates: React.FC = () => {
-  const [selectedYear, setSelectedYear] = useState<string>('All');
-
-  const filteredCertificates = selectedYear === 'All' 
-    ? CERTIFICATES 
-    : CERTIFICATES.filter(c => c.year === selectedYear);
-
   return (
     <div 
       id="certificates" 
@@ -220,43 +212,16 @@ const Certificates: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Year Filter Buttons */}
-        <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
-          <div className="flex items-center gap-1.5 text-xs font-mono text-neutral-500 mr-2 shrink-0">
-            <Filter size={13} className="text-[#00f3ff]" />
-            <span>Filter:</span>
-          </div>
-          {FILTER_YEARS.map(year => (
-            <button
-              key={year}
-              onClick={() => setSelectedYear(year)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-all shrink-0 ${
-                selectedYear === year
-                  ? 'bg-[#00f3ff] text-black font-semibold shadow-[0_0_12px_rgba(0,243,255,0.3)]'
-                  : 'bg-white/5 hover:bg-white/10 text-neutral-400 border border-white/10'
-              }`}
-            >
-              {year === 'All' ? 'All (41)' : `${year} (${CERTIFICATES.filter(c => c.year === year).length})`}
-            </button>
-          ))}
-        </div>
-
         {/* Certificates Grid */}
-        <motion.div 
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredCertificates.map((cert, index) => (
-              <motion.div
-                key={cert.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, delay: index * 0.03 }}
-                className="group relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex flex-col justify-between hover:border-[#00f3ff]/40 hover:bg-black/60 transition-all duration-300 shadow-xl"
-              >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {CERTIFICATES.map((cert, index) => (
+            <motion.div
+              key={cert.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.03 }}
+              className="group relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex flex-col justify-between hover:border-[#00f3ff]/40 hover:bg-black/60 transition-all duration-300 shadow-xl"
+            >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] px-2.5 py-0.5 rounded-full border border-[#00f3ff]/20 bg-[#00f3ff]/10 truncate max-w-[70%]">
@@ -300,8 +265,7 @@ const Certificates: React.FC = () => {
                 </div>
               </motion.div>
             ))}
-          </AnimatePresence>
-        </motion.div>
+        </div>
 
         {/* Centered Fitted "More Certificates" CTA Button */}
         <motion.div 

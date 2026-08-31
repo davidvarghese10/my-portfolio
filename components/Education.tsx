@@ -106,11 +106,8 @@ const Education: React.FC = () => {
             </h2>
           </div>
           <div className="text-left md:text-right">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block mb-1">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block">
               (2022 — 2029)
-            </span>
-            <span className="text-[11px] font-mono text-[#00f3ff]/80">
-              Rajagiri School of Engineering &amp; Technology
             </span>
           </div>
         </motion.div>
