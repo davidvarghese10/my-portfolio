@@ -49,8 +49,8 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
           <span className="text-white">Varghese</span>
         </button>
 
-        {/* Selected Tab Display at Center Top (hidden on Home) */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center pointer-events-none">
+        {/* Selected Tab Display at Center Top (hidden on Home and Mobile) */}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center pointer-events-none">
           <AnimatePresence mode="wait">
             {activePage !== 'home' && (
               <motion.div
