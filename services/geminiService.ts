@@ -507,19 +507,13 @@ export const sendChatMessage = async (
       })
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      if (data.text?.trim()) {
-        return data.text.trim();
-      }
-    }
+if (response.ok && data.text?.trim()) {
+  return data.text.trim();
+}
 
-    console.warn("Gemini Worker returned an error");
-
-  } catch (error) {
-    console.warn("Gemini Worker unavailable:", error);
-  }
+return `Gemini error: ${data.error || "Unknown error"}${data.details ? ` — ${data.details}` : ""}`;
 
   // Your existing offline intelligence remains as fallback.
   return getOfflinePortfolioAnswer(trimmed, history);
