@@ -521,6 +521,6 @@ export const sendChatMessage = async (
     console.warn("Gemini Worker unavailable:", error);
   }
 
-  // Your existing offline intelligence remains as fallback
+  // Your existing offline intelligence remains as fallback.
   return getOfflinePortfolioAnswer(trimmed, history);
 };
