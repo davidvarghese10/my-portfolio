@@ -482,46 +482,48 @@ Here are some topics you can ask me about:
 • **Contact & Hiring**: Email him at **david3005.scd@gmail.com**!`;
 };
 
-export const sendChatMessage = async (message: string, history: ChatMessage[] = []): Promise<string> => {
+export const sendChatMessage = async (
+  message: string,
+  history: ChatMessage[] = []
+): Promise<string> => {
   const trimmed = message.trim();
-  if (!trimmed) return "Please enter a question or topic to explore!";
 
-  const ai = getAIClient();
-  
-  // If API key is available (either environment or user-provided in settings), query Gemini
-  if (ai) {
-    for (const model of MODELS_TO_TRY) {
-      try {
-        const formattedContents = history
-          .slice(-6)
-          .map(msg => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.text }]
-          }));
+  if (!trimmed) {
+    return "Please enter a question or topic to explore!";
+  }
 
-        formattedContents.push({
-          role: 'user',
-          parts: [{ text: trimmed }]
-        });
+  try {
+    const response = await fetch("/api/gemini", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: trimmed,
+        history: history.slice(-6).map((msg) => ({
+          role: msg.role === "user" ? "user" : "model",
+          text: msg.text
+        }))
+      })
+    });
 
-        const response = await ai.models.generateContent({
-          model: model,
-          contents: formattedContents,
-          config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-            temperature: 0.7,
-            topP: 0.95,
-          }
-        });
+    if (response.ok) {
+      const data = await response.json();
 
-        if (response && response.text && response.text.trim().length > 0) {
-          return response.text.trim();
-        }
-      } catch (error: any) {
-        console.warn(`Model ${model} attempt encountered issue:`, error?.message || error);
+      if (data.text?.trim()) {
+        return data.text.trim();
       }
     }
+
+    console.warn("Gemini Worker returned an error");
+
+  } catch (error) {
+    console.warn("Gemini Worker unavailable:", error);
   }
+
+  // Your existing offline intelligence remains as fallback
+  return getOfflinePortfolioAnswer(trimmed, history);
+};
 
   // Fallback to the intelligent portfolio engine
   return getOfflinePortfolioAnswer(trimmed, history);
