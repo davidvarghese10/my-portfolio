@@ -8,9 +8,5 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
-  },
-
-  "secrets": {
-    "required": ["GEMINI_API_KEY"]
   }
 }
