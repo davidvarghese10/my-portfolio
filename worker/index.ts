@@ -104,8 +104,16 @@ export default {
               });
             }
           } catch (error) {
-            console.error(`Gemini ${model} failed:`, error);
-          }
+  console.error(`Gemini ${model} failed:`, error);
+
+  return Response.json(
+    {
+      error: `Gemini ${model} failed`,
+      details: error instanceof Error ? error.message : String(error)
+    },
+    { status: 502 }
+  );
+}
         }
 
         return Response.json(
