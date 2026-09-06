@@ -509,12 +509,16 @@ export const sendChatMessage = async (
 
     const data = await response.json();
 
-if (response.ok && data.text?.trim()) {
-  return data.text.trim();
-}
+    if (response.ok && data.text?.trim()) {
+      return data.text.trim();
+    }
 
-return `Gemini error: ${data.error || "Unknown error"}${data.details ? ` — ${data.details}` : ""}`;
-
-  // Your existing offline intelligence remains as fallback.
-  return getOfflinePortfolioAnswer(trimmed, history);
+    return `Gemini error: ${data.error || "Unknown error"}${
+      data.details ? ` — ${data.details}` : ""
+    }`;
+  } catch (error) {
+    return `Connection error: ${
+      error instanceof Error ? error.message : String(error)
+    }`;
+  }
 };
