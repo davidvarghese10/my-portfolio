@@ -524,7 +524,3 @@ export const sendChatMessage = async (
   // Your existing offline intelligence remains as fallback
   return getOfflinePortfolioAnswer(trimmed, history);
 };
-
-  // Fallback to the intelligent portfolio engine
-  return getOfflinePortfolioAnswer(trimmed, history);
-};
