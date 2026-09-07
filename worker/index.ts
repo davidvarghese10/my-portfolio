@@ -82,44 +82,36 @@ export default {
         ];
 
         const models = [
-          "gemini-3.5-flash-lite",
-          "gemini-3.6-flash"
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash"
         ];
 
-        for (const model of models) {
-          try {
-            const response = await ai.models.generateContent({
-              model,
-              contents,
-              config: {
-                systemInstruction: SYSTEM_INSTRUCTION,
-                temperature: 0.7,
-                topP: 0.95
-              }
-            });
+for (const model of models) {
+  try {
+    const response = await ai.models.generateContent({
+      model,
+      contents,
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION
+      }
+    });
 
-            if (response.text?.trim()) {
-              return Response.json({
-                text: response.text.trim()
-              });
-            }
-          } catch (error) {
-  console.error(`Gemini ${model} failed:`, error);
-
-  return Response.json(
-    {
-      error: `Gemini ${model} failed`,
-      details: error instanceof Error ? error.message : String(error)
-    },
-    { status: 502 }
-  );
+    if (response.text?.trim()) {
+      return Response.json({
+        text: response.text.trim()
+      });
+    }
+  } catch (error) {
+    console.error(`Gemini ${model} failed:`, error);
+  }
 }
-        }
 
-        return Response.json(
-          { error: "Gemini was unable to generate a response" },
-          { status: 502 }
-        );
+return Response.json(
+  {
+    error: "Gemini service temporarily unavailable"
+  },
+  { status: 502 }
+);
 
       } catch (error) {
         console.error("Gemini Worker error:", error);
