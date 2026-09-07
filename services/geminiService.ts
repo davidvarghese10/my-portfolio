@@ -513,12 +513,13 @@ export const sendChatMessage = async (
       return data.text.trim();
     }
 
-    return `Gemini error: ${data.error || "Unknown error"}${
-      data.details ? ` — ${data.details}` : ""
-    }`;
+    // Gemini/Worker failed → use offline engine
+    return getOfflinePortfolioAnswer(trimmed, history);
+
   } catch (error) {
-    return `Connection error: ${
-      error instanceof Error ? error.message : String(error)
-    }`;
+    console.error("Gemini request failed:", error);
+
+    // Network/connection failure → use offline engine
+    return getOfflinePortfolioAnswer(trimmed, history);
   }
 };
