@@ -10,6 +10,7 @@ import Certificates from './components/Certificates';
 import Footer from './components/Footer';
 import AIChat from './components/AIChat';
 import LiquidBackground from './components/LiquidBackground';
+import InteractiveParticles from './components/InteractiveParticles';
 import ScrollHUD from './components/ScrollHUD';
 import AppleHelloLoader from './components/AppleHelloLoader';
 import { PageTab } from './types';
@@ -126,6 +127,7 @@ const App: React.FC = () => {
       )}
 
       <LiquidBackground />
+      <InteractiveParticles />
       <ScrollHUD />
       
       <div className="relative z-10 md:cursor-none min-h-screen flex flex-col justify-between">
