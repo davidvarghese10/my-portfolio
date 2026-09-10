@@ -6,7 +6,7 @@ interface ParallaxParticle {
   y: number;
   vx: number;
   vy: number;
-  depth: number; // 0.15 (far back) to 1.0 (near)
+  depth: number; // 0.2 (far back) to 1.0 (near)
   size: number;
   colorIndex: number;
   baseAlpha: number;
@@ -15,7 +15,7 @@ interface ParallaxParticle {
   shimmerPhase: number;
 }
 
-// Pre-defined color palette with RGB values for zero-allocation alpha blending
+// Pre-defined color palette
 const PALETTE_COLORS = [
   '#ffffff', // Crisp white
   '#00f3ff', // Cyan
@@ -40,15 +40,17 @@ export const InteractiveParticles: React.FC = () => {
     targetY: 0,
   });
 
-  // Raw orientation readings - separated so event listener does virtually 0 work
-  const sensorRef = useRef<{
-    gamma: number | null;
-    beta: number | null;
-    hasNewData: boolean;
+  // Sensor state refs
+  const sensorStateRef = useRef<{
+    baselineGamma: number | null;
+    baselineBeta: number | null;
+    hasOrientationData: boolean;
+    lastOrientationTime: number;
   }>({
-    gamma: null,
-    beta: null,
-    hasNewData: false,
+    baselineGamma: null,
+    baselineBeta: null,
+    hasOrientationData: false,
+    lastOrientationTime: 0,
   });
 
   useEffect(() => {
@@ -62,16 +64,14 @@ export const InteractiveParticles: React.FC = () => {
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let isMobile = false;
     let particles: ParallaxParticle[] = [];
 
-    // Check motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const initDimensions = () => {
-      isMobile = window.innerWidth < 768;
-      // Battery saver: on mobile screens, clamp DPR to 1 to reduce GPU fillrate & memory bandwidth by ~75%
-      dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+      const isMobile = window.innerWidth < 768;
+      // High-DPI support: cap at 2 for crisp rendering on OLED/Retina
+      dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
       width = window.innerWidth;
       height = window.innerHeight;
 
@@ -84,24 +84,26 @@ export const InteractiveParticles: React.FC = () => {
     };
 
     const initParticles = () => {
-      // Conservative particle count: 50 on mobile for minimal CPU/battery footprint, 110 on desktop
-      const count = isMobile ? 50 : 110;
+      const isMobile = window.innerWidth < 768;
+      // 55 particles on mobile (minimal CPU), 110 on desktop
+      const count = isMobile ? 55 : 110;
       particles = [];
 
       for (let i = 0; i < count; i++) {
         const x = Math.random() * width;
         const y = Math.random() * height;
         const depth = 0.2 + Math.pow(Math.random(), 1.4) * 0.8;
-        const size = 0.65 + depth * 0.75;
+        // Crisp visible sizes: 1.0px in back to 2.0px in foreground
+        const size = 0.9 + depth * 1.0;
 
-        // Very slow, soothing drift
-        const speed = (0.05 + Math.random() * 0.08) * depth;
+        // Gentle ambient drift
+        const speed = (0.04 + Math.random() * 0.08) * depth;
         const angle = Math.random() * Math.PI * 2;
         const vx = Math.cos(angle) * speed;
         const vy = Math.sin(angle) * speed;
 
         const colorIndex = Math.floor(Math.random() * PALETTE_COLORS.length);
-        const baseAlpha = 0.2 + depth * 0.55;
+        const baseAlpha = 0.25 + depth * 0.55;
 
         particles.push({
           x,
@@ -122,124 +124,153 @@ export const InteractiveParticles: React.FC = () => {
     initDimensions();
     initParticles();
 
-    // Desktop Mouse listener
+    // 1. Desktop Mouse Movement
     const handleMouseMove = (e: MouseEvent) => {
-      if (isMobile) return;
+      // If mobile accelerometer is actively providing data, let the phone drive it
+      if (sensorStateRef.current.hasOrientationData) return;
+
       const centerX = width / 2;
       const centerY = height / 2;
-      const maxParallaxRange = 55;
+      const maxRange = 65;
 
       const normX = (e.clientX - centerX) / centerX;
       const normY = (e.clientY - centerY) / centerY;
 
-      // Inverted: move in opposite direction
-      parallaxRef.current.targetX = -normX * maxParallaxRange;
-      parallaxRef.current.targetY = -normY * maxParallaxRange;
+      // Inverted: move in opposite direction of mouse
+      parallaxRef.current.targetX = -normX * maxRange;
+      parallaxRef.current.targetY = -normY * maxRange;
     };
 
     const handleMouseLeave = () => {
-      parallaxRef.current.targetX = 0;
-      parallaxRef.current.targetY = 0;
-    };
-
-    // Mobile Accelerometer (DeviceOrientation)
-    // Minimal footprint: the event handler only records raw values to avoid CPU spikes on high-frequency sensors
-    let lastSensorTime = 0;
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (e.gamma === null || e.beta === null) return;
-
-      const now = performance.now();
-      // Throttle sensor intake to ~30Hz (every 32ms) to save battery on 60-120Hz sensors
-      if (now - lastSensorTime < 32) return;
-      lastSensorTime = now;
-
-      sensorRef.current.gamma = e.gamma;
-      sensorRef.current.beta = e.beta;
-      sensorRef.current.hasNewData = true;
-    };
-
-    // Adaptive orientation filter running inside the RAF loop
-    let baselineGamma: number | null = null;
-    let baselineBeta: number | null = null;
-
-    const processSensorData = () => {
-      const sensor = sensorRef.current;
-      if (!sensor.hasNewData || sensor.gamma === null || sensor.beta === null) return;
-      sensor.hasNewData = false;
-
-      const gamma = sensor.gamma;
-      const beta = sensor.beta;
-
-      if (baselineGamma === null || baselineBeta === null) {
-        baselineGamma = gamma;
-        baselineBeta = beta;
-        return;
-      }
-
-      // Smooth drift adaptation for baseline
-      baselineGamma += (gamma - baselineGamma) * 0.012;
-      baselineBeta += (beta - baselineBeta) * 0.012;
-
-      const deltaX = gamma - baselineGamma;
-      const deltaY = beta - baselineBeta;
-
-      // Deadband: ignore micro-tremors (< 0.25 deg) to avoid unnecessary recalculations
-      const absDeltaX = Math.abs(deltaX);
-      const absDeltaY = Math.abs(deltaY);
-
-      if (absDeltaX > 0.25 || absDeltaY > 0.25) {
-        const tiltSensitivity = 22;
-        const normX = Math.max(-1, Math.min(1, deltaX / tiltSensitivity));
-        const normY = Math.max(-1, Math.min(1, deltaY / tiltSensitivity));
-        const maxParallaxRange = 38;
-
-        // Inverted opposite direction
-        parallaxRef.current.targetX = -normX * maxParallaxRange;
-        parallaxRef.current.targetY = -normY * maxParallaxRange;
-      }
-    };
-
-    // Optional touch fallback (only if phone is stationary or orientation is denied)
-    const handleTouchMove = (e: TouchEvent) => {
-      // If accelerometer is providing readings, skip touch parallax to conserve CPU
-      if (baselineGamma !== null) return;
-
-      if (e.touches.length > 0) {
-        const touch = e.touches[0];
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const maxParallaxRange = 30;
-
-        const normX = (touch.clientX - centerX) / centerX;
-        const normY = (touch.clientY - centerY) / centerY;
-
-        parallaxRef.current.targetX = -normX * maxParallaxRange;
-        parallaxRef.current.targetY = -normY * maxParallaxRange;
-      }
-    };
-
-    const handleTouchEnd = () => {
-      if (baselineGamma === null) {
+      if (!sensorStateRef.current.hasOrientationData) {
         parallaxRef.current.targetX = 0;
         parallaxRef.current.targetY = 0;
       }
     };
 
-    // iOS 13+ permission request on user tap
-    const requestOrientationPermission = async () => {
-      const DeviceOrientationEventAny = window.DeviceOrientationEvent as unknown as {
-        requestPermission?: () => Promise<'granted' | 'denied'>;
-      };
+    // 2. Mobile DeviceOrientation (Gyroscope / Accelerometer)
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma === null || e.beta === null) return;
 
-      if (typeof DeviceOrientationEventAny?.requestPermission === 'function') {
-        try {
-          const permission = await DeviceOrientationEventAny.requestPermission();
-          if (permission === 'granted') {
+      const gamma = e.gamma; // Roll: tilt left (<0) / right (>0)
+      const beta = e.beta;   // Pitch: tilt forward/back
+
+      const sensor = sensorStateRef.current;
+      sensor.hasOrientationData = true;
+      sensor.lastOrientationTime = performance.now();
+
+      // Establish baseline on first reading
+      if (sensor.baselineGamma === null || sensor.baselineBeta === null) {
+        sensor.baselineGamma = gamma;
+        // Typical portrait holding angle is ~45deg
+        sensor.baselineBeta = beta;
+        return;
+      }
+
+      // Delta from baseline holding angle
+      const deltaX = gamma - sensor.baselineGamma;
+      const deltaY = beta - sensor.baselineBeta;
+
+      // 22-degree tilt produces full travel range
+      const tiltSensitivity = 22;
+      const normX = Math.max(-1, Math.min(1, deltaX / tiltSensitivity));
+      const normY = Math.max(-1, Math.min(1, deltaY / tiltSensitivity));
+
+      // 70px dynamic travel range so the motion is distinctly visible on mobile
+      const maxRange = 70;
+
+      // Inverted:
+      // Phone tilt right (normX > 0) -> particles move left (-normX)
+      // Phone tilt forward/down (normY > 0) -> particles move up (-normY)
+      parallaxRef.current.targetX = -normX * maxRange;
+      parallaxRef.current.targetY = -normY * maxRange;
+    };
+
+    // 3. Fallback: DeviceMotion (Acceleration with Gravity)
+    // Works reliably across all Android WebViews and mobile browsers even if orientation is restricted
+    const handleMotion = (e: DeviceMotionEvent) => {
+      const sensor = sensorStateRef.current;
+      // Skip if deviceorientation is already providing active readings
+      if (performance.now() - sensor.lastOrientationTime < 1500) return;
+
+      const acc = e.accelerationIncludingGravity;
+      if (!acc || acc.x === null || acc.y === null) return;
+
+      sensor.hasOrientationData = true;
+
+      // Detect iOS vs Android gravity sign differences
+      const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const sign = isIOS ? -1 : 1;
+
+      // Lateral tilt: acc.x typically ranges from -7 to +7 m/s²
+      const normX = Math.max(-1, Math.min(1, (acc.x * sign) / 5.5));
+      // Normal phone upright pitch has acc.y around 7 to 9.8 m/s²
+      const normY = Math.max(-1, Math.min(1, (acc.y - 7.5) / 5.5));
+
+      const maxRange = 65;
+      parallaxRef.current.targetX = normX * maxRange;
+      parallaxRef.current.targetY = -normY * maxRange;
+    };
+
+    // Recalibrate baseline on tap/touch so user's natural posture is always centered
+    const handleUserInteraction = () => {
+      // Trigger iOS 13+ permission request if needed
+      requestIOSPermission();
+    };
+
+    // 4. Touch Parallax Fallback (in case user testing in emulator or sensors unavailable)
+    const handleTouchMove = (e: TouchEvent) => {
+      // Only active if no physical accelerometer data has been received
+      if (sensorStateRef.current.hasOrientationData) return;
+
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const maxRange = 40;
+
+        const normX = (touch.clientX - centerX) / centerX;
+        const normY = (touch.clientY - centerY) / centerY;
+
+        parallaxRef.current.targetX = -normX * maxRange;
+        parallaxRef.current.targetY = -normY * maxRange;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (!sensorStateRef.current.hasOrientationData) {
+        parallaxRef.current.targetX = 0;
+        parallaxRef.current.targetY = 0;
+      }
+    };
+
+    // iOS 13+ Permission Handler
+    const requestIOSPermission = async () => {
+      try {
+        const OrientationAny = window.DeviceOrientationEvent as unknown as {
+          requestPermission?: () => Promise<'granted' | 'denied'>;
+        };
+
+        if (typeof OrientationAny?.requestPermission === 'function') {
+          const res = await OrientationAny.requestPermission();
+          if (res === 'granted') {
             window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+            window.addEventListener('deviceorientationabsolute', handleOrientation as EventListener, { passive: true });
           }
-        } catch {
-          // Gracefully fallback
         }
+
+        const MotionAny = window.DeviceMotionEvent as unknown as {
+          requestPermission?: () => Promise<'granted' | 'denied'>;
+        };
+
+        if (typeof MotionAny?.requestPermission === 'function') {
+          const res = await MotionAny.requestPermission();
+          if (res === 'granted') {
+            window.addEventListener('devicemotion', handleMotion, { passive: true });
+          }
+        }
+      } catch {
+        // Fallback silently if permission prompt is declined or unsupported
       }
     };
 
@@ -248,16 +279,23 @@ export const InteractiveParticles: React.FC = () => {
       initParticles();
     };
 
-    // Attach passive listeners
+    // Register all sensor listeners immediately (Android Chrome / standard browsers activate immediately)
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+    window.addEventListener('deviceorientationabsolute', handleOrientation as EventListener, { passive: true });
+    window.addEventListener('devicemotion', handleMotion, { passive: true });
+
+    // Desktop mouse listeners
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseleave', handleMouseLeave, { passive: true });
-    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
-    window.addEventListener('touchstart', requestOrientationPermission, { once: true, passive: true });
+
+    // Touch & interaction listeners
+    window.addEventListener('touchstart', handleUserInteraction, { passive: true });
+    window.addEventListener('click', handleUserInteraction);
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop with Visibility API (0% CPU/battery when tab is inactive)
+    // Animation Loop with Visibility API
     let lastTime = performance.now();
     let isLoopRunning = true;
 
@@ -266,26 +304,20 @@ export const InteractiveParticles: React.FC = () => {
 
       animationFrameId = requestAnimationFrame(render);
 
-      // Process throttled accelerometer reading
-      if (isMobile) {
-        processSensorData();
-      }
-
       const dt = Math.min((currentTime - lastTime) / 16.67, 2.0);
       lastTime = currentTime;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth inertia interpolation
+      // Smooth inertia interpolation (higher lerp for responsive feeling)
       const parallax = parallaxRef.current;
-      const lerpSpeed = prefersReducedMotion ? 0.02 : 0.055;
+      const lerpSpeed = prefersReducedMotion ? 0.03 : 0.08;
       parallax.currentX += (parallax.targetX - parallax.currentX) * lerpSpeed * dt;
       parallax.currentY += (parallax.targetY - parallax.currentY) * lerpSpeed * dt;
 
-      const margin = 40;
+      const margin = 50;
 
-      // Group particles by color index to BATCH draw calls (massively reduces GPU overhead)
-      // 5 draw calls total instead of 100+ individual state changes
+      // Batch particle drawing by color to maximize GPU performance
       for (let c = 0; c < PALETTE_COLORS.length; c++) {
         ctx.fillStyle = PALETTE_COLORS[c];
         ctx.beginPath();
@@ -294,7 +326,7 @@ export const InteractiveParticles: React.FC = () => {
           const p = particles[i];
           if (p.colorIndex !== c) continue;
 
-          // Subtle organic shimmer (skip on reduced motion)
+          // Subtle organic shimmer
           if (!prefersReducedMotion) {
             p.shimmerPhase += p.shimmerSpeed * dt;
           }
@@ -322,7 +354,7 @@ export const InteractiveParticles: React.FC = () => {
       }
     };
 
-    // Pause animation completely when tab or phone screen is off to consume 0% battery
+    // Pause animation completely when screen is off / tab inactive to save battery
     const handleVisibilityChange = () => {
       if (document.hidden) {
         isLoopRunning = false;
@@ -343,10 +375,13 @@ export const InteractiveParticles: React.FC = () => {
       isLoopRunning = false;
       cancelAnimationFrame(animationFrameId);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('deviceorientation', handleOrientation);
+      window.removeEventListener('deviceorientationabsolute', handleOrientation as EventListener);
+      window.removeEventListener('devicemotion', handleMotion);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
-      window.removeEventListener('deviceorientation', handleOrientation);
-      window.removeEventListener('touchstart', requestOrientationPermission);
+      window.removeEventListener('touchstart', handleUserInteraction);
+      window.removeEventListener('click', handleUserInteraction);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('resize', handleResize);
