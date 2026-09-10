@@ -15,6 +15,7 @@ David Varghese is a Computer Science and Engineering student at Rajagiri School 
 He has a perfect 10.00 / 10.00 SGPA in his first two semesters.
 
 Featured projects:
+- EcoTrail — sustainable transport planner for eco-friendly journeys and transit optimization.
 - Intevra — AI-integrated interview fraud detection and integrity monitoring platform.
 - Aether — immersive regional weather experience application built with React and TypeScript.
 - MediSense AI — machine-learning disease prediction system.

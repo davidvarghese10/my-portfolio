@@ -35,7 +35,7 @@ const About: React.FC = () => {
                 I’m a Computer Science and Engineering student and aspiring software developer based in Kerala, India. My passion lies in building practical software, cybersecurity, and emerging technologies.
               </p>
               <p className="text-neutral-400 text-sm md:text-base">
-                Whether creating AI-assisted fraud detection systems, interactive weather platforms, disease prediction tools, or algorithmic equation solvers, I focus on turning ideas into resilient, real-world solutions.
+                Whether creating sustainable transport planners, AI-assisted fraud detection systems, interactive weather platforms, disease prediction tools, or algorithmic equation solvers, I focus on turning ideas into resilient, real-world solutions.
               </p>
             </div>
 
@@ -59,7 +59,7 @@ const About: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <div className="flex items-baseline gap-1">
-                  <h4 className="text-4xl font-bold font-oswald text-white">4+</h4>
+                  <h4 className="text-4xl font-bold font-oswald text-white">5+</h4>
                 </div>
                 <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#00f3ff] mt-1">
                   Projects

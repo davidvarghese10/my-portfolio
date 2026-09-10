@@ -71,19 +71,22 @@ ABOUT DAVID VARGHESE:
   • LeetCode: https://leetcode.com/u/david_1000/
 
 FEATURED PROJECTS:
-1. Intevra (2026) — Category: AI & Security
+1. EcoTrail (2026) — Category: Sustainable Tech
+   • Overview: Sustainable transport planner designed to optimize green commuting and eco-friendly journeys.
+   • Features: Multi-modal transit planning, carbon footprint computation across transportation modes, eco-friendly route suggestions, and green commute optimization.
+2. Intevra (2026) — Category: AI & Security
    • Overview: AI-integrated interview fraud detection and integrity monitoring platform.
    • Features: Multi-modal anomaly detection analyzing facial posture, eye gaze, multiple voices, background acoustic discrepancies, and browser focus/window switching.
    • Recognition: National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology).
-2. Aether (2026) — Category: Interactive Web & UI Engineering
+3. Aether (2026) — Category: Interactive Web & UI Engineering
    • Overview: Immersive Regional Weather Experience Application.
    • Tech Stack: React, TypeScript, Tailwind CSS, Framer Motion, Recharts.
    • Features: 60fps GPU-accelerated atmospheric visual layers, particle rain/cloud simulations, real-time regional meteorological metrics, and responsive interactive telemetry.
-3. MediSense AI (2026) — Category: Healthcare AI
+4. MediSense AI (2026) — Category: Healthcare AI
    • Overview: Machine learning disease prediction system evaluating patient-reported symptoms.
    • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
    • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
-4. Equora (2023) — Category: Python & Algorithms
+5. Equora (2023) — Category: Python & Algorithms
    • Overview: High-performance mathematical and symbolic equation solver in Python.
    • Features: Custom algebraic parser, polynomial root-finder, calculus differentiation & integration engines, and step-by-step mathematical reasoning.
 
@@ -207,7 +210,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
     query === 'help' || query.includes('commands') || query.includes('menu') || query.includes('topics') ||
     query.includes('what should i ask') || query.includes('what can i ask')
   ) {
-    return "Here are the main areas you can explore with me:\n\n• **Featured Projects**: Intevra (AI interview fraud detection), Aether (interactive weather), MediSense AI (disease predictor), Equora (equation solver)\n• **Academic Background**: B.Tech CSE at Rajagiri School of Engineering & Technology (10.00 SGPA), Devamatha CMI (96%), CMI Chalakudy (97.6%)\n• **Technical Toolkit**: Python, Java (OOP), C Programming, DSA, React, TypeScript, Tailwind CSS, Cybersecurity, Machine Learning\n• **Industry Experience**: 4-Week Technical Internship with Edunet Foundation & IBM SkillsBuild\n• **Certifications**: 41 total accreditations across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE, Google\n• **Hackathons & Honors**: Vibe Night 3rd Prize, Hacksus National Finalist, Smart India Hackathon (SIH), LeetCode (`david_1000`)\n• **Contact & Socials**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub, LeetCode";
+    return "Here are the main areas you can explore with me:\n\n• **Featured Projects (5+)**: EcoTrail (sustainable transport planner), Intevra (AI interview fraud detection), Aether (interactive weather), MediSense AI (disease predictor), Equora (equation solver)\n• **Academic Background**: B.Tech CSE at Rajagiri School of Engineering & Technology (10.00 SGPA), Devamatha CMI (96%), CMI Chalakudy (97.6%)\n• **Technical Toolkit**: Python, Java (OOP), C Programming, DSA, React, TypeScript, Tailwind CSS, Cybersecurity, Machine Learning\n• **Industry Experience**: 4-Week Technical Internship with Edunet Foundation & IBM SkillsBuild\n• **Certifications**: 41 total accreditations across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE, Google\n• **Hackathons & Honors**: Vibe Night 3rd Prize, Hacksus National Finalist, Smart India Hackathon (SIH), LeetCode (`david_1000`)\n• **Contact & Socials**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub, LeetCode";
   }
 
   // 6. Gratitude, Compliments & Praise
@@ -247,13 +250,18 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
     const facts = [
       "💡 **Fun Fact**: David holds a perfect 10.00 / 10.00 SGPA across his initial semesters in Computer Science at Rajagiri School of Engineering & Technology!",
       "💡 **Fun Fact**: David's project **Intevra** monitors multiple multi-modal integrity cues simultaneously—such as facial posture, eye gaze, and background acoustic anomalies—to detect remote interview fraud in real time!",
-      "💡 **Fun Fact**: David has earned 41 professional certifications from top organizations like IBM, Cisco, Microsoft, HP, and Deloitte!",
-      "💡 **Fun Fact**: The weather app **Aether** delivers fluid 60fps GPU-accelerated atmospheric visual layers paired with real-time regional meteorological data!"
+      "💡 **Fun Fact**: David has built 5+ featured software projects, including **EcoTrail** (sustainable transport planner) and **Aether** (interactive weather)!",
+      "💡 **Fun Fact**: David has earned 41 professional certifications from top organizations like IBM, Cisco, Microsoft, HP, and Deloitte!"
     ];
     return facts[Math.floor(Math.random() * facts.length)];
   }
 
   // 10. Deep Project Knowledge
+  // EcoTrail
+  if (query.includes('ecotrail') || (query.includes('sustainable') && query.includes('transport')) || query.includes('transport planner') || query.includes('green commute') || query.includes('carbon transit') || query.includes('sustainable transit')) {
+    return "**EcoTrail (2026)** is a sustainable transport planner designed to optimize green commuting and eco-friendly journeys.\n\n• **Core Purpose**: Helps commuters and travelers choose low-carbon transit routes and plan sustainable multi-modal journeys.\n• **Key Features**: Carbon emission comparison across transportation modes, eco-friendly route recommendations, public transit integration, and green commute telemetry.\n• **Environmental Impact**: Encourages greener travel habits by quantifying carbon savings and route efficiency.";
+  }
+
   // Intevra
   if (query.includes('intevra') || (query.includes('fraud') && query.includes('interview')) || query.includes('interview integrity') || query.includes('cheating detection') || query.includes('hacksus')) {
     return "**Intevra (2026)** is an AI-powered interview fraud detection and integrity monitoring system.\n\n• **Core Purpose**: Prevents unfair practices and proxy test-taking in remote technical interviews.\n• **Technology & Intelligence**: Utilizes multi-modal machine learning signals to monitor facial posture, eye gaze tracking, background voices/speech anomalies, and real-time browser focus/window switching.\n• **Achievement**: Selected as a **National Level Hackathon Finalist** at Hacksus (Rajagiri School of Engineering & Technology).";
@@ -276,7 +284,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
 
   // General Projects Overview
   if (query.includes('project') || query.includes('portfolio') || query.includes('built') || query.includes('work') || query.includes('apps') || query.includes('showcase') || query.includes('best project')) {
-    return "David has developed 4 major featured projects:\n\n1. **Intevra (2026)** — AI Interview Fraud Detection System (National Hackathon Finalist)\n2. **Aether (2026)** — Immersive Regional Weather Experience Application (React + Framer Motion)\n3. **MediSense AI (2026)** — Machine Learning Disease Prediction System (Python + Scikit-learn)\n4. **Equora (2023)** — High-Performance Python Mathematical & Symbolic Equation Solver\n\nYou can explore each project interactively in the **Projects** section!";
+    return "David has developed 5+ projects, including:\n\n1. **EcoTrail (2026)** — Sustainable Transport Planner & Green Journey Optimizer\n2. **Intevra (2026)** — AI Interview Fraud Detection System (National Hackathon Finalist)\n3. **Aether (2026)** — Immersive Regional Weather Experience Application (React + Framer Motion)\n4. **MediSense AI (2026)** — Machine Learning Disease Prediction System (Python + Scikit-learn)\n5. **Equora (2023)** — High-Performance Python Mathematical & Symbolic Equation Solver\n\nYou can explore each project interactively in the **Projects** section!";
   }
 
   // 11. Academic Record & Education
@@ -475,7 +483,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
   return `I'm **Livoq**, David Varghese's AI assistant! 
 
 Here are some topics you can ask me about:
-• **Featured Projects**: Intevra (AI fraud detection), Aether (interactive weather), MediSense AI, Equora
+• **Featured Projects (5+)**: EcoTrail (sustainable transport planner), Intevra (AI fraud detection), Aether (interactive weather), MediSense AI, Equora
 • **Academic Record**: Perfect 10.00 SGPA at Rajagiri (RSET), Class XII (96.0%), Class X (97.6%)
 • **Certifications**: 41+ credentials across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE
 • **Technical Skills**: Python, Java (OOP), C/DSA, React, TypeScript, Cybersecurity

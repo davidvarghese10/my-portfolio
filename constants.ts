@@ -14,6 +14,14 @@ export const NAV_ITEMS: NavItem[] = [
 export const PROJECTS: Project[] = [
   {
     id: 1,
+    title: "EcoTrail",
+    category: "Sustainable Tech",
+    year: "2026",
+    image: "https://picsum.photos/800/600?grayscale&random=50",
+    description: "Sustainable transport planner."
+  },
+  {
+    id: 2,
     title: "Intevra",
     category: "AI & Security",
     year: "2026",
@@ -21,7 +29,7 @@ export const PROJECTS: Project[] = [
     description: "AI integrated interview fraud detection system."
   },
   {
-    id: 2,
+    id: 3,
     title: "Aether",
     category: "Interactive Web",
     year: "2026",
@@ -29,7 +37,7 @@ export const PROJECTS: Project[] = [
     description: "Immersive Regional Weather Experience Application."
   },
   {
-    id: 3,
+    id: 4,
     title: "MediSense AI",
     category: "Healthcare AI",
     year: "2026",
@@ -37,7 +45,7 @@ export const PROJECTS: Project[] = [
     description: "A disease prediction system based on the symptoms provided."
   },
   {
-    id: 4,
+    id: 5,
     title: "Equora",
     category: "Python & Algorithms",
     year: "2023",
