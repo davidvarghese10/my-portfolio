@@ -4,6 +4,8 @@ interface AIAssistantAvatarProps {
   size?: number;
   className?: string;
   glow?: boolean;
+  trackCursor?: boolean;
+  blink?: boolean;
 }
 
 // Exact organic pebble path matching image.png
@@ -25,6 +27,8 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
   size = 28,
   className = "",
   glow = true,
+  trackCursor = true,
+  blink = true,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const blobGroupRef = useRef<SVGGElement>(null);
@@ -51,10 +55,10 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
     let isBlinking = false;
     let blinkScale = 1;
     let blinkProgress = 0;
-    let nextBlinkTime = Date.now() + 3500 + Math.random() * 3000;
+    let nextBlinkTime = Date.now() + 3000 + Math.random() * 3000;
 
     const handlePointerMove = (e: MouseEvent | PointerEvent) => {
-      if (!containerRef.current) return;
+      if (!trackCursor || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
@@ -90,38 +94,44 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
       targetEyeY = Math.sin(angle) * (factor * maxEyeY);
     };
 
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    if (trackCursor) {
+      window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    }
 
     const updateFrame = () => {
-      // Smooth interpolation for body movement
-      currentBodyX += (targetBodyX - currentBodyX) * 0.12;
-      currentBodyY += (targetBodyY - currentBodyY) * 0.12;
-      currentRotate += (targetRotate - currentRotate) * 0.12;
+      if (trackCursor) {
+        // Smooth interpolation for body movement
+        currentBodyX += (targetBodyX - currentBodyX) * 0.12;
+        currentBodyY += (targetBodyY - currentBodyY) * 0.12;
+        currentRotate += (targetRotate - currentRotate) * 0.12;
 
-      // Smooth interpolation for eye movement
-      currentEyeX += (targetEyeX - currentEyeX) * 0.16;
-      currentEyeY += (targetEyeY - currentEyeY) * 0.16;
-
-      // Occasional natural blink (quick vertical scale)
-      const now = Date.now();
-      if (!isBlinking && now >= nextBlinkTime) {
-        isBlinking = true;
-        blinkProgress = 0;
+        // Smooth interpolation for eye movement
+        currentEyeX += (targetEyeX - currentEyeX) * 0.16;
+        currentEyeY += (targetEyeY - currentEyeY) * 0.16;
       }
 
-      if (isBlinking) {
-        blinkProgress += 0.18;
-        if (blinkProgress <= 1) {
-          blinkScale = 1 - Math.sin(blinkProgress * Math.PI) * 0.9;
-        } else {
-          isBlinking = false;
-          blinkScale = 1;
-          nextBlinkTime = now + 4000 + Math.random() * 4000;
+      // Occasional natural blink (quick vertical scale)
+      if (blink) {
+        const now = Date.now();
+        if (!isBlinking && now >= nextBlinkTime) {
+          isBlinking = true;
+          blinkProgress = 0;
+        }
+
+        if (isBlinking) {
+          blinkProgress += 0.18;
+          if (blinkProgress <= 1) {
+            blinkScale = 1 - Math.sin(blinkProgress * Math.PI) * 0.9;
+          } else {
+            isBlinking = false;
+            blinkScale = 1;
+            nextBlinkTime = now + 3500 + Math.random() * 3500;
+          }
         }
       }
 
       // Update body: translation + lean/tilt toward cursor
-      if (blobGroupRef.current) {
+      if (blobGroupRef.current && trackCursor) {
         blobGroupRef.current.setAttribute(
           'transform',
           `translate(${currentBodyX.toFixed(2)}, ${currentBodyY.toFixed(2)}) rotate(${currentRotate.toFixed(2)}, 50, 50)`
@@ -140,10 +150,12 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
     animFrameId = requestAnimationFrame(updateFrame);
 
     return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
+      if (trackCursor) {
+        window.removeEventListener('pointermove', handlePointerMove);
+      }
       cancelAnimationFrame(animFrameId);
     };
-  }, []);
+  }, [trackCursor, blink]);
 
   // Unique ID for gradients
   const idPrefix = useRef(`avatar-${Math.random().toString(36).substring(2, 8)}`).current;

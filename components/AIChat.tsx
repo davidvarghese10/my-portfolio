@@ -191,13 +191,10 @@ const AIChat: React.FC = () => {
             {/* Header */}
             <div className="bg-black/60 text-white p-3.5 flex justify-between items-center border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <AIAssistantAvatar size={24} glow />
+                <AIAssistantAvatar size={24} glow trackCursor={false} blink={true} />
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-medium text-sm text-white tracking-wide">Livoq Assistant</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
-                      Online
-                    </span>
+                    <span className="font-medium text-sm text-white tracking-wide">Livoq</span>
                   </div>
                   <span className="text-[10px] font-mono text-[#00f3ff]/80 block">David's Interactive AI</span>
                 </div>
@@ -219,19 +216,60 @@ const AIChat: React.FC = () => {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-start gap-2.5'}`}
                 >
                   {msg.role === 'model' && (
-                    <div className="shrink-0 mt-0.5" title="AI Assistant">
-                      <AIAssistantAvatar size={22} glow />
-                    </div>
+                    <motion.div 
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="shrink-0 mt-0.5" 
+                      title="AI Assistant"
+                    >
+                      <AIAssistantAvatar size={22} glow trackCursor={false} blink={true} />
+                    </motion.div>
                   )}
-                  <div 
-                    className={`max-w-[82%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
-                      msg.role === 'user' 
-                        ? 'bg-[#00f3ff] text-black font-medium rounded-tr-none shadow-[0_2px_12px_rgba(0,243,255,0.25)]' 
-                        : 'bg-white/10 border border-white/10 text-neutral-200 rounded-tl-none backdrop-blur-md'
-                    }`}
-                  >
-                    {renderFormattedText(msg.text)}
-                  </div>
+
+                  {msg.role === 'user' ? (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.94, y: 6 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative max-w-[84%] rounded-[22px] overflow-hidden backdrop-blur-2xl bg-gradient-to-b from-[#00f3ff]/45 via-[#00d4e6]/36 96% to-black/85 border border-[#00f3ff]/45 shadow-[0_10px_28px_rgba(0,0,0,0.55),0_0_24px_rgba(0,243,255,0.25),inset_0_1px_1.5px_rgba(255,255,255,0.6)] group"
+                    >
+                      {/* Dominant top neon blue specular highlight */}
+                      <div className="absolute inset-x-0 top-0 h-[75%] pointer-events-none rounded-t-[21px] bg-gradient-to-b from-[#00f3ff]/50 via-[#00f3ff]/20 to-transparent" />
+                      
+                      {/* Ultra-slim bottom glass refraction rim in black */}
+                      <div className="absolute inset-x-0 bottom-0 h-[7%] pointer-events-none rounded-b-[21px] bg-gradient-to-t from-black/90 to-transparent border-b-[1.5px] border-[#00f3ff]/50 shadow-[inset_0_-3px_6px_rgba(0,0,0,0.7)]" />
+
+                      {/* Message text */}
+                      <div className="relative z-10 px-4 py-3 text-xs sm:text-sm text-white leading-relaxed whitespace-pre-wrap font-medium tracking-[-0.01em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                        {renderFormattedText(msg.text)}
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.15, x: -24, y: 2 }}
+                      animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 340, 
+                        damping: 24, 
+                        mass: 0.7 
+                      }}
+                      style={{ transformOrigin: "top left" }}
+                      className="relative max-w-[84%] rounded-[22px] origin-top-left overflow-hidden backdrop-blur-2xl bg-white/[0.07] border border-[#00f3ff]/20 shadow-[0_10px_28px_rgba(0,0,0,0.5),0_0_16px_rgba(0,243,255,0.08),inset_0_1px_1.5px_rgba(0,243,255,0.3)] group"
+                    >
+                      {/* Top neon blue specular reflection */}
+                      <div className="absolute inset-x-0 top-0 h-[36%] pointer-events-none rounded-t-[21px] bg-gradient-to-b from-[#00f3ff]/24 via-[#00f3ff]/06 to-transparent" />
+                      
+                      {/* iOS-style bottom curved glass refraction lens in neon blue tone */}
+                      <div className="absolute inset-x-0 bottom-0 h-[38%] pointer-events-none rounded-b-[21px] bg-gradient-to-t from-[#00f3ff]/22 via-[#00f3ff]/05 to-transparent border-b-[1.5px] border-[#00f3ff]/40 shadow-[inset_0_-6px_14px_rgba(0,243,255,0.14)]" />
+
+                      {/* Message text */}
+                      <div className="relative z-10 px-4 py-3.5 text-xs sm:text-sm text-neutral-200 leading-relaxed whitespace-pre-wrap font-normal tracking-[-0.01em]">
+                        {renderFormattedText(msg.text)}
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               ))}
 
@@ -244,7 +282,7 @@ const AIChat: React.FC = () => {
                   className="flex items-center gap-2.5 py-1.5"
                 >
                   <div className="shrink-0" title="Thinking...">
-                    <AIAssistantAvatar size={22} glow />
+                    <AIAssistantAvatar size={22} glow trackCursor={false} blink={true} />
                   </div>
                   <SiriThinkingAnimation size="sm" />
                 </motion.div>

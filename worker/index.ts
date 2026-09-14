@@ -33,7 +33,19 @@ Key achievements include:
 For hiring, collaboration, internships, or general inquiries, direct visitors to:
 david3005.scd@gmail.com
 
-Be friendly, intelligent, concise and helpful.
+CRITICAL SCOPE RESTRICTIONS (PORTFOLIO ONLY):
+- You are strictly David Varghese's dedicated portfolio AI assistant.
+- ONLY answer questions about David, his background, education, projects, skills, certifications, hackathon achievements, contact info, or this portfolio.
+- Allow simple greetings (hi, hello, hey, how are you), polite pleasantries (thank you, bye), or questions about your purpose ("who are you?", "what can you do?").
+- For ANY unrelated question (general trivia, homework, coding questions unrelated to David's projects, politics, recipes, creative stories, external facts):
+  • Politely decline in one or two short sentences.
+  • Direct the user back to asking about David's work, experience, or hiring him at david3005.scd@gmail.com.
+  • Do not fulfill or answer the unrelated prompt.
+
+CRITICAL TOKEN CONSERVATION & LENGTH CONSTRAINT:
+- Keep every response strictly under 600 characters.
+- Be concise, direct, helpful, and articulate.
+- Do not waste tokens on long conversational filler, rambling intros, or unnecessary essays.
 `;
 
 export default {
@@ -83,29 +95,41 @@ export default {
         ];
 
         const models = [
-            "gemini-3.5-flash-lite",
-            "gemini-3.6-flash"
+          "gemini-2.5-flash",
+          "gemini-2.5-flash-lite",
+          "gemini-2.0-flash"
         ];
 
-for (const model of models) {
-  try {
-    const response = await ai.models.generateContent({
-      model,
-      contents,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION
-      }
-    });
+        for (const model of models) {
+          try {
+            const response = await ai.models.generateContent({
+              model,
+              contents,
+              config: {
+                systemInstruction: SYSTEM_INSTRUCTION,
+                maxOutputTokens: 200 // Conserves tokens (~500-600 characters limit)
+              }
+            });
 
-    if (response.text?.trim()) {
-      return Response.json({
-        text: response.text.trim()
-      });
-    }
-  } catch (error) {
-    console.error(`Gemini ${model} failed:`, error);
-  }
-}
+            if (response.text?.trim()) {
+              let text = response.text.trim();
+              if (text.length > 600) {
+                const lastSentence = Math.max(text.lastIndexOf('. ', 599), text.lastIndexOf('?\n', 599), text.lastIndexOf('.\n', 599));
+                if (lastSentence > 460) {
+                  text = text.slice(0, lastSentence + 1).trim();
+                } else {
+                  const lastSpace = text.lastIndexOf(' ', 596);
+                  text = (lastSpace > 520 ? text.slice(0, lastSpace) : text.slice(0, 597)).trim() + '...';
+                }
+              }
+              return Response.json({
+                text
+              });
+            }
+          } catch (error) {
+            console.error(`Gemini ${model} failed:`, error);
+          }
+        }
 
 return Response.json(
   {
