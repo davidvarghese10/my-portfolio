@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { sendChatMessage } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import { SiriThinkingAnimation } from './SiriThinkingAnimation';
+import { AIAssistantAvatar } from './AIAssistantAvatar';
 
 const PaperAirplaneSendIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
   <svg
@@ -18,92 +20,37 @@ const PaperAirplaneSendIcon: React.FC<{ size?: number; className?: string }> = (
   </svg>
 );
 
-const AnimatedChatToggleIcon: React.FC<{ isOpen: boolean; size?: number }> = ({ isOpen, size = 24 }) => (
-  <motion.svg
-    viewBox="0 0 24 24"
-    width={size}
-    height={size}
-    animate={{ rotate: isOpen ? 90 : 0 }}
-    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-    className={`transition-colors duration-300 ${
-      isOpen ? 'text-[#00f3ff] drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]' : 'text-white group-hover:text-[#00f3ff]'
-    }`}
-    fill="none"
+const AnimatedChatToggleIcon: React.FC<{ isOpen: boolean; size?: number }> = ({ isOpen, size = 30 }) => (
+  <div 
+    className="relative flex items-center justify-center"
+    style={{ width: size, height: size }}
   >
-    {/* Speech Bubble Icon (visible when closed, dissolves/contracts when open) */}
-    <motion.path
-      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      initial={false}
-      animate={
-        isOpen
-          ? { pathLength: 0, opacity: 0, scale: 0.3, rotate: -45 }
-          : { pathLength: 1, opacity: 1, scale: 1, rotate: 0 }
-      }
-      style={{ originX: '12px', originY: '12px' }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-    />
-
-    {/* Interlaced X - Continuous bottom-left to top-right diagonal */}
-    <motion.line
-      x1="4.5"
-      y1="19.5"
-      x2="19.5"
-      y2="4.5"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      initial={false}
-      animate={
-        isOpen
-          ? { pathLength: 1, opacity: 1, scale: 1 }
-          : { pathLength: 0, opacity: 0, scale: 0.4 }
-      }
-      style={{ originX: '12px', originY: '12px' }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.05 : 0 }}
-    />
-
-    {/* Interlaced X - Top-left branch of broken diagonal */}
-    <motion.line
-      x1="4.5"
-      y1="4.5"
-      x2="9.5"
-      y2="9.5"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      initial={false}
-      animate={
-        isOpen
-          ? { pathLength: 1, opacity: 1, scale: 1 }
-          : { pathLength: 0, opacity: 0, scale: 0.4 }
-      }
-      style={{ originX: '12px', originY: '12px' }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.1 : 0 }}
-    />
-
-    {/* Interlaced X - Bottom-right branch of broken diagonal */}
-    <motion.line
-      x1="14.5"
-      y1="14.5"
-      x2="19.5"
-      y2="19.5"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      initial={false}
-      animate={
-        isOpen
-          ? { pathLength: 1, opacity: 1, scale: 1 }
-          : { pathLength: 0, opacity: 0, scale: 0.4 }
-      }
-      style={{ originX: '12px', originY: '12px' }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: isOpen ? 0.1 : 0 }}
-    />
-  </motion.svg>
+    <AnimatePresence mode="wait">
+      {isOpen ? (
+        <motion.div
+          key="close"
+          initial={{ opacity: 0, rotate: -90, scale: 0.6 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          exit={{ opacity: 0, rotate: 90, scale: 0.6 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[#00f3ff] drop-shadow-[0_0_8px_rgba(0,243,255,0.8)] flex items-center justify-center"
+        >
+          <InterlacedX size={Math.round(size * 0.7)} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="avatar"
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.6 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-center"
+        >
+          <AIAssistantAvatar size={size} glow />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
 );
 
 const InterlacedX: React.FC<{ size?: number; className?: string }> = ({ size = 20, className = "" }) => (
@@ -188,7 +135,11 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const responseText = await sendChatMessage(userMsg, newHistory);
+      const minThinkingTime = new Promise(resolve => setTimeout(resolve, 1100));
+      const [responseText] = await Promise.all([
+        sendChatMessage(userMsg, newHistory),
+        minThinkingTime
+      ]);
       setMessages(prev => [...prev, { role: 'model', text: responseText }]);
     } catch (err) {
       console.error("Chat error:", err);
@@ -240,10 +191,7 @@ const AIChat: React.FC = () => {
             {/* Header */}
             <div className="bg-black/60 text-white p-3.5 flex justify-between items-center border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="relative flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#00f3ff] animate-pulse"></div>
-                  <div className="absolute w-4 h-4 rounded-full bg-[#00f3ff]/20 animate-ping"></div>
-                </div>
+                <AIAssistantAvatar size={24} glow />
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-medium text-sm text-white tracking-wide">Livoq Assistant</span>
@@ -268,10 +216,15 @@ const AIChat: React.FC = () => {
               {messages.map((msg, idx) => (
                 <div 
                   key={idx} 
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-start gap-2.5'}`}
                 >
+                  {msg.role === 'model' && (
+                    <div className="shrink-0 mt-0.5" title="AI Assistant">
+                      <AIAssistantAvatar size={22} glow />
+                    </div>
+                  )}
                   <div 
-                    className={`max-w-[85%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
+                    className={`max-w-[82%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
                       msg.role === 'user' 
                         ? 'bg-[#00f3ff] text-black font-medium rounded-tr-none shadow-[0_2px_12px_rgba(0,243,255,0.25)]' 
                         : 'bg-white/10 border border-white/10 text-neutral-200 rounded-tl-none backdrop-blur-md'
@@ -283,12 +236,18 @@ const AIChat: React.FC = () => {
               ))}
 
               {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-white/10 border border-white/10 p-3 rounded-2xl rounded-tl-none flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#00f3ff]" />
-                    <span className="text-xs text-neutral-400 font-mono">Thinking...</span>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 8 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-center gap-2.5 py-1.5"
+                >
+                  <div className="shrink-0" title="Thinking...">
+                    <AIAssistantAvatar size={22} glow />
                   </div>
-                </div>
+                  <SiriThinkingAnimation size="sm" />
+                </motion.div>
               )}
 
               {/* Quick suggestions */}
@@ -340,31 +299,42 @@ const AIChat: React.FC = () => {
       </AnimatePresence>
 
       <motion.button
+        variants={{
+          idle: { scale: 1 },
+          hover: { scale: 1 },
+          tap: { scale: 0.96 },
+        }}
         initial="idle"
+        animate="idle"
         whileHover="hover"
-        whileTap={{ scale: 0.95 }}
+        whileTap="tap"
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close AI Assistant" : "Ask AI Assistant"}
-        className="liquid-glass-button p-4 rounded-full flex items-center overflow-hidden shadow-2xl"
+        className="liquid-glass-button h-[60px] min-w-[60px] max-h-[60px] rounded-full flex items-center justify-center overflow-hidden shadow-2xl origin-bottom-right group"
       >
-        <div className="relative z-10 flex items-center justify-center">
-          <AnimatedChatToggleIcon isOpen={isOpen} size={24} />
+        <div className="relative z-10 w-[60px] h-[60px] flex items-center justify-center shrink-0">
+          <AnimatedChatToggleIcon isOpen={isOpen} size={38} />
         </div>
         
         {!isOpen && (
           <motion.div
             variants={{
-              idle: { width: 0, opacity: 0, marginLeft: 0 },
+              idle: { 
+                width: 0, 
+                opacity: 0,
+                transition: { duration: 0.32, ease: [0.32, 0, 0.67, 0] }
+              },
               hover: { 
-                width: "auto", 
+                width: 64, 
                 opacity: 1, 
-                marginLeft: 12,
-                transition: { type: "spring", stiffness: 300, damping: 30, mass: 0.8 }
+                transition: { duration: 0.44, ease: [0.22, 1, 0.36, 1] }
               }
             }}
-            className="overflow-hidden whitespace-nowrap text-sm font-bold tracking-wide"
+            className="h-[60px] flex items-center overflow-hidden whitespace-nowrap"
           >
-            Ask AI
+            <span className="block whitespace-nowrap text-sm font-semibold tracking-wide pr-3.5 text-white">
+              Ask AI
+            </span>
           </motion.div>
         )}
       </motion.button>
