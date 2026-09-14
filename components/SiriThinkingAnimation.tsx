@@ -235,10 +235,10 @@ export const SiriThinkingAnimation: React.FC<SiriThinkingAnimationProps> = ({
   }, []);
 
   const sizeStyles = {
-    xs: 'w-[124px] h-[34px]',
-    sm: 'w-[140px] h-[38px]',
-    md: 'w-[168px] h-[46px]',
-    lg: 'w-[220px] h-[60px]',
+    xs: 'w-[112px] h-[34px]',
+    sm: 'w-[126px] h-[38px]',
+    md: 'w-[151px] h-[46px]',
+    lg: 'w-[198px] h-[60px]',
   };
 
   const textSizes = {
