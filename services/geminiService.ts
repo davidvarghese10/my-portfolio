@@ -135,45 +135,9 @@ TECHNICAL TOOLKIT:
 INSTRUCTIONS FOR RESPONSES:
 - Provide friendly, intelligent, crisp, and helpful answers.
 - Highlight David's strengths in academic rigor, problem-solving, cybersecurity, and modern UI engineering.
-- For hiring, collaboration, or general inquiries, invite users to contact david3005.scd@gmail.com.
-- CRITICAL SCOPE RESTRICTIONS (PORTFOLIO ONLY):
-  • You are strictly David Varghese's dedicated portfolio AI assistant.
-  • ONLY answer questions about David, his background, education, projects, skills, certifications, hackathon achievements, contact info, or this portfolio.
-  • Allow simple greetings (hi, hello, hey, how are you), polite pleasantries (thank you, bye), or questions about your purpose ("who are you?", "what can you do?").
-  • For ANY unrelated question (general trivia, homework, coding questions unrelated to David's projects, politics, recipes, creative stories, external facts):
-    - Politely decline in one or two short sentences.
-    - Direct the user back to asking about David's work, experience, or hiring him at david3005.scd@gmail.com.
-    - Do not fulfill or answer the unrelated prompt.
-- CRITICAL TOKEN CONSERVATION & LENGTH CONSTRAINT:
-  • Keep your response strictly under 600 characters total.
-  • Avoid conversational filler, repetition, or oversized paragraphs to conserve tokens.`;
+- For hiring, collaboration, or general inquiries, invite users to contact david3005.scd@gmail.com.`;
 
-const MODELS_TO_TRY = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
-
-// Enforce a strict 600-character cap on online responses to save tokens and prevent overflow
-const enforceOnlineResponseLimit = (text: string, maxChars: number = 600): string => {
-  const trimmed = text.trim();
-  if (trimmed.length <= maxChars) {
-    return trimmed;
-  }
-  const slice = trimmed.slice(0, maxChars);
-  // Find clean sentence ending
-  const lastSentence = Math.max(
-    slice.lastIndexOf('. '),
-    slice.lastIndexOf('.\n'),
-    slice.lastIndexOf('?\n'),
-    slice.lastIndexOf('! ')
-  );
-  if (lastSentence > maxChars - 140) {
-    return slice.slice(0, lastSentence + 1).trim();
-  }
-  // Find last space
-  const lastSpace = slice.lastIndexOf(' ');
-  if (lastSpace > maxChars - 70) {
-    return slice.slice(0, lastSpace).trim() + '...';
-  }
-  return slice.trim() + '...';
-};
+const MODELS_TO_TRY = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
 
 // Safe math expression evaluator
 const tryEvaluateMath = (query: string): string | null => {
@@ -536,7 +500,6 @@ export const sendChatMessage = async (
     return "Please enter a question or topic to explore!";
   }
 
-  // 1. Try server/worker endpoint /api/gemini
   try {
     const response = await fetch("/api/gemini", {
       method: "POST",
@@ -552,50 +515,19 @@ export const sendChatMessage = async (
       })
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data.text?.trim()) {
-        return enforceOnlineResponseLimit(data.text.trim(), 600);
-      }
+    const data = await response.json();
+
+    if (response.ok && data.text?.trim()) {
+      return data.text.trim();
     }
+
+    // Gemini/Worker failed → use offline engine
+    return getOfflinePortfolioAnswer(trimmed, history);
+
   } catch (error) {
-    console.warn("Online worker /api/gemini not reachable, trying direct client SDK if key present:", error);
+    console.error("Gemini request failed:", error);
+
+    // Network/connection failure → use offline engine
+    return getOfflinePortfolioAnswer(trimmed, history);
   }
-
-  // 2. Direct client SDK call if Gemini API key is configured
-  const aiClient = getAIClient();
-  if (aiClient) {
-    const contents = [
-      ...history.slice(-6).map((msg) => ({
-        role: msg.role === "user" ? ("user" as const) : ("model" as const),
-        parts: [{ text: msg.text }]
-      })),
-      {
-        role: "user" as const,
-        parts: [{ text: trimmed }]
-      }
-    ];
-
-    for (const model of MODELS_TO_TRY) {
-      try {
-        const response = await aiClient.models.generateContent({
-          model,
-          contents,
-          config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-            maxOutputTokens: 200 // Conserves tokens: 200 tokens caps length to ~500-600 characters
-          }
-        });
-
-        if (response.text?.trim()) {
-          return enforceOnlineResponseLimit(response.text.trim(), 600);
-        }
-      } catch (err) {
-        console.warn(`Online Gemini model ${model} failed:`, err);
-      }
-    }
-  }
-
-  // 3. Fallback to built-in offline engine (unlimited, full pre-configured portfolio answers)
-  return getOfflinePortfolioAnswer(trimmed, history);
 };
