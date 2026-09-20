@@ -38,21 +38,25 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 md:py-6 text-[#00f3ff] bg-black/40 backdrop-blur-md border-b border-white/5"
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 md:py-6 text-[#00f3ff] transition-colors duration-300 ${
+          menuOpen ? 'bg-transparent border-transparent' : 'bg-black/40 backdrop-blur-md border-b border-white/5'
+        }`}
       >
         {/* Brand / Logo */}
         <button 
+          type="button"
           onClick={() => handleNav('home')} 
-          className="text-md font-bold tracking-tighter uppercase flex flex-col leading-none text-left cursor-pointer hover:opacity-80 transition-opacity z-50"
+          className="text-md font-bold tracking-tighter uppercase flex flex-col leading-none text-left cursor-pointer hover:opacity-80 transition-opacity z-50 bg-transparent outline-none focus:outline-none select-none"
+          style={{ WebkitTapHighlightColor: 'transparent', outline: 'none' }}
         >
           <span className="text-[#00f3ff]">David</span>
           <span className="text-white">Varghese</span>
         </button>
 
-        {/* Selected Tab Display at Center Top (hidden on Home and Mobile) */}
+        {/* Selected Tab Display at Center Top (hidden on Home, Mobile, and while Menu is Open) */}
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center pointer-events-none">
           <AnimatePresence mode="wait">
-            {activePage !== 'home' && (
+            {activePage !== 'home' && !menuOpen && (
               <motion.div
                 key={activePage}
                 initial={{ opacity: 0, scale: 0.9, y: -4 }}
@@ -69,8 +73,10 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
 
         {/* Animated Hamburger Button (3 lines directly morph into Over-Under Interlaced 'X') */}
         <motion.button 
+          type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="relative z-50 flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#00f3ff]/40 shadow-lg cursor-pointer transition-all duration-300 group"
+          className="relative z-50 flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#00f3ff]/40 shadow-lg cursor-pointer transition-all duration-300 group outline-none focus:outline-none"
+          style={{ WebkitTapHighlightColor: 'transparent', outline: 'none' }}
           aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
           whileTap={{ scale: 0.94 }}
         >
@@ -150,17 +156,24 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.35, delay: idx * 0.04 }}
+                      className="bg-transparent"
                     >
                       <button
+                        type="button"
                         onClick={() => handleNav(pageKey)}
-                        className={`group flex items-baseline gap-4 md:gap-8 text-left cursor-pointer transition-all duration-300 w-full py-1 ${
+                        className={`group flex items-baseline gap-4 md:gap-8 text-left cursor-pointer transition-all duration-300 w-full py-1 bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent outline-none focus:outline-none focus:ring-0 select-none ${
                           isActive ? 'text-[#00f3ff]' : 'text-neutral-400 hover:text-white'
                         }`}
+                        style={{
+                          WebkitTapHighlightColor: 'transparent',
+                          outline: 'none',
+                          backgroundColor: 'transparent',
+                        }}
                       >
-                        <span className="font-mono text-xs md:text-sm text-neutral-600 group-hover:text-[#00f3ff] transition-colors">
+                        <span className="font-mono text-xs md:text-sm text-neutral-600 group-hover:text-[#00f3ff] transition-colors select-none bg-transparent">
                           {String(idx + 1).padStart(2, '0')} //
                         </span>
-                        <span className="text-3xl sm:text-4xl md:text-6xl font-bold uppercase tracking-tight font-poppins group-hover:translate-x-3 md:group-hover:translate-x-4 transition-transform duration-300 flex items-center gap-4">
+                        <span className="text-3xl sm:text-4xl md:text-6xl font-bold uppercase tracking-tight font-poppins group-hover:translate-x-3 md:group-hover:translate-x-4 transition-transform duration-300 flex items-center gap-4 select-none bg-transparent">
                           {item.label}
                           {isActive && (
                             <span className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full bg-[#00f3ff] shadow-[0_0_15px_#00f3ff]" />
