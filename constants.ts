@@ -18,7 +18,8 @@ export const PROJECTS: Project[] = [
     category: "Sustainable Tech",
     year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=50",
-    description: "Sustainable transport planner."
+    description: "Sustainable transport planner.",
+    link: "https://ecotrail-sustainable-transport-planner.ai.studio/"
   },
   {
     id: 2,

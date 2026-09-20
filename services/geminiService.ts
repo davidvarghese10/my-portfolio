@@ -73,6 +73,7 @@ ABOUT DAVID VARGHESE:
 FEATURED PROJECTS:
 1. EcoTrail (2026) — Category: Sustainable Tech
    • Overview: Sustainable transport planner designed to optimize green commuting and eco-friendly journeys.
+   • Live Application: https://ecotrail-sustainable-transport-planner.ai.studio/
    • Features: Multi-modal transit planning, carbon footprint computation across transportation modes, eco-friendly route suggestions, and green commute optimization.
 2. Intevra (2026) — Category: AI & Security
    • Overview: AI-integrated interview fraud detection and integrity monitoring platform.

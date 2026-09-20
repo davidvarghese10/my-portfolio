@@ -7,6 +7,7 @@ export interface Project {
   year: string;
   image: string;
   description: string;
+  link?: string;
 }
 
 export interface NavItem {

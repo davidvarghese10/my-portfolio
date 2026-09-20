@@ -54,9 +54,13 @@ const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Mouse position for custom cursor - direct 1:1 tracking with zero latency
+  // Mouse position for custom cursor
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
+  
+  // High-frequency, near-zero inertia spring: gives silky smooth 60/120fps motion with no trailing lag
+  const cursorX = useSpring(mouseX, { stiffness: 850, damping: 45, mass: 0.1 });
+  const cursorY = useSpring(mouseY, { stiffness: 850, damping: 45, mass: 0.1 });
   
   // Responsive spring animation for cursor scale when hovering interactive elements
   const cursorScale = useSpring(1, { stiffness: 350, damping: 25 });
@@ -77,14 +81,10 @@ const App: React.FC = () => {
       return !!target.closest('a, button, input, textarea, select, [role="button"], .cursor-pointer');
     };
 
+    // Direct position update without expensive DOM traversal on every mouse movement tick
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX - 10);
       mouseY.set(e.clientY - 10);
-      if (isHoverable(e.target)) {
-        cursorScale.set(2.2);
-      } else {
-        cursorScale.set(1);
-      }
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -236,8 +236,8 @@ const App: React.FC = () => {
       <motion.div
         className="glass-cursor fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999] hidden md:block"
         style={{
-          x: mouseX,
-          y: mouseY,
+          x: cursorX,
+          y: cursorY,
           scale: cursorScale,
         }}
       />
