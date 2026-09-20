@@ -94,7 +94,7 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
                   ? { x1: 4.5, y1: 4.5, x2: 9.5, y2: 9.5, stroke: '#00f3ff' }
                   : { x1: 3.5, y1: 6.5, x2: 20.5, y2: 6.5, stroke: 'currentColor' }
               }
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               strokeWidth="2.2"
               strokeLinecap="round"
             />
@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
                   ? { x1: 4.5, y1: 19.5, x2: 19.5, y2: 4.5, stroke: '#00f3ff' }
                   : { x1: 3.5, y1: 12, x2: 20.5, y2: 12, stroke: 'currentColor' }
               }
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               strokeWidth="2.2"
               strokeLinecap="round"
             />
@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
                   ? { x1: 14.5, y1: 14.5, x2: 19.5, y2: 19.5, stroke: '#00f3ff' }
                   : { x1: 3.5, y1: 17.5, x2: 20.5, y2: 17.5, stroke: 'currentColor' }
               }
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               strokeWidth="2.2"
               strokeLinecap="round"
             />
@@ -126,22 +126,29 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
         </motion.button>
       </motion.header>
 
-      {/* Fullscreen Cyberpunk Glass Overlay Menu */}
+      {/* Fullscreen Cyberpunk Glass Overlay Menu - Optimized for low-end mobile devices */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-2xl flex flex-col justify-between px-8 md:px-20 pt-28 pb-12 overflow-y-auto"
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="fixed inset-0 z-40 bg-[#0a0c10]/98 md:bg-black/90 md:backdrop-blur-xl flex flex-col justify-between px-8 md:px-20 pt-28 pb-12 overflow-y-auto"
+            style={{ willChange: 'opacity', transform: 'translateZ(0)' }}
             onClick={(e) => {
               if (e.target === e.currentTarget) setMenuOpen(false);
             }}
           >
-            {/* Ambient Background Glows */}
-            <div className="absolute top-1/4 right-10 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#00f3ff]/5 rounded-full blur-3xl pointer-events-none" />
+            {/* Ambient Background Glows - Using zero-overhead radial gradient instead of blur-3xl */}
+            <div 
+              className="absolute top-1/4 right-10 w-96 h-96 rounded-full pointer-events-none opacity-40 md:opacity-60"
+              style={{ background: 'radial-gradient(circle, rgba(0,243,255,0.12) 0%, rgba(0,243,255,0) 70%)' }}
+            />
+            <div 
+              className="absolute bottom-10 left-10 w-80 h-80 rounded-full pointer-events-none opacity-30 md:opacity-50"
+              style={{ background: 'radial-gradient(circle, rgba(0,243,255,0.08) 0%, rgba(0,243,255,0) 70%)' }}
+            />
 
             {/* Navigation List */}
             <div className="relative z-10 my-auto py-6 max-w-4xl">
@@ -152,10 +159,9 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
                   return (
                     <motion.li
                       key={item.label}
-                      initial={{ opacity: 0, x: -30 }}
+                      initial={{ opacity: 0, x: -16 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.35, delay: idx * 0.04 }}
+                      transition={{ duration: 0.22, delay: idx * 0.02, ease: [0.16, 1, 0.3, 1] }}
                       className="bg-transparent"
                     >
                       <button
@@ -188,9 +194,9 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
 
             {/* Menu Footer Info */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.18, duration: 0.2 }}
               className="relative z-10 pt-8 border-t border-white/10 flex justify-between items-center text-xs font-mono text-neutral-400"
             >
               <div>
