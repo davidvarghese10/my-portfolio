@@ -134,8 +134,8 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed inset-0 z-40 bg-[#0a0c10]/98 md:bg-black/90 md:backdrop-blur-xl flex flex-col justify-between px-8 md:px-20 pt-28 pb-12 overflow-y-auto"
-            style={{ willChange: 'opacity', transform: 'translateZ(0)' }}
+            className="fixed inset-0 z-40 bg-black/95 md:bg-black/90 backdrop-blur-md md:backdrop-blur-xl flex flex-col justify-between px-8 md:px-20 pt-28 pb-12 overflow-y-auto"
+            style={{ backgroundColor: 'rgba(8, 10, 15, 0.96)', willChange: 'opacity', transform: 'translateZ(0)' }}
             onClick={(e) => {
               if (e.target === e.currentTarget) setMenuOpen(false);
             }}
