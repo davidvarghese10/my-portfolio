@@ -8,7 +8,7 @@ interface Env {
 const SYSTEM_INSTRUCTION = `
 You are "Livoq", the intelligent, friendly, and articulate personal AI assistant on David Varghese's software engineering portfolio website.
 
-You answer questions about David Varghese, his projects, education, certifications, skills, achievements, and portfolio.
+You answer questions ONLY about David Varghese and his portfolio.
 
 David Varghese is a Computer Science and Engineering student at Rajagiri School of Engineering & Technology (RSET), Kerala.
 
@@ -33,8 +33,49 @@ Key achievements include:
 For hiring, collaboration, internships, or general inquiries, direct visitors to:
 david3005.scd@gmail.com
 
-Be friendly, intelligent, concise and helpful.
+SCOPE RESTRICTIONS:
+- Answer ONLY questions related to David Varghese, his portfolio, education, projects, skills, certifications, achievements, hackathons, experience, contact information, or hiring.
+- You may respond to simple greetings such as "hi", "hello", "hey", "good morning", "how are you?", and polite messages such as "thanks" or "bye".
+- For ANY unrelated question, do NOT answer the question.
+- Unrelated questions include general knowledge, mathematics, science, programming questions unrelated to David, homework, recipes, politics, entertainment, creative writing, or questions about unrelated people, companies, or topics.
+- For an unrelated question, politely reject the request in one or two short sentences and redirect the user toward David's portfolio.
+- Never provide an answer to an unrelated question, even if you know the answer.
+
+RESPONSE LENGTH:
+- Every response MUST be 600 characters or fewer.
+- This limit includes spaces and punctuation.
+- Be concise, friendly, intelligent, and helpful.
 `;
+
+const MAX_RESPONSE_LENGTH = 600;
+
+function limitResponse(text: string): string {
+  const trimmed = text.trim();
+
+  if (trimmed.length <= MAX_RESPONSE_LENGTH) {
+    return trimmed;
+  }
+
+  const cutoff = trimmed.slice(0, MAX_RESPONSE_LENGTH);
+
+  const lastSentence = Math.max(
+    cutoff.lastIndexOf(". "),
+    cutoff.lastIndexOf("? "),
+    cutoff.lastIndexOf("! ")
+  );
+
+  if (lastSentence >= 400) {
+    return cutoff.slice(0, lastSentence + 1).trim();
+  }
+
+  const lastSpace = cutoff.lastIndexOf(" ");
+
+  if (lastSpace > 0) {
+    return cutoff.slice(0, lastSpace).trim() + "...";
+  }
+
+  return cutoff.slice(0, MAX_RESPONSE_LENGTH - 3) + "...";
+}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -83,36 +124,37 @@ export default {
         ];
 
         const models = [
-            "gemini-3.5-flash-lite",
-            "gemini-3.6-flash"
+          "gemini-3.5-flash-lite",
+          "gemini-3.6-flash"
         ];
 
-for (const model of models) {
-  try {
-    const response = await ai.models.generateContent({
-      model,
-      contents,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION
-      }
-    });
+        for (const model of models) {
+          try {
+            const response = await ai.models.generateContent({
+              model,
+              contents,
+              config: {
+                systemInstruction: SYSTEM_INSTRUCTION,
+                maxOutputTokens: 200
+              }
+            });
 
-    if (response.text?.trim()) {
-      return Response.json({
-        text: response.text.trim()
-      });
-    }
-  } catch (error) {
-    console.error(`Gemini ${model} failed:`, error);
-  }
-}
+            if (response.text?.trim()) {
+              return Response.json({
+                text: limitResponse(response.text)
+              });
+            }
+          } catch (error) {
+            console.error(`Gemini ${model} failed:`, error);
+          }
+        }
 
-return Response.json(
-  {
-    error: "Gemini service temporarily unavailable"
-  },
-  { status: 502 }
-);
+        return Response.json(
+          {
+            error: "Gemini service temporarily unavailable"
+          },
+          { status: 502 }
+        );
 
       } catch (error) {
         console.error("Gemini Worker error:", error);
