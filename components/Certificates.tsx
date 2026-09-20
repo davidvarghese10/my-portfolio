@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BadgeCheck, 
-  CheckCircle2, 
   Calendar, 
   Award, 
   ExternalLink, 
@@ -306,7 +305,7 @@ const Certificates: React.FC = () => {
                       </p>
 
                       {/* Skills tags */}
-                      <div className="flex flex-wrap gap-1.5 mb-4">
+                      <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
                         {cert.skills.map((skill, sIdx) => (
                           <span 
                             key={sIdx}
@@ -317,34 +316,15 @@ const Certificates: React.FC = () => {
                         ))}
                       </div>
                     </div>
-
-                    {/* Front Footer: Verified Accreditation + Flip Prompt */}
-                    <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-                      <span className="flex items-center gap-1.5 text-[11px] text-neutral-300 font-medium">
-                        <CheckCircle2 size={13} className="text-[#00f3ff]" />
-                        Verified
-                      </span>
-                      
-                      {/* Flip Hint Indicator */}
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-[#00f3ff] bg-[#00f3ff]/10 hover:bg-[#00f3ff]/20 border border-[#00f3ff]/30 px-2.5 py-1 rounded-full transition-colors">
-                        <RotateCw size={11} className="transition-transform duration-500 group-hover:rotate-180" />
-                        <span>Hover to flip</span>
-                      </span>
-                    </div>
                   </div>
 
                   {/* BACK SIDE (Certificate Image) */}
-                  <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] [transform:rotateY(180deg)] bg-neutral-950/95 backdrop-blur-2xl border border-[#00f3ff]/50 p-4 rounded-2xl flex flex-col justify-between shadow-[0_0_35px_rgba(0,243,255,0.18)] overflow-hidden">
+                  <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] [transform:rotateY(180deg)] bg-neutral-950/95 backdrop-blur-2xl border border-[#00f3ff]/50 p-4 rounded-2xl flex flex-col shadow-[0_0_35px_rgba(0,243,255,0.18)] overflow-hidden">
                     {/* Top Bar with Issuer & Actions */}
-                    <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2.5">
-                      <div className="flex items-center gap-2 truncate">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-2 py-0.5 rounded-full truncate">
-                          {cert.issuer}
-                        </span>
-                        <span className="text-[10px] font-mono text-neutral-400 hidden sm:inline">
-                          Credential
-                        </span>
-                      </div>
+                    <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-2.5 py-0.5 rounded-full truncate max-w-[70%]">
+                        {cert.issuer}
+                      </span>
 
                       <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
                         {cert.verifyUrl && (
@@ -370,7 +350,7 @@ const Certificates: React.FC = () => {
 
                     {/* Certificate Image Frame */}
                     <div 
-                      className="relative flex-1 w-full my-2.5 rounded-xl overflow-hidden bg-neutral-900/90 border border-white/10 flex items-center justify-center p-2 group/img hover:border-[#00f3ff]/40 transition-all shadow-inner"
+                      className="relative flex-1 w-full mt-2.5 rounded-xl overflow-hidden bg-neutral-900/90 border border-white/10 flex items-center justify-center p-2 group/img hover:border-[#00f3ff]/40 transition-all shadow-inner"
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveModalCert(cert);
@@ -405,25 +385,11 @@ const Certificates: React.FC = () => {
                           <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider mb-1 line-clamp-1">
                             {cert.title}
                           </span>
-                          <span className="text-[10px] font-mono text-neutral-400 mb-2">
+                          <span className="text-[10px] font-mono text-neutral-400">
                             {cert.issuer} &bull; {cert.year}
-                          </span>
-                          <span className="text-[9px] font-mono text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/20 px-2 py-0.5 rounded-full">
-                            Certificate File Slot
                           </span>
                         </div>
                       )}
-                    </div>
-
-                    {/* Back Footer */}
-                    <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-neutral-400">
-                      <span className="flex items-center gap-1 text-[#00f3ff] font-medium">
-                        <ShieldCheck size={13} />
-                        Official Certificate
-                      </span>
-                      <span className="text-neutral-500 text-[10px]">
-                        Hover away to flip back
-                      </span>
                     </div>
                   </div>
                 </div>

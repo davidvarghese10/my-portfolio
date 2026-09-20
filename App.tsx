@@ -58,11 +58,12 @@ const App: React.FC = () => {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
   
-  const cursorX = useSpring(mouseX, { stiffness: 150, damping: 20 });
-  const cursorY = useSpring(mouseY, { stiffness: 150, damping: 20 });
+  // High-frequency, near-zero inertia spring: gives silky smooth 60/120fps motion with no trailing lag
+  const cursorX = useSpring(mouseX, { stiffness: 850, damping: 45, mass: 0.1 });
+  const cursorY = useSpring(mouseY, { stiffness: 850, damping: 45, mass: 0.1 });
   
   // Responsive spring animation for cursor scale when hovering interactive elements
-  const cursorScale = useSpring(1, { stiffness: 200, damping: 25 });
+  const cursorScale = useSpring(1, { stiffness: 350, damping: 25 });
 
   // Reset cursor scale on page changes
   useEffect(() => {
@@ -88,7 +89,7 @@ const App: React.FC = () => {
 
     const handleMouseOver = (e: MouseEvent) => {
       if (isHoverable(e.target)) {
-        cursorScale.set(2.2);
+        cursorScale.set(1.8);
       }
     };
 
