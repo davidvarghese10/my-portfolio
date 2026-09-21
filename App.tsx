@@ -16,18 +16,89 @@ import AppleHelloLoader from './components/AppleHelloLoader';
 import { PageTab } from './types';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
+const VALID_PAGES: PageTab[] = [
+  'home',
+  'profile',
+  'experience',
+  'education',
+  'projects',
+  'achievements',
+  'certificates',
+  'contact',
+];
+
+// Helper to determine the application's base URL path (e.g., '/' or '/subfolder/')
+const getBasePath = (): string => {
+  if (typeof window === 'undefined') return '/';
+  const pathname = window.location.pathname;
+  const segments = pathname.split('/').filter(Boolean);
+  const lastSegment = segments[segments.length - 1]?.toLowerCase();
+  
+  if (lastSegment && (VALID_PAGES.includes(lastSegment as PageTab) || lastSegment === 'work')) {
+    segments.pop();
+  }
+  return segments.length > 0 ? `/${segments.join('/')}/` : '/';
+};
+
+// Helper to construct clean URL without '#'
+const getPageUrl = (page: PageTab): string => {
+  const base = getBasePath();
+  if (page === 'home') {
+    return base;
+  }
+  return `${base}${page}`;
+};
+
+// Helper to resolve the active page from the current URL
+const resolveCurrentPage = (): PageTab => {
+  if (typeof window === 'undefined') return 'home';
+
+  // 1. Check pathname (e.g. /profile, /projects)
+  const pathname = window.location.pathname;
+  const segments = pathname.split('/').filter(Boolean);
+  const lastSegment = segments[segments.length - 1]?.toLowerCase();
+
+  if (lastSegment && VALID_PAGES.includes(lastSegment as PageTab)) {
+    return lastSegment as PageTab;
+  }
+  if (lastSegment === 'work') {
+    return 'projects';
+  }
+
+  // 2. Check search params (e.g. ?page=projects)
+  const searchParams = new URLSearchParams(window.location.search);
+  const pageParam = (searchParams.get('page') || searchParams.get('tab'))?.toLowerCase();
+  if (pageParam && VALID_PAGES.includes(pageParam as PageTab)) {
+    return pageParam as PageTab;
+  }
+  if (pageParam === 'work') {
+    return 'projects';
+  }
+
+  // 3. Fallback check for old hash link (e.g. /#projects)
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  if (hash && VALID_PAGES.includes(hash as PageTab)) {
+    return hash as PageTab;
+  }
+  if (hash === 'work') {
+    return 'projects';
+  }
+
+  return 'home';
+};
+
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState<PageTab>(() => {
-    const hash = window.location.hash.replace('#', '') as PageTab;
-    if (['home', 'profile', 'experience', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
-      return hash;
+    const initialPage = resolveCurrentPage();
+    // If URL had a '#' or needed cleanup, cleanly replace state in history without '#'
+    if (typeof window !== 'undefined') {
+      const targetUrl = getPageUrl(initialPage);
+      if (window.location.hash || window.location.pathname !== targetUrl) {
+        window.history.replaceState({ page: initialPage }, '', targetUrl);
+      }
     }
-    // Backward compatibility for old #work link
-    if (hash === ('work' as any)) {
-      return 'projects';
-    }
-    return 'home';
+    return initialPage;
   });
   const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
@@ -35,25 +106,23 @@ const App: React.FC = () => {
     cursorScale.set(1);
     setIsCertificateModalOpen(false);
     setActivePage(page);
-    window.location.hash = page === 'home' ? '' : page;
+
+    const targetUrl = getPageUrl(page);
+    if (window.location.pathname !== targetUrl || window.location.hash) {
+      window.history.pushState({ page }, '', targetUrl);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
-    const handleHashChange = () => {
+    const handlePopState = () => {
       cursorScale.set(1);
-      const hash = window.location.hash.replace('#', '') as PageTab;
-      if (['home', 'profile', 'experience', 'education', 'projects', 'achievements', 'certificates', 'contact'].includes(hash)) {
-        setActivePage(hash);
-      } else if (hash === ('work' as any)) {
-        setActivePage('projects');
-      } else if (!window.location.hash) {
-        setActivePage('home');
-      }
+      const currentPage = resolveCurrentPage();
+      setActivePage(currentPage);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   // Mouse position for custom cursor
