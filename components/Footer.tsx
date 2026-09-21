@@ -19,8 +19,9 @@ const Footer: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
         >
+          {/* Left Column: Contact Info */}
           <div className="max-w-xl">
             <span className="block text-xs font-mono font-bold uppercase tracking-widest text-[#00f3ff] mb-4 flex items-center gap-2">
               <Mail size={14} className="text-[#00f3ff]" />
@@ -34,8 +35,8 @@ const Footer: React.FC = () => {
             </p>
           </div>
           
-          {/* Floating Dock with LinkedIn, GitHub, LeetCode, Instagram & Email */}
-          <div className="self-center lg:self-auto py-2">
+          {/* Right Column: Floating Dock Centered */}
+          <div className="flex items-center justify-center w-full py-4 lg:py-0">
             <FloatingDock />
           </div>
         </motion.div>

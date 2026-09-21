@@ -23,6 +23,13 @@ const LeetCodeIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" 
 
 const DOCK_ITEMS: DockItemData[] = [
   {
+    title: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/david-varghese-solchadav-group/',
+    icon: <Linkedin size={21} strokeWidth={1.75} />,
+    brandColor: 'hover:!text-[#0A66C2] hover:!border-[#0A66C2]/80 hover:bg-[#0A66C2]/20',
+    glowColor: 'rgba(10, 102, 194, 0.75)',
+  },
+  {
     title: 'GitHub',
     href: 'https://github.com/davidvarghese10',
     icon: <Github size={21} strokeWidth={1.75} />,
@@ -43,13 +50,6 @@ const DOCK_ITEMS: DockItemData[] = [
     brandColor: 'hover:!text-[#E1306C] hover:!border-[#E1306C]/80 hover:bg-[#E1306C]/15',
     glowColor: 'rgba(225, 48, 108, 0.5)',
   },
-  {
-    title: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/david-varghese-solchadav-group/',
-    icon: <Linkedin size={21} strokeWidth={1.75} />,
-    brandColor: 'hover:!text-[#0A66C2] hover:!border-[#0A66C2]/80 hover:bg-[#0A66C2]/20',
-    glowColor: 'rgba(10, 102, 194, 0.75)',
-  },
 ];
 
 interface DockIconItemProps {
@@ -66,18 +66,15 @@ const DockIconItem: React.FC<DockIconItemProps> = ({ item, mouseX }) => {
     return val - bounds.x - bounds.width / 2;
   });
 
-  // macOS dock magnification interpolation
+// macOS dock magnification interpolation - expands upwards from the bottom while keeping the bottom line still
   const widthSync = useTransform(distance, [-110, 0, 110], [46, 62, 46]);
   const width = useSpring(widthSync, { mass: 0.1, stiffness: 220, damping: 15 });
 
-  const ySync = useTransform(distance, [-110, 0, 110], [0, -10, 0]);
-  const y = useSpring(ySync, { mass: 0.1, stiffness: 220, damping: 15 });
-
-  const iconScaleSync = useTransform(distance, [-110, 0, 110], [1, 1.28, 1]);
+  const iconScaleSync = useTransform(distance, [-110, 0, 110], [1, 1.25, 1]);
   const iconScale = useSpring(iconScaleSync, { mass: 0.1, stiffness: 220, damping: 15 });
 
   return (
-    <div className="flex flex-col items-center relative">
+    <div className="flex flex-col items-center justify-end relative">
       {/* Dock Magnifying Icon Button */}
       <motion.a
         ref={ref}
@@ -85,8 +82,8 @@ const DockIconItem: React.FC<DockIconItemProps> = ({ item, mouseX }) => {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={item.title}
-        style={{ width, height: width, y }}
-        className={`group relative rounded-2xl flex items-center justify-center text-[#00f3ff]/80 bg-[#00f3ff]/[0.08] border border-[#00f3ff]/30 backdrop-blur-xl shadow-[0_8px_20px_rgba(0,0,0,0.45),0_0_12px_rgba(0,243,255,0.12),inset_0_1px_1.5px_rgba(0,243,255,0.4)] transition-colors duration-200 cursor-pointer ${item.brandColor}`}
+        style={{ width, height: width }}
+        className={`group relative rounded-2xl flex items-center justify-center origin-bottom text-[#00f3ff]/80 bg-[#00f3ff]/[0.08] border border-[#00f3ff]/30 backdrop-blur-xl shadow-[0_8px_20px_rgba(0,0,0,0.45),0_0_12px_rgba(0,243,255,0.12),inset_0_1px_1.5px_rgba(0,243,255,0.4)] transition-colors duration-200 cursor-pointer ${item.brandColor}`}
       >
         {/* Neon blue glass top specular sheen */}
         <div className="absolute inset-x-0 top-0 h-[40%] rounded-t-2xl pointer-events-none bg-gradient-to-b from-[#00f3ff]/30 via-[#00f3ff]/10 to-transparent" />
@@ -113,15 +110,17 @@ export const FloatingDock: React.FC<{ className?: string }> = ({ className = '' 
   const mouseX = useMotionValue(Infinity);
 
   return (
-    <div className={`relative inline-flex flex-col items-center ${className}`}>
+    <div 
+      onMouseMove={(e) => mouseX.set(e.clientX)}
+      onMouseLeave={() => mouseX.set(Infinity)}
+      className={`relative inline-flex flex-col items-center ${className}`}
+    >
       {/* Dock Outer Ambient Neon Blue Glow */}
       <div className="absolute -inset-1.5 rounded-[34px] bg-gradient-to-r from-[#00f3ff]/30 via-[#00cce0]/15 to-[#00f3ff]/30 blur-xl pointer-events-none -z-10" />
 
       {/* Dock Body / Island */}
       <div
-        onMouseMove={(e) => mouseX.set(e.clientX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
-        className="relative flex items-center gap-2.5 sm:gap-3.5 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-[28px] bg-gradient-to-b from-[#00f3ff]/15 via-black/80 to-black/95 backdrop-blur-2xl border border-[#00f3ff]/40 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,243,255,0.22),inset_0_1px_2px_rgba(0,243,255,0.5)]"
+        className="relative flex items-end h-[68px] pb-2.5 sm:pb-3 gap-2.5 sm:gap-3.5 px-3.5 sm:px-4 rounded-[28px] bg-gradient-to-b from-[#00f3ff]/15 via-black/80 to-black/95 backdrop-blur-2xl border border-[#00f3ff]/40 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,243,255,0.22),inset_0_1px_2px_rgba(0,243,255,0.5)]"
       >
         {/* Top Rim Neon Blue Specular Highlight */}
         <div className="absolute inset-x-4 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#00f3ff]/70 to-transparent pointer-events-none" />
