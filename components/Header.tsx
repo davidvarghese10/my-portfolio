@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface HeaderProps {
   activePage: PageTab;
   onNavigate: (page: PageTab) => void;
+  isHidden?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
+const Header: React.FC<HeaderProps> = ({ activePage, onNavigate, isHidden = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNav = (page: PageTab) => {
@@ -36,8 +37,12 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
     <>
       <motion.header 
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        animate={{ 
+          y: isHidden ? -100 : 0, 
+          opacity: isHidden ? 0 : 1,
+          pointerEvents: isHidden ? 'none' : 'auto'
+        }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 md:py-6 text-[#00f3ff] transition-colors duration-300 ${
           menuOpen ? 'bg-transparent border-transparent' : 'bg-black/40 backdrop-blur-md border-b border-white/5'
         }`}

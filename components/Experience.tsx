@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin, Building2, CheckCircle2, ExternalLink } from 'lucide-react';
 
@@ -38,27 +38,159 @@ const EXPERIENCES: ExperienceItem[] = [
   }
 ];
 
+const ExperienceCard: React.FC<{ exp: ExperienceItem; idx: number }> = ({ exp, idx }) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <motion.a
+      key={exp.id}
+      href={exp.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.01 }}
+      transition={{ duration: 0.7, delay: idx * 0.12 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group block relative bg-black/40 backdrop-blur-xl border rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden transition-all cursor-pointer ${
+        exp.featured
+          ? 'border-[#00f3ff]/30 hover:border-[#00f3ff]/80 hover:shadow-[0_0_40px_rgba(0,243,255,0.25)] bg-gradient-to-br from-black/60 via-black/40 to-[#00f3ff]/5'
+          : 'border-white/10 hover:border-white/20 hover:bg-black/60'
+      }`}
+    >
+      {/* Cursor Spotlight Radial Glow */}
+      <div 
+        className="pointer-events-none absolute -inset-px rounded-[2.5rem] transition-opacity duration-300 z-0"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 243, 255, 0.15), transparent 70%)`
+        }}
+      />
+      {/* Cursor Spotlight Border Shine */}
+      <div 
+        className="pointer-events-none absolute -inset-px rounded-[2.5rem] border border-[#00f3ff]/70 transition-opacity duration-300 z-0"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          maskImage: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, black 20%, transparent 100%)`,
+          WebkitMaskImage: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, black 20%, transparent 100%)`,
+        }}
+      />
+
+      {/* Subtle ambient glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00f3ff]/20 transition-all duration-500" />
+
+      <div className="relative z-10 space-y-6">
+        {/* Badges & Meta */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] shadow-[0_0_15px_rgba(0,243,255,0.3)]">
+              {exp.type}
+            </span>
+            <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
+              <Calendar size={13} className="text-[#00f3ff]" />
+              {exp.duration}
+            </span>
+            <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
+              <MapPin size={13} className="text-[#00f3ff]" />
+              {exp.location}
+            </span>
+          </div>
+
+          {exp.link && (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-[#00f3ff] group-hover:bg-[#00f3ff] group-hover:text-black group-hover:border-[#00f3ff] transition-all duration-300">
+              <span>View LinkedIn Post</span>
+              <ExternalLink size={12} />
+            </div>
+          )}
+        </div>
+
+        {/* Role & Org */}
+        <div className="space-y-2">
+          <h3 className="text-2xl md:text-4xl font-bold font-poppins text-white tracking-tight leading-tight group-hover:text-[#00f3ff] transition-colors">
+            {exp.role}
+          </h3>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-base md:text-lg font-medium text-neutral-200">
+            <div className="flex items-center gap-2">
+              <Building2 size={18} className="text-[#00f3ff] shrink-0" />
+              <span className="text-white font-semibold">{exp.organization}</span>
+            </div>
+            <span className="hidden sm:inline text-neutral-600">&bull;</span>
+            <span className="text-[#00f3ff] font-light">
+              {exp.collaboration}
+            </span>
+          </div>
+        </div>
+
+        {/* Summary */}
+        <p className="text-neutral-300 text-sm md:text-base leading-relaxed max-w-4xl">
+          {exp.summary}
+        </p>
+
+        {/* Key Highlights */}
+        <div className="space-y-3 pt-2">
+          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#00f3ff]">
+            Key Takeaways &amp; Contributions:
+          </h4>
+          <ul className="space-y-2.5">
+            {exp.highlights.map((highlight, hIdx) => (
+              <li key={hIdx} className="flex items-start gap-3 text-xs md:text-sm text-neutral-300">
+                <CheckCircle2 size={16} className="text-[#00f3ff] shrink-0 mt-0.5" />
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Tech & Skills Pill Tags */}
+        <div className="pt-4 border-t border-white/10">
+          <div className="flex flex-wrap items-center gap-2">
+            {exp.skills.map((skill, sIdx) => (
+              <span
+                key={sIdx}
+                className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-neutral-300 group-hover:border-[#00f3ff]/40 group-hover:text-white transition-colors"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.a>
+  );
+};
+
 const Experience: React.FC = () => {
   return (
-    <div className="pt-28 md:pt-36 pb-24 px-6 md:px-12 flex flex-col justify-between min-h-[calc(100vh-100px)]">
+    <div className="pt-36 pb-24 px-6 md:px-12 bg-transparent relative z-10 min-h-screen flex flex-col justify-between">
       <div className="max-w-[90vw] mx-auto w-full">
         {/* Header / Intro */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-white/10"
+          transition={{ duration: 0.8 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-neutral-800 pb-8"
         >
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-[#00f3ff] mb-2">
+            <span className="block text-xs font-mono font-bold uppercase tracking-widest text-[#00f3ff] mb-4 flex items-center gap-2">
               <Briefcase size={14} className="text-[#00f3ff]" />
-              Work &amp; Industry Exposure
-            </div>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold font-poppins text-white tracking-tight">
+              // Work &bull; Industry Exposure
+            </span>
+            <h2 className="liquid-glass-text text-5xl md:text-8xl font-bold uppercase tracking-tighter">
               Experience
             </h2>
           </div>
-          <div className="mt-4 md:mt-0 text-left md:text-right">
+          <div className="text-left md:text-right">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block mb-1">
               (Industry Internships)
             </span>
@@ -71,101 +203,7 @@ const Experience: React.FC = () => {
         {/* Experience Timeline / Cards */}
         <div className="space-y-8 mb-16">
           {EXPERIENCES.map((exp, idx) => (
-            <motion.a
-              key={exp.id}
-              href={exp.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.7, delay: idx * 0.12 }}
-              className={`group block relative bg-black/40 backdrop-blur-xl border rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden transition-all cursor-pointer ${
-                exp.featured
-                  ? 'border-[#00f3ff]/30 hover:border-[#00f3ff]/80 hover:shadow-[0_0_40px_rgba(0,243,255,0.25)] bg-gradient-to-br from-black/60 via-black/40 to-[#00f3ff]/5'
-                  : 'border-white/10 hover:border-white/20 hover:bg-black/60'
-              }`}
-            >
-              {/* Subtle ambient glow */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-[#00f3ff]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00f3ff]/20 transition-all duration-500" />
-
-              <div className="relative z-10 space-y-6">
-                {/* Badges & Meta */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] shadow-[0_0_15px_rgba(0,243,255,0.3)]">
-                      {exp.type}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
-                      <Calendar size={13} className="text-[#00f3ff]" />
-                      {exp.duration}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs font-mono text-neutral-400">
-                      <MapPin size={13} className="text-[#00f3ff]" />
-                      {exp.location}
-                    </span>
-                  </div>
-
-                  {exp.link && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-[#00f3ff] group-hover:bg-[#00f3ff] group-hover:text-black group-hover:border-[#00f3ff] transition-all duration-300">
-                      <span>View LinkedIn Post</span>
-                      <ExternalLink size={12} />
-                    </div>
-                  )}
-                </div>
-
-                {/* Role & Org */}
-                <div className="space-y-2">
-                  <h3 className="text-2xl md:text-4xl font-bold font-poppins text-white tracking-tight leading-tight group-hover:text-[#00f3ff] transition-colors">
-                    {exp.role}
-                  </h3>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-base md:text-lg font-medium text-neutral-200">
-                    <div className="flex items-center gap-2">
-                      <Building2 size={18} className="text-[#00f3ff] shrink-0" />
-                      <span className="text-white font-semibold">{exp.organization}</span>
-                    </div>
-                    <span className="hidden sm:inline text-neutral-600">&bull;</span>
-                    <span className="text-[#00f3ff] font-light">
-                      {exp.collaboration}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Summary */}
-                <p className="text-neutral-300 text-sm md:text-base leading-relaxed max-w-4xl">
-                  {exp.summary}
-                </p>
-
-                {/* Key Highlights */}
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#00f3ff]">
-                    Key Takeaways &amp; Contributions:
-                  </h4>
-                  <ul className="space-y-2.5">
-                    {exp.highlights.map((highlight, hIdx) => (
-                      <li key={hIdx} className="flex items-start gap-3 text-xs md:text-sm text-neutral-300">
-                        <CheckCircle2 size={16} className="text-[#00f3ff] shrink-0 mt-0.5" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Tech & Skills Pill Tags */}
-                <div className="pt-4 border-t border-white/10">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {exp.skills.map((skill, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-neutral-300 group-hover:border-[#00f3ff]/40 group-hover:text-white transition-colors"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.a>
+            <ExperienceCard key={exp.id} exp={exp} idx={idx} />
           ))}
         </div>
       </div>

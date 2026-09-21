@@ -69,12 +69,6 @@ const ProjectList: React.FC = () => {
                 </div>
                 
                 <div className="mt-4 md:mt-0 flex items-center gap-4 md:gap-8 z-10 pointer-events-none">
-                  {project.link && (
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#00f3ff] px-2.5 py-1 rounded-full border border-[#00f3ff]/40 bg-[#00f3ff]/10 flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,243,255,0.15)]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00f3ff] animate-pulse" />
-                      Live App
-                    </span>
-                  )}
                   <span className="text-xs font-mono uppercase tracking-widest text-[#00f3ff]/90 px-3 py-1 rounded-full border border-[#00f3ff]/20 bg-[#00f3ff]/5">
                     {project.category}
                   </span>

@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BadgeCheck, 
   Calendar, 
   Award, 
   ExternalLink, 
-  RotateCw, 
   Maximize2, 
-  X, 
   ShieldCheck 
 } from 'lucide-react';
 
@@ -203,7 +201,266 @@ const CERTIFICATES: Certificate[] = [
   }
 ];
 
-const Certificates: React.FC = () => {
+const InterlacedX: React.FC<{ size?: number; strokeWidth?: number; className?: string }> = ({ 
+  size = 20, 
+  strokeWidth = 3, 
+  className = "" 
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    className={className}
+    fill="none"
+  >
+    {/* Continuous bottom-left to top-right diagonal */}
+    <line
+      x1="5"
+      y1="19"
+      x2="19"
+      y2="5"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+    />
+    {/* Top-left segment of broken diagonal */}
+    <line
+      x1="5"
+      y1="5"
+      x2="8.5"
+      y2="8.5"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+    />
+    {/* Bottom-right segment of broken diagonal */}
+    <line
+      x1="15.5"
+      y1="15.5"
+      x2="19"
+      y2="19"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const WebsiteXCloseButton: React.FC<{
+  onClick: () => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  title?: string;
+}> = ({ onClick, size = 'md', className = '', title = "Close" }) => {
+  const dimensionClass = 
+    size === 'sm' ? 'w-9 h-9' : 
+    size === 'lg' ? 'w-12 h-12' : 
+    'w-11 h-11';
+  const iconSize = size === 'sm' ? 18 : size === 'lg' ? 24 : 20;
+
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      className={`relative rounded-full bg-[#060e17] border border-[#00f3ff]/40 shadow-[0_0_20px_rgba(0,243,255,0.25)] hover:border-[#00f3ff]/80 hover:shadow-[0_0_25px_rgba(0,243,255,0.5)] flex items-center justify-center cursor-pointer shrink-0 outline-none focus:outline-none transition-all duration-300 group ${dimensionClass} ${className}`}
+      aria-label={title}
+      title={title}
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.94 }}
+    >
+      <div className="relative z-10 flex items-center justify-center text-[#00f3ff] drop-shadow-[0_0_8px_rgba(0,243,255,0.9)] group-hover:drop-shadow-[0_0_12px_rgba(0,243,255,1)] transition-all duration-300">
+        <InterlacedX size={iconSize} strokeWidth={3} />
+      </div>
+    </motion.button>
+  );
+};
+
+const CertificateCard: React.FC<{
+  cert: Certificate;
+  index: number;
+  isTapped: boolean;
+  toggleTapCard: (id: number) => void;
+  setActiveModalCert: (cert: Certificate) => void;
+  failedImages: Record<number, boolean>;
+  setFailedImages: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
+}> = ({
+  cert,
+  index,
+  isTapped,
+  toggleTapCard,
+  setActiveModalCert,
+  failedImages,
+  setFailedImages,
+}) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <motion.div
+      key={cert.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.03 }}
+      className="group relative h-[360px] md:h-[370px] w-full [perspective:1200px] cursor-pointer"
+      onClick={() => toggleTapCard(cert.id)}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* 3D Flipping Container */}
+      <div 
+        className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ease-out group-hover:[transform:rotateY(180deg)] ${
+          isTapped ? '[transform:rotateY(180deg)]' : ''
+        }`}
+      >
+        {/* FRONT SIDE */}
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] bg-black/45 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex flex-col justify-between group-hover:border-[#00f3ff]/40 group-hover:bg-black/60 transition-all duration-300 shadow-xl overflow-hidden">
+          {/* Cursor Spotlight Radial Glow */}
+          <div 
+            className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 243, 255, 0.18), transparent 75%)`
+            }}
+          />
+          {/* Cursor Spotlight Border Shine */}
+          <div 
+            className="pointer-events-none absolute -inset-px rounded-2xl border border-[#00f3ff]/70 transition-opacity duration-300 z-0"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              maskImage: `radial-gradient(220px circle at ${mousePos.x}px ${mousePos.y}px, black 20%, transparent 100%)`,
+              WebkitMaskImage: `radial-gradient(220px circle at ${mousePos.x}px ${mousePos.y}px, black 20%, transparent 100%)`,
+            }}
+          />
+
+          {/* Background subtle neon glow */}
+          <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#00f3ff]/5 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00f3ff]/10 transition-colors" />
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] px-2.5 py-0.5 rounded-full border border-[#00f3ff]/20 bg-[#00f3ff]/10 truncate max-w-[70%]">
+                {cert.field}
+              </span>
+              <div className="flex items-center gap-1 text-xs font-mono text-neutral-400 shrink-0">
+                <Calendar size={12} className="text-[#00f3ff]" />
+                <span className="font-semibold text-white">{cert.year}</span>
+              </div>
+            </div>
+
+            <h3 className="text-lg md:text-xl font-medium tracking-tight text-white group-hover:text-[#00f3ff] transition-colors mb-2 line-clamp-2">
+              {cert.title}
+            </h3>
+
+            <p className="text-xs font-mono text-neutral-400 mb-4 flex items-center gap-1.5">
+              <Award size={13} className="text-[#00f3ff] shrink-0" />
+              <span className="text-neutral-300 font-medium">{cert.issuer}</span>
+            </p>
+
+            {/* Skills tags */}
+            <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+              {cert.skills.map((skill, sIdx) => (
+                <span 
+                  key={sIdx}
+                  className="text-[10px] font-mono text-neutral-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* BACK SIDE (Certificate Image) */}
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] [transform:rotateY(180deg)] bg-neutral-950/95 backdrop-blur-2xl border border-[#00f3ff]/50 p-4 rounded-2xl flex flex-col shadow-[0_0_35px_rgba(0,243,255,0.18)] overflow-hidden">
+          {/* Cursor Spotlight on Back */}
+          <div 
+            className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 243, 255, 0.14), transparent 75%)`
+            }}
+          />
+
+          {/* Top Bar with Issuer & Actions */}
+          <div className="relative z-10 flex items-center justify-between gap-2 border-b border-white/10 pb-2">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-2.5 py-0.5 rounded-full truncate max-w-[70%]">
+              {cert.issuer}
+            </span>
+
+            <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
+              {cert.verifyUrl && (
+                <a
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-[#00f3ff]/20 text-neutral-300 hover:text-[#00f3ff] border border-white/10 hover:border-[#00f3ff]/40 transition-colors"
+                  title="Verify on Issuer Portal"
+                >
+                  <ExternalLink size={13} />
+                </a>
+              )}
+              <button
+                onClick={() => setActiveModalCert(cert)}
+                className="p-1.5 rounded-lg bg-[#00f3ff]/10 hover:bg-[#00f3ff]/25 text-[#00f3ff] border border-[#00f3ff]/30 transition-colors"
+                title="Enlarge Certificate"
+              >
+                <Maximize2 size={13} />
+              </button>
+            </div>
+          </div>
+
+          {/* Certificate Image Frame */}
+          <div 
+            className="relative z-10 flex-1 w-full mt-2.5 rounded-xl overflow-hidden bg-neutral-900/90 border border-white/10 flex items-center justify-center p-2 group/img hover:border-[#00f3ff]/40 transition-all shadow-inner cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveModalCert(cert);
+            }}
+          >
+            {!failedImages[cert.id] ? (
+              <img 
+                src={cert.imageUrl} 
+                alt={`${cert.title} Certificate`}
+                className="w-full h-full object-contain rounded-lg drop-shadow-lg transition-transform duration-300 group-hover/img:scale-[1.02]"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                onError={() => {
+                  setFailedImages(prev => ({ ...prev, [cert.id]: true }));
+                }}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center p-3 h-full w-full">
+                <div className="w-10 h-10 rounded-full bg-[#00f3ff]/10 border border-[#00f3ff]/30 flex items-center justify-center mb-2">
+                  <Award size={20} className="text-[#00f3ff]" />
+                </div>
+                <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider mb-1 line-clamp-1">
+                  {cert.title}
+                </span>
+                <span className="text-[10px] font-mono text-neutral-400">
+                  {cert.issuer} &bull; {cert.year}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+interface CertificatesProps {
+  onModalChange?: (isOpen: boolean) => void;
+}
+
+const Certificates: React.FC<CertificatesProps> = ({ onModalChange }) => {
   const [activeModalCert, setActiveModalCert] = useState<Certificate | null>(null);
   const [tappedCertId, setTappedCertId] = useState<number | null>(null);
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
@@ -211,6 +468,27 @@ const Certificates: React.FC = () => {
   const toggleTapCard = (id: number) => {
     setTappedCertId(prev => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    onModalChange?.(!!activeModalCert);
+    return () => {
+      onModalChange?.(false);
+    };
+  }, [activeModalCert, onModalChange]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveModalCert(null);
+      }
+    };
+    if (activeModalCert) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeModalCert]);
 
   return (
     <div 
@@ -231,18 +509,14 @@ const Certificates: React.FC = () => {
               // Accreditations &bull; Credentials
             </span>
             <h2 className="liquid-glass-text text-5xl md:text-8xl font-bold uppercase tracking-tighter">
-              Verified<br/>Certificates
+              Course<br/>Certificates
             </h2>
           </div>
           
           <div className="flex flex-col items-start md:items-end gap-3">
             <div className="text-left md:text-right">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block mb-1">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-500 block">
                 (2023 — 2026)
-              </span>
-              <span className="text-[11px] font-mono text-[#00f3ff]/80 flex items-center gap-1.5 md:justify-end">
-                <RotateCw size={12} className="text-[#00f3ff] animate-spin-slow" />
-                Hover tiles to flip &amp; view certificates
               </span>
             </div>
 
@@ -251,7 +525,7 @@ const Certificates: React.FC = () => {
               href="https://www.linkedin.com/in/david-varghese-solchadav-group/details/certifications/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] hover:bg-[#00d9e6] hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all transform hover:-translate-y-0.5"
+              className="liquid-glass-button inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all transform hover:-translate-y-0.5"
             >
               <span>View On LinkedIn</span>
               <ExternalLink size={13} />
@@ -261,141 +535,18 @@ const Certificates: React.FC = () => {
 
         {/* Certificates 3D Flip Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CERTIFICATES.map((cert, index) => {
-            const isTapped = tappedCertId === cert.id;
-
-            return (
-              <motion.div
-                key={cert.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.03 }}
-                className="group relative h-[360px] md:h-[370px] w-full [perspective:1200px] cursor-pointer"
-                onClick={() => toggleTapCard(cert.id)}
-              >
-                {/* 3D Flipping Container */}
-                <div 
-                  className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ease-out group-hover:[transform:rotateY(180deg)] ${
-                    isTapped ? '[transform:rotateY(180deg)]' : ''
-                  }`}
-                >
-                  {/* FRONT SIDE */}
-                  <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] bg-black/45 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex flex-col justify-between group-hover:border-[#00f3ff]/40 group-hover:bg-black/60 transition-all duration-300 shadow-xl overflow-hidden">
-                    {/* Background subtle neon glow */}
-                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#00f3ff]/5 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00f3ff]/10 transition-colors" />
-
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-4">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] px-2.5 py-0.5 rounded-full border border-[#00f3ff]/20 bg-[#00f3ff]/10 truncate max-w-[70%]">
-                          {cert.field}
-                        </span>
-                        <div className="flex items-center gap-1 text-xs font-mono text-neutral-400 shrink-0">
-                          <Calendar size={12} className="text-[#00f3ff]" />
-                          <span className="font-semibold text-white">{cert.year}</span>
-                        </div>
-                      </div>
-
-                      <h3 className="text-lg md:text-xl font-medium tracking-tight text-white group-hover:text-[#00f3ff] transition-colors mb-2 line-clamp-2">
-                        {cert.title}
-                      </h3>
-
-                      <p className="text-xs font-mono text-neutral-400 mb-4 flex items-center gap-1.5">
-                        <Award size={13} className="text-[#00f3ff] shrink-0" />
-                        <span className="text-neutral-300 font-medium">{cert.issuer}</span>
-                      </p>
-
-                      {/* Skills tags */}
-                      <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-                        {cert.skills.map((skill, sIdx) => (
-                          <span 
-                            key={sIdx}
-                            className="text-[10px] font-mono text-neutral-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* BACK SIDE (Certificate Image) */}
-                  <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [webkit-backface-visibility:hidden] [transform:rotateY(180deg)] bg-neutral-950/95 backdrop-blur-2xl border border-[#00f3ff]/50 p-4 rounded-2xl flex flex-col shadow-[0_0_35px_rgba(0,243,255,0.18)] overflow-hidden">
-                    {/* Top Bar with Issuer & Actions */}
-                    <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-2.5 py-0.5 rounded-full truncate max-w-[70%]">
-                        {cert.issuer}
-                      </span>
-
-                      <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
-                        {cert.verifyUrl && (
-                          <a
-                            href={cert.verifyUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-[#00f3ff]/20 text-neutral-300 hover:text-[#00f3ff] border border-white/10 hover:border-[#00f3ff]/40 transition-colors"
-                            title="Verify on Issuer Portal"
-                          >
-                            <ExternalLink size={13} />
-                          </a>
-                        )}
-                        <button
-                          onClick={() => setActiveModalCert(cert)}
-                          className="p-1.5 rounded-lg bg-[#00f3ff]/10 hover:bg-[#00f3ff]/25 text-[#00f3ff] border border-[#00f3ff]/30 transition-colors"
-                          title="Enlarge Certificate"
-                        >
-                          <Maximize2 size={13} />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Certificate Image Frame */}
-                    <div 
-                      className="relative flex-1 w-full mt-2.5 rounded-xl overflow-hidden bg-neutral-900/90 border border-white/10 flex items-center justify-center p-2 group/img hover:border-[#00f3ff]/40 transition-all shadow-inner"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveModalCert(cert);
-                      }}
-                    >
-                      {!failedImages[cert.id] ? (
-                        <>
-                          <img 
-                            src={cert.imageUrl} 
-                            alt={`${cert.title} Certificate`}
-                            className="w-full h-full object-contain rounded-lg drop-shadow-lg transition-transform duration-300 group-hover/img:scale-[1.02]"
-                            referrerPolicy="no-referrer"
-                            loading="lazy"
-                            onError={() => {
-                              setFailedImages(prev => ({ ...prev, [cert.id]: true }));
-                            }}
-                          />
-
-                          {/* Hover Overlay Hint */}
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center rounded-lg gap-1.5 backdrop-blur-[2px]">
-                            <span className="text-xs font-mono font-semibold text-white bg-black/80 px-3 py-1.5 rounded-full border border-[#00f3ff]/40 flex items-center gap-1.5">
-                              <Maximize2 size={12} className="text-[#00f3ff]" />
-                              Click to enlarge
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center text-center p-3 h-full w-full">
-                          <div className="w-10 h-10 rounded-full bg-[#00f3ff]/10 border border-[#00f3ff]/30 flex items-center justify-center mb-2">
-                            <Award size={20} className="text-[#00f3ff]" />
-                          </div>
-                          <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider mb-1 line-clamp-1">
-                            {cert.title}
-                          </span>
-                          <span className="text-[10px] font-mono text-neutral-400">
-                            {cert.issuer} &bull; {cert.year}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+          {CERTIFICATES.map((cert, index) => (
+            <CertificateCard
+              key={cert.id}
+              cert={cert}
+              index={index}
+              isTapped={tappedCertId === cert.id}
+              toggleTapCard={toggleTapCard}
+              setActiveModalCert={setActiveModalCert}
+              failedImages={failedImages}
+              setFailedImages={setFailedImages}
+            />
+          ))}
         </div>
 
         {/* Centered Fitted "More Certificates" CTA Button */}
@@ -439,14 +590,14 @@ const Certificates: React.FC = () => {
       {/* Lightbox Certificate Enlarge Modal */}
       <AnimatePresence>
         {activeModalCert && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 md:p-6">
             {/* Backdrop */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveModalCert(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
 
             {/* Modal Card */}
@@ -455,40 +606,40 @@ const Certificates: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative z-10 max-w-4xl w-full bg-neutral-950 border border-[#00f3ff]/40 rounded-3xl p-6 md:p-8 shadow-[0_0_50px_rgba(0,243,255,0.25)] flex flex-col max-h-[90vh] overflow-y-auto"
+              className="relative z-10 max-w-3xl w-full bg-neutral-950/95 backdrop-blur-2xl border border-[#00f3ff]/40 rounded-3xl p-3.5 sm:p-5 shadow-[0_0_60px_rgba(0,243,255,0.3)] flex flex-col max-h-[78vh] overflow-y-auto my-auto"
             >
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-4 border-b border-neutral-800 pb-4 mb-5">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-3 py-0.5 rounded-full">
+              {/* Modal Header (scrolls naturally with content) */}
+              <div className="flex items-center justify-between gap-4 border-b border-neutral-800 pb-2.5 mb-2.5">
+                <div className="pr-2 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f3ff] bg-[#00f3ff]/10 border border-[#00f3ff]/30 px-2.5 py-0.5 rounded-full">
                       {activeModalCert.issuer}
                     </span>
                     <span className="text-xs font-mono text-neutral-400">
                       {activeModalCert.year}
                     </span>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight leading-snug">
                     {activeModalCert.title}
                   </h3>
                 </div>
 
-                <button 
-                  onClick={() => setActiveModalCert(null)}
-                  className="p-2 rounded-full bg-white/5 hover:bg-[#00f3ff]/20 text-neutral-400 hover:text-white border border-white/10 hover:border-[#00f3ff]/40 transition-colors shrink-0"
-                  aria-label="Close modal"
-                >
-                  <X size={20} />
-                </button>
+                <div className="shrink-0">
+                  <WebsiteXCloseButton 
+                    onClick={() => setActiveModalCert(null)} 
+                    size="md" 
+                    title="Close Certificate Modal"
+                  />
+                </div>
               </div>
 
               {/* Certificate Image in Lightbox */}
-              <div className="w-full flex-1 min-h-[300px] md:min-h-[440px] bg-black/60 rounded-2xl border border-white/10 p-4 md:p-6 flex items-center justify-center overflow-hidden">
+              <div className="w-full flex-1 min-h-[180px] bg-black/50 rounded-2xl border border-white/10 p-2 sm:p-3 flex items-center justify-center overflow-hidden">
                 {!failedImages[activeModalCert.id] ? (
                   <img 
                     src={activeModalCert.imageUrl} 
                     alt={activeModalCert.title}
-                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"
+                    className="max-h-[40vh] md:max-h-[46vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"
                     referrerPolicy="no-referrer"
                     onError={() => {
                       setFailedImages(prev => ({ ...prev, [activeModalCert.id]: true }));
@@ -524,31 +675,25 @@ const Certificates: React.FC = () => {
               </div>
 
               {/* Modal Footer */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 mt-5 border-t border-neutral-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 mt-3 border-t border-neutral-800">
                 <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
                   <ShieldCheck size={15} className="text-[#00f3ff]" />
                   <span>Issued to <strong className="text-white">David Varghese</strong></span>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  {activeModalCert.verifyUrl && (
+                {activeModalCert.verifyUrl && (
+                  <div className="flex items-center gap-3">
                     <a
                       href={activeModalCert.verifyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] hover:bg-[#00d9e6] shadow-[0_0_15px_rgba(0,243,255,0.4)] transition-all"
+                      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00f3ff] hover:bg-[#00d9e6] shadow-[0_0_15px_rgba(0,243,255,0.4)] transition-all"
                     >
                       <span>Verify Credential</span>
                       <ExternalLink size={13} />
                     </a>
-                  )}
-                  <button
-                    onClick={() => setActiveModalCert(null)}
-                    className="px-4 py-2 rounded-full text-xs font-mono text-neutral-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
-                  >
-                    Close
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

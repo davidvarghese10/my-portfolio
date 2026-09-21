@@ -29,9 +29,11 @@ const App: React.FC = () => {
     }
     return 'home';
   });
+  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
   const handleNavigate = (page: PageTab) => {
     cursorScale.set(1);
+    setIsCertificateModalOpen(false);
     setActivePage(page);
     window.location.hash = page === 'home' ? '' : page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -127,7 +129,7 @@ const App: React.FC = () => {
       <ScrollHUD />
       
       <div className="relative z-10 md:cursor-none min-h-screen flex flex-col justify-between">
-        <Header activePage={activePage} onNavigate={handleNavigate} />
+        <Header activePage={activePage} onNavigate={handleNavigate} isHidden={isCertificateModalOpen} />
         
         <main className="flex-grow">
           <AnimatePresence mode="wait">
@@ -211,7 +213,7 @@ const App: React.FC = () => {
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               >
-                <Certificates />
+                <Certificates onModalChange={setIsCertificateModalOpen} />
               </motion.div>
             )}
 
