@@ -13,6 +13,7 @@ import LiquidBackground from './components/LiquidBackground';
 import InteractiveParticles from './components/InteractiveParticles';
 import ScrollHUD from './components/ScrollHUD';
 import AppleHelloLoader from './components/AppleHelloLoader';
+import NotFound from './components/NotFound';
 import { PageTab } from './types';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
@@ -27,17 +28,16 @@ const VALID_PAGES: PageTab[] = [
   'contact',
 ];
 
-// Helper to determine the application's base URL path (e.g., '/' or '/subfolder/')
+const KNOWN_REPO_BASES = ['my-portfolio', 'portfolio'];
+
+// Helper to determine the application's base URL path (e.g., '/' or '/my-portfolio/')
 const getBasePath = (): string => {
   if (typeof window === 'undefined') return '/';
-  const pathname = window.location.pathname;
-  const segments = pathname.split('/').filter(Boolean);
-  const lastSegment = segments[segments.length - 1]?.toLowerCase();
-  
-  if (lastSegment && (VALID_PAGES.includes(lastSegment as PageTab) || lastSegment === 'work')) {
-    segments.pop();
+  const segments = window.location.pathname.split('/').filter(Boolean);
+  if (segments.length > 0 && KNOWN_REPO_BASES.includes(segments[0].toLowerCase())) {
+    return `/${segments[0]}/`;
   }
-  return segments.length > 0 ? `/${segments.join('/')}/` : '/';
+  return '/';
 };
 
 // Helper to construct clean URL without '#'
@@ -53,53 +53,72 @@ const getPageUrl = (page: PageTab): string => {
 const resolveCurrentPage = (): PageTab => {
   if (typeof window === 'undefined') return 'home';
 
-  // 1. Check pathname (e.g. /profile, /projects)
-  const pathname = window.location.pathname;
-  const segments = pathname.split('/').filter(Boolean);
-  const lastSegment = segments[segments.length - 1]?.toLowerCase();
-
-  if (lastSegment && VALID_PAGES.includes(lastSegment as PageTab)) {
-    return lastSegment as PageTab;
-  }
-  if (lastSegment === 'work') {
-    return 'projects';
-  }
-
-  // 2. Check search params (e.g. ?page=projects)
+  // 1. Check search params (e.g. ?page=projects)
   const searchParams = new URLSearchParams(window.location.search);
   const pageParam = (searchParams.get('page') || searchParams.get('tab'))?.toLowerCase();
-  if (pageParam && VALID_PAGES.includes(pageParam as PageTab)) {
-    return pageParam as PageTab;
-  }
-  if (pageParam === 'work') {
-    return 'projects';
-  }
-
-  // 3. Fallback check for old hash link (e.g. /#projects)
-  const hash = window.location.hash.replace('#', '').toLowerCase();
-  if (hash && VALID_PAGES.includes(hash as PageTab)) {
-    return hash as PageTab;
-  }
-  if (hash === 'work') {
-    return 'projects';
+  if (pageParam) {
+    if (VALID_PAGES.includes(pageParam as PageTab)) {
+      return pageParam as PageTab;
+    }
+    if (pageParam === 'work') {
+      return 'projects';
+    }
+    return '404';
   }
 
-  return 'home';
+  // 2. Fallback check for old hash link (e.g. /#projects)
+  const rawHash = window.location.hash.replace('#', '').replace(/^\/+/, '').toLowerCase();
+  if (rawHash) {
+    if (VALID_PAGES.includes(rawHash as PageTab)) {
+      return rawHash as PageTab;
+    }
+    if (rawHash === 'work') {
+      return 'projects';
+    }
+    return '404';
+  }
+
+  // 3. Check pathname (e.g. /, /profile, /projects, or unknown 404 route)
+  const segments = window.location.pathname.split('/').filter(Boolean);
+  const routeSegments =
+    segments.length > 0 && KNOWN_REPO_BASES.includes(segments[0].toLowerCase())
+      ? segments.slice(1)
+      : segments;
+
+  const filteredSegments = routeSegments.filter(
+    (seg) => seg.toLowerCase() !== 'index.html'
+  );
+
+  if (filteredSegments.length === 0) {
+    return 'home';
+  }
+
+  if (filteredSegments.length === 1) {
+    const seg = filteredSegments[0].toLowerCase();
+    if (VALID_PAGES.includes(seg as PageTab)) {
+      return seg as PageTab;
+    }
+    if (seg === 'work') {
+      return 'projects';
+    }
+  }
+
+  return '404';
 };
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState<PageTab>(() => {
     const initialPage = resolveCurrentPage();
-    // If URL had a '#' or needed cleanup, cleanly replace state in history without '#'
-    if (typeof window !== 'undefined') {
+    // If URL had a '#' or ?page= query param on a valid page, cleanly replace state in history without '#'
+    if (typeof window !== 'undefined' && initialPage !== '404') {
       const targetUrl = getPageUrl(initialPage);
-      if (window.location.hash || window.location.pathname !== targetUrl) {
+      if (window.location.hash || window.location.search || window.location.pathname !== targetUrl) {
         window.history.replaceState({ page: initialPage }, '', targetUrl);
       }
     }
     return initialPage;
   });
+  const [isLoading, setIsLoading] = useState<boolean>(() => resolveCurrentPage() !== '404');
   const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
   const handleNavigate = (page: PageTab) => {
@@ -186,6 +205,26 @@ const App: React.FC = () => {
       window.removeEventListener('pointerdown', handlePointerDown);
     };
   }, [mouseX, mouseY, cursorScale]);
+
+  if (activePage === '404') {
+    return (
+      <>
+        <LiquidBackground />
+        <InteractiveParticles />
+        <div className="relative z-10 md:cursor-none min-h-screen flex flex-col justify-between">
+          <NotFound onGoHome={() => handleNavigate('home')} />
+        </div>
+        <motion.div
+          className="glass-cursor fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999] hidden md:block"
+          style={{
+            x: cursorX,
+            y: cursorY,
+            scale: cursorScale,
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-export type PageTab = 'home' | 'profile' | 'education' | 'projects' | 'certificates' | 'achievements' | 'experience' | 'contact';
+export type PageTab = 'home' | 'profile' | 'education' | 'projects' | 'certificates' | 'achievements' | 'experience' | 'contact' | '404';
 
 export interface Project {
   id: number;
