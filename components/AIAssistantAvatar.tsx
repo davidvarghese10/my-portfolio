@@ -57,11 +57,21 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
     let blinkProgress = 0;
     let nextBlinkTime = Date.now() + 3000 + Math.random() * 3000;
 
-    const handlePointerMove = (e: MouseEvent | PointerEvent) => {
-      if (!trackCursor || !containerRef.current) return;
+    // Cached center coordinates to avoid synchronous layout reflow on every pointermove
+    let centerX = window.innerWidth - 48;
+    let centerY = window.innerHeight - 48;
+
+    const updateCenter = () => {
+      if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      centerX = rect.left + rect.width / 2;
+      centerY = rect.top + rect.height / 2;
+    };
+
+    updateCenter();
+
+    const handlePointerMove = (e: MouseEvent | PointerEvent) => {
+      if (!trackCursor) return;
 
       const dx = e.clientX - centerX;
       const dy = e.clientY - centerY;
@@ -96,7 +106,11 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
 
     if (trackCursor) {
       window.addEventListener('pointermove', handlePointerMove, { passive: true });
+      window.addEventListener('resize', updateCenter, { passive: true });
     }
+
+    let lastBodyTransform = '';
+    let lastEyeTransform = '';
 
     const updateFrame = () => {
       if (trackCursor) {
@@ -130,18 +144,22 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
         }
       }
 
-      // Update body: translation + lean/tilt toward cursor
+      // Update body only when changed to avoid unnecessary SVG re-rasterization
       if (blobGroupRef.current && trackCursor) {
-        blobGroupRef.current.setAttribute(
-          'transform',
-          `translate(${currentBodyX.toFixed(2)}, ${currentBodyY.toFixed(2)}) rotate(${currentRotate.toFixed(2)}, 50, 50)`
-        );
+        const nextBodyTransform = `translate(${currentBodyX.toFixed(1)}, ${currentBodyY.toFixed(1)}) rotate(${currentRotate.toFixed(1)}, 50, 50)`;
+        if (nextBodyTransform !== lastBodyTransform) {
+          blobGroupRef.current.setAttribute('transform', nextBodyTransform);
+          lastBodyTransform = nextBodyTransform;
+        }
       }
 
-      // Update vertical capsule eyes inside the face: translation + blink scale
+      // Update vertical capsule eyes inside the face only when changed
       if (eyesGroupRef.current) {
-        const eyeTransform = `translate(${currentEyeX.toFixed(2)}, ${currentEyeY.toFixed(2)}) translate(0, 46.5) scale(1, ${blinkScale.toFixed(3)}) translate(0, -46.5)`;
-        eyesGroupRef.current.setAttribute('transform', eyeTransform);
+        const nextEyeTransform = `translate(${currentEyeX.toFixed(1)}, ${currentEyeY.toFixed(1)}) translate(0, 46.5) scale(1, ${blinkScale.toFixed(2)}) translate(0, -46.5)`;
+        if (nextEyeTransform !== lastEyeTransform) {
+          eyesGroupRef.current.setAttribute('transform', nextEyeTransform);
+          lastEyeTransform = nextEyeTransform;
+        }
       }
 
       animFrameId = requestAnimationFrame(updateFrame);
@@ -152,6 +170,7 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
     return () => {
       if (trackCursor) {
         window.removeEventListener('pointermove', handlePointerMove);
+        window.removeEventListener('resize', updateCenter);
       }
       cancelAnimationFrame(animFrameId);
     };
@@ -167,11 +186,16 @@ export const AIAssistantAvatar: React.FC<AIAssistantAvatarProps> = ({
       style={{
         width: size,
         height: size,
-        filter: glow
-          ? 'drop-shadow(0 0 8px rgba(0, 243, 255, 0.85)) drop-shadow(0 0 16px rgba(0, 243, 255, 0.4)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))'
-          : 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.6))',
       }}
     >
+      {glow && (
+        <div
+          className="absolute inset-[-35%] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(0, 243, 255, 0.45) 0%, rgba(0, 243, 255, 0) 70%)',
+          }}
+        />
+      )}
       <svg
         viewBox="0 0 100 100"
         width={size}

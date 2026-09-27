@@ -61,7 +61,7 @@ const DockIconItem: React.FC<DockIconItemProps> = ({ item, mouseX }) => {
   const ref = useRef<HTMLAnchorElement>(null);
 
   // Measure distance between mouse and icon center X
-  const distance = useTransform(mouseX, (val) => {
+  const distance = useTransform(mouseX, (val: number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return val - bounds.x - bounds.width / 2;
   });

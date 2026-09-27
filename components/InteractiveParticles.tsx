@@ -1,6 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import { PageTab } from '../types';
 
-// Tiny particle with 3D depth layer for multi-plane parallax
+interface InteractiveParticlesProps {
+  activePage?: PageTab;
+  sphereTransitionId?: number;
+  pullSphereProgressRef?: React.MutableRefObject<number>;
+}
+
+// Tiny particle with 3D depth layer for multi-plane parallax + 3D sphere coordinates
 interface ParallaxParticle {
   x: number;
   y: number;
@@ -13,6 +20,10 @@ interface ParallaxParticle {
   alpha: number;
   shimmerSpeed: number;
   shimmerPhase: number;
+  // Unit 3D sphere coordinates (-1 to 1)
+  sx3d: number;
+  sy3d: number;
+  sz3d: number;
 }
 
 // Pre-defined color palette
@@ -24,8 +35,30 @@ const PALETTE_COLORS = [
   '#c084fc', // Lavender
 ];
 
-export const InteractiveParticles: React.FC = () => {
+export const InteractiveParticles: React.FC<InteractiveParticlesProps> = ({
+  activePage = 'home',
+  sphereTransitionId = 0,
+  pullSphereProgressRef,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const activePageRef = useRef<PageTab>(activePage);
+  const sphereTransitionStartRef = useRef<number | null>(null);
+  const sphereStartedFromPullRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    activePageRef.current = activePage;
+  }, [activePage]);
+
+  useEffect(() => {
+    if (sphereTransitionId > 0) {
+      const currentPull = pullSphereProgressRef?.current ?? 0;
+      sphereStartedFromPullRef.current = currentPull >= 0.8;
+      if (pullSphereProgressRef) {
+        pullSphereProgressRef.current = 0;
+      }
+      sphereTransitionStartRef.current = performance.now();
+    }
+  }, [sphereTransitionId, pullSphereProgressRef]);
 
   // Parallax physics coordinates
   const parallaxRef = useRef<{
@@ -69,25 +102,24 @@ export const InteractiveParticles: React.FC = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const initDimensions = () => {
-      const isMobile = window.innerWidth < 768;
-      // High-DPI support: cap at 2 for crisp rendering on OLED/Retina
-      dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+      // Use 1x DPR for ambient particle canvas to cut GPU pixel fill-rate by up to 4x on Retina/4K displays
+      dpr = 1;
       width = window.innerWidth;
       height = window.innerHeight;
 
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
+      canvas.width = width;
+      canvas.height = height;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-
-      ctx.scale(dpr, dpr);
     };
 
     const initParticles = () => {
       const isMobile = window.innerWidth < 768;
-      // 55 particles on mobile (minimal CPU), 110 on desktop
-      const count = isMobile ? 55 : 110;
+      // Balanced particle count for crisp 3D sphere and ultra-low GPU overhead
+      const count = isMobile ? 65 : 120;
       particles = [];
+
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5));
 
       for (let i = 0; i < count; i++) {
         const x = Math.random() * width;
@@ -105,6 +137,15 @@ export const InteractiveParticles: React.FC = () => {
         const colorIndex = Math.floor(Math.random() * PALETTE_COLORS.length);
         const baseAlpha = 0.25 + depth * 0.55;
 
+        // Compute unit 3D Fibonacci sphere coordinates
+        const y3d = 1 - (i / Math.max(1, count - 1)) * 2; // 1 to -1
+        const radiusAtY = Math.sqrt(Math.max(0, 1 - y3d * y3d));
+        const theta = goldenAngle * i;
+        const shellR = 0.86 + (i % 5) * 0.035;
+        const sx3d = Math.cos(theta) * radiusAtY * shellR;
+        const sy3d = y3d * shellR;
+        const sz3d = Math.sin(theta) * radiusAtY * shellR;
+
         particles.push({
           x,
           y,
@@ -117,6 +158,9 @@ export const InteractiveParticles: React.FC = () => {
           alpha: baseAlpha,
           shimmerSpeed: 0.01 + Math.random() * 0.02,
           shimmerPhase: Math.random() * Math.PI * 2,
+          sx3d,
+          sy3d,
+          sz3d,
         });
       }
     };
@@ -298,6 +342,7 @@ export const InteractiveParticles: React.FC = () => {
     // Animation Loop with Visibility API
     let lastTime = performance.now();
     let isLoopRunning = true;
+    let smoothedPullBlend = 0;
 
     const render = (currentTime: number) => {
       if (!isLoopRunning) return;
@@ -314,6 +359,75 @@ export const InteractiveParticles: React.FC = () => {
       const lerpSpeed = prefersReducedMotion ? 0.03 : 0.08;
       parallax.currentX += (parallax.targetX - parallax.currentX) * lerpSpeed * dt;
       parallax.currentY += (parallax.targetY - parallax.currentY) * lerpSpeed * dt;
+
+      // 1. Mobile bottom overscroll pull progress (0 -> 1 as user scrolls past bottom)
+      const rawPull = pullSphereProgressRef ? Math.min(1, Math.max(0, pullSphereProgressRef.current)) : 0;
+      smoothedPullBlend += (rawPull - smoothedPullBlend) * Math.min(1, 0.22 * dt);
+      if (Math.abs(rawPull - smoothedPullBlend) < 0.001) {
+        smoothedPullBlend = rawPull;
+      }
+
+      // 2. Tab Change Sphere Animation (slower gather -> hold -> spread)
+      let transitionBlend = 0;
+      if (sphereTransitionStartRef.current !== null) {
+        const tabElapsed = Math.max(0, currentTime - sphereTransitionStartRef.current);
+        const startedFromPull = sphereStartedFromPullRef.current;
+        const GATHER_MS = startedFromPull ? 120 : 680;
+        const HOLD_MS = 260;
+        const SPREAD_MS = 760;
+        const TOTAL_MS = GATHER_MS + HOLD_MS + SPREAD_MS;
+
+        if (tabElapsed < GATHER_MS) {
+          const t = tabElapsed / GATHER_MS;
+          if (startedFromPull) {
+            transitionBlend = 1;
+          } else {
+            // Smooth cubic ease-in-out shrinking into sphere
+            transitionBlend = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+          }
+        } else if (tabElapsed < GATHER_MS + HOLD_MS) {
+          transitionBlend = 1;
+        } else if (tabElapsed < TOTAL_MS) {
+          const t = (tabElapsed - (GATHER_MS + HOLD_MS)) / SPREAD_MS;
+          // Smooth cubic ease-out spreading back across the screen
+          const spreadOut = 1 - Math.pow(1 - t, 3);
+          transitionBlend = 1 - spreadOut;
+        } else {
+          transitionBlend = 0;
+          sphereTransitionStartRef.current = null;
+          sphereStartedFromPullRef.current = false;
+        }
+      }
+
+      const sphereBlend = Math.max(transitionBlend, smoothedPullBlend);
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+      // 3D sphere radius (~78px on mobile, ~115-130px on desktop)
+      const sphereRadius = Math.max(76, Math.min(130, Math.min(width, height) * (width < 768 ? 0.19 : 0.15)));
+
+      // 3D sphere rotation angles
+      const rotY = currentTime * 0.0018 + parallax.currentX * 0.006;
+      const rotX = Math.sin(currentTime * 0.001) * 0.35 - parallax.currentY * 0.006;
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+
+      // Subtle core glow behind the 3D particle sphere during tab transition or mobile pull
+      if (sphereBlend > 0.02) {
+        const sphereGlowAlpha = sphereBlend * 0.25;
+        const glowX = centerX + parallax.currentX * 0.22;
+        const glowY = centerY + parallax.currentY * 0.22;
+        const grad = ctx.createRadialGradient(glowX, glowY, 2, glowX, glowY, sphereRadius * 1.6);
+        grad.addColorStop(0, `rgba(0, 243, 255, ${sphereGlowAlpha.toFixed(3)})`);
+        grad.addColorStop(0.5, `rgba(56, 189, 248, ${(sphereGlowAlpha * 0.45).toFixed(3)})`);
+        grad.addColorStop(1, 'rgba(0, 243, 255, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(glowX, glowY, sphereRadius * 1.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       const margin = 50;
 
@@ -341,13 +455,35 @@ export const InteractiveParticles: React.FC = () => {
           if (p.y < -margin) p.y = height + margin;
           if (p.y > height + margin) p.y = -margin;
 
-          // Opposite parallax position
-          const renderX = p.x + parallax.currentX * p.depth;
-          const renderY = p.y + parallax.currentY * p.depth;
+          // Ambient spread-out position with opposite parallax
+          const ambientX = p.x + parallax.currentX * p.depth;
+          const ambientY = p.y + parallax.currentY * p.depth;
+
+          let renderX = ambientX;
+          let renderY = ambientY;
+          let renderSize = p.size;
+
+          // Shrink into 3D sphere and spread across during tab switch or mobile bottom pull
+          if (sphereBlend > 0.001) {
+            const x1 = p.sx3d * cosY - p.sz3d * sinY;
+            const z1 = p.sx3d * sinY + p.sz3d * cosY;
+            const y2 = p.sy3d * cosX - z1 * sinX;
+            const z2 = p.sy3d * sinX + z1 * cosX;
+
+            const persp = 1 / (1 - z2 * 0.28);
+            const sphereX = centerX + x1 * sphereRadius * persp + parallax.currentX * 0.22;
+            const sphereY = centerY + y2 * sphereRadius * persp + parallax.currentY * 0.22;
+
+            renderX = ambientX + (sphereX - ambientX) * sphereBlend;
+            renderY = ambientY + (sphereY - ambientY) * sphereBlend;
+
+            const sphereParticleSize = p.size * (0.95 + 0.4 * persp);
+            renderSize = p.size + (sphereParticleSize - p.size) * sphereBlend;
+          }
 
           // Add to current path batch
-          ctx.moveTo(renderX + p.size, renderY);
-          ctx.arc(renderX, renderY, p.size, 0, Math.PI * 2);
+          ctx.moveTo(renderX + renderSize, renderY);
+          ctx.arc(renderX, renderY, renderSize, 0, Math.PI * 2);
         }
 
         ctx.fill();

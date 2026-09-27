@@ -47,7 +47,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           style={{ y: badgeY, opacity: badgeOpacity }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.15 }}
           className="flex items-center gap-3 mb-4"
         >
           <span className="inline-block w-2 h-2 rounded-full bg-[#00f3ff] animate-pulse" />
@@ -63,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           className="liquid-glass-text liquid-hover font-oswald text-[18vw] md:text-[15vw] leading-[0.8] font-bold uppercase tracking-tighter whitespace-nowrap cursor-default pb-4 will-change-transform"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
         >
           David
         </motion.h1>
@@ -72,7 +72,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           className="liquid-glass-text liquid-hover font-oswald text-[18vw] md:text-[15vw] leading-[0.8] font-bold uppercase tracking-tighter whitespace-nowrap ml-0 md:ml-24 cursor-default pb-4 will-change-transform"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.1, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
         >
           Varghese
         </motion.h1>
@@ -82,7 +82,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           style={{ y: badgeY, opacity: badgeOpacity }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          transition={{ duration: 0.9, delay: 0.3 }}
           className="mt-6 md:mt-8 ml-0 md:ml-24 max-w-2xl backdrop-blur-md bg-black/40 p-6 rounded-2xl border border-white/10 shadow-2xl"
         >
           <div className="text-xs font-mono text-[#00f3ff] uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -99,7 +99,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         style={{ opacity: scrollIndicatorOpacity, y: scrollIndicatorY }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.8 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
         className="flex justify-between items-end border-t border-neutral-800/80 pt-6 mt-6"
       >
         <button 

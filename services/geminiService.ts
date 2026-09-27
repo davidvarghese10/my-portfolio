@@ -17,7 +17,7 @@ export const getStoredApiKey = (): string => {
   const envKey = 
     process.env.API_KEY || 
     process.env.GEMINI_API_KEY || 
-    (typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env as any).VITE_GEMINI_API_KEY : '') ||
+    (typeof import.meta !== 'undefined' && (import.meta as any).env ? (import.meta as any).env.VITE_GEMINI_API_KEY : '') ||
     (typeof window !== 'undefined' && (window as any).GEMINI_API_KEY ? (window as any).GEMINI_API_KEY : '');
 
   return (envKey && typeof envKey === 'string') ? envKey.trim() : '';

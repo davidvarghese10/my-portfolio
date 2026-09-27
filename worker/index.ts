@@ -1,5 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
+interface Fetcher {
+  fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+}
+
 interface Env {
   ASSETS: Fetcher;
   GEMINI_API_KEY: string;
