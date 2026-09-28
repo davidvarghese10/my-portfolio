@@ -6,7 +6,7 @@ import About from './components/About';
 import Experience from './components/Experience';
 import Education from './components/Education';
 import Achievements from './components/Achievements';
-import Certificates from './components/Certificates';
+import Certificates from './components/Certificates';//hello
 import Footer from './components/Footer';
 import AIChat from './components/AIChat';
 import LiquidBackground from './components/LiquidBackground';
