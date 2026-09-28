@@ -141,6 +141,7 @@ const App: React.FC = () => {
     return initialPage;
   });
   const [isLoading, setIsLoading] = useState<boolean>(() => resolveCurrentPage() !== '404');
+  const [isContentReady, setIsContentReady] = useState<boolean>(() => resolveCurrentPage() === '404');
   const [sphereTransitionId, setSphereTransitionId] = useState<number>(0);
   const [isTabTransitioning, setIsTabTransitioning] = useState<boolean>(false);
   const tabTransitionTimerRef = React.useRef<number | null>(null);
@@ -442,7 +443,7 @@ const App: React.FC = () => {
           <NotFound onGoHome={() => handleNavigate('home')} />
         </div>
         <motion.div
-          className="glass-cursor fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999] hidden md:block"
+          className="glass-cursor-dark fixed top-0 left-0 w-5 h-5 rounded-full pointer-events-none z-[9999] hidden md:block"
           style={{
             x: cursorX,
             y: cursorY,
@@ -457,7 +458,9 @@ const App: React.FC = () => {
     <>
       {isLoading && (
         <AppleHelloLoader
+          onExitStart={() => setIsContentReady(true)}
           onComplete={() => {
+            setIsContentReady(true);
             setIsLoading(false);
           }}
         />
@@ -485,97 +488,97 @@ const App: React.FC = () => {
         
         <main ref={mainContentRef} className="flex-grow transition-transform duration-75 origin-center">
           <AnimatePresence mode="wait">
-            {!isLoading && !isTabTransitioning && activePage === 'home' && (
+            {isContentReady && !isTabTransitioning && activePage === 'home' && (
               <motion.div
                 key="home"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Hero onNavigate={handleNavigate} />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'projects' && (
+            {isContentReady && !isTabTransitioning && activePage === 'projects' && (
               <motion.div
                 key="projects"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <ProjectList />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'profile' && (
+            {isContentReady && !isTabTransitioning && activePage === 'profile' && (
               <motion.div
                 key="profile"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <About />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'experience' && (
+            {isContentReady && !isTabTransitioning && activePage === 'experience' && (
               <motion.div
                 key="experience"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Experience />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'education' && (
+            {isContentReady && !isTabTransitioning && activePage === 'education' && (
               <motion.div
                 key="education"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Education />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'achievements' && (
+            {isContentReady && !isTabTransitioning && activePage === 'achievements' && (
               <motion.div
                 key="achievements"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Achievements />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'certificates' && (
+            {isContentReady && !isTabTransitioning && activePage === 'certificates' && (
               <motion.div
                 key="certificates"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Certificates onModalChange={setIsCertificateModalOpen} />
               </motion.div>
             )}
 
-            {!isLoading && !isTabTransitioning && activePage === 'contact' && (
+            {isContentReady && !isTabTransitioning && activePage === 'contact' && (
               <motion.div
                 key="contact"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.16 } }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
               >
                 <Footer />
               </motion.div>
