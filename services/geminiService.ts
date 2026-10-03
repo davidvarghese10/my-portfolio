@@ -93,7 +93,7 @@ FEATURED PROJECTS:
    • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
    • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
 6. chip8-emulator (2026) — Category: Systems & C++
-   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling.
+   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling. It features Tetris, Pong and Pacman games.
    • GitHub: https://github.com/davidvarghese10/chip8-emulator.git
 7. Equora (2023) — Category: Python & Algorithms
    • Overview: High-performance mathematical and symbolic equation solver in Python.
