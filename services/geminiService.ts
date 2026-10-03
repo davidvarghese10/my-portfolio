@@ -77,17 +77,25 @@ FEATURED PROJECTS:
    • Features: Multi-modal transit planning, carbon footprint computation across transportation modes, eco-friendly route suggestions, and green commute optimization.
 2. Intevra (2026) — Category: AI & Security
    • Overview: AI-integrated interview fraud detection and integrity monitoring platform.
+   • GitHub: https://github.com/davidvarghese10/ai-for-hiring-3.git
    • Features: Multi-modal anomaly detection analyzing facial posture, eye gaze, multiple voices, background acoustic discrepancies, and browser focus/window switching.
    • Recognition: National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology).
-3. Aether (2026) — Category: Interactive Web & UI Engineering
+3. FolioBind (2026) — Category: Document Utility
+   • Overview: A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format.
+4. Aether (2026) — Category: Interactive Web & UI Engineering
    • Overview: Immersive Regional Weather Experience Application.
+   • GitHub: https://github.com/davidvarghese10/Aether.git
    • Tech Stack: React, TypeScript, Tailwind CSS, Framer Motion, Recharts.
    • Features: 60fps GPU-accelerated atmospheric visual layers, particle rain/cloud simulations, real-time regional meteorological metrics, and responsive interactive telemetry.
-4. MediSense AI (2026) — Category: Healthcare AI
+5. MediSense AI (2026) — Category: Healthcare AI
    • Overview: Machine learning disease prediction system evaluating patient-reported symptoms.
+   • GitHub: https://github.com/davidvarghese10/medisense-ai.git
    • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
    • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
-5. Equora (2023) — Category: Python & Algorithms
+6. chip8-emulator (2026) — Category: Systems & C++
+   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling.
+   • GitHub: https://github.com/davidvarghese10/chip8-emulator.git
+7. Equora (2023) — Category: Python & Algorithms
    • Overview: High-performance mathematical and symbolic equation solver in Python.
    • Features: Custom algebraic parser, polynomial root-finder, calculus differentiation & integration engines, and step-by-step mathematical reasoning.
 
@@ -277,17 +285,27 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
 
   // Intevra
   if (query.includes('intevra') || (query.includes('fraud') && query.includes('interview')) || query.includes('interview integrity') || query.includes('cheating detection') || query.includes('hacksus')) {
-    return "**Intevra (2026)** is an AI-powered interview fraud detection and integrity monitoring system.\n\n• **Core Purpose**: Prevents unfair practices and proxy test-taking in remote technical interviews.\n• **Technology & Intelligence**: Utilizes multi-modal machine learning signals to monitor facial posture, eye gaze tracking, background voices/speech anomalies, and real-time browser focus/window switching.\n• **Achievement**: Selected as a **National Level Hackathon Finalist** at Hacksus (Rajagiri School of Engineering & Technology).";
+    return "**Intevra (2026)** is an AI-powered interview fraud detection and integrity monitoring system.\n\n• **Core Purpose**: Prevents unfair practices and proxy test-taking in remote technical interviews.\n• **Technology & Intelligence**: Utilizes multi-modal machine learning signals to monitor facial posture, eye gaze tracking, background voices/speech anomalies, and real-time browser focus/window switching.\n• **Achievement**: Selected as a **National Level Hackathon Finalist** at Hacksus (Rajagiri School of Engineering & Technology).\n• **GitHub**: [ai-for-hiring-3](https://github.com/davidvarghese10/ai-for-hiring-3.git)";
+  }
+
+  // FolioBind
+  if (query.includes('foliobind') || query.includes('document merger') || query.includes('merge pdf') || query.includes('pdf docx')) {
+    return "**FolioBind (2026)** is a versatile document merger utility.\n\n• **Core Purpose**: Combines multiple PDF, DOCX, and PPTX files into a single unified document in your preferred supported format.\n• **Capabilities**: Fast document composition, cross-format document conversion, clean output formatting, and intuitive user workflow.";
   }
 
   // Aether
   if (query.includes('aether') || (query.includes('weather') && !query.includes('whether')) || query.includes('meteorolog') || query.includes('atmosphere')) {
-    return "**Aether (2026)** is an immersive regional weather experience application.\n\n• **Tech Stack**: Built with **React, TypeScript, Tailwind CSS, and Framer Motion** with Recharts.\n• **Key Features**: Delivers fluid 60fps atmospheric visualizations, GPU-accelerated particle rain/cloud simulation layers, and comprehensive regional telemetry (humidity, wind speed, precipitation curves, and UV indices).\n• **UI/UX Craft**: Focuses on micro-animations, glassmorphism aesthetics, and clean data visualizations.";
+    return "**Aether (2026)** is an immersive regional weather experience application.\n\n• **Tech Stack**: Built with **React, TypeScript, Tailwind CSS, and Framer Motion** with Recharts.\n• **Key Features**: Delivers fluid 60fps atmospheric visualizations, GPU-accelerated particle rain/cloud simulation layers, and comprehensive regional telemetry (humidity, wind speed, precipitation curves, and UV indices).\n• **GitHub**: [Aether](https://github.com/davidvarghese10/Aether.git)";
   }
 
   // MediSense AI
   if (query.includes('medisense') || query.includes('disease') || query.includes('symptom') || query.includes('health') || query.includes('medical') || query.includes('diagnosis')) {
-    return "**MediSense AI (2026)** is an intelligent healthcare disease prediction system.\n\n• **Core Purpose**: Predicts potential illnesses from user-reported symptom combinations with high statistical confidence.\n• **Tech Stack**: Engineered in **Python** using **Scikit-learn classification pipelines** and structured health datasets.\n• **Capabilities**: Provides probabilistic illness likelihoods, diagnostic explanations, and risk-factor breakdowns to assist users in understanding their symptoms.";
+    return "**MediSense AI (2026)** is an intelligent healthcare disease prediction system.\n\n• **Core Purpose**: Predicts potential illnesses from user-reported symptom combinations with high statistical confidence.\n• **Tech Stack**: Engineered in **Python** using **Scikit-learn classification pipelines** and structured health datasets.\n• **GitHub**: [medisense-ai](https://github.com/davidvarghese10/medisense-ai.git)";
+  }
+
+  // chip8-emulator
+  if (query.includes('chip8') || query.includes('chip-8') || query.includes('emulator') || query.includes('virtual machine') || query.includes('sdl2')) {
+    return "**chip8-emulator (2026)** is a hardware-accurate CHIP-8 virtual machine emulator.\n\n• **Tech Stack**: Implemented in **C++** with **SDL2** for graphics rendering and input handling, managed via custom **Makefiles**.\n• **Architecture**: Features accurate cycle-timing CPU instruction decoding, memory mapping, timers, graphics framebuffers, and keypad input processing.\n• **GitHub**: [chip8-emulator](https://github.com/davidvarghese10/chip8-emulator.git)";
   }
 
   // Equora
@@ -297,7 +315,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
 
   // General Projects Overview
   if (query.includes('project') || query.includes('portfolio') || query.includes('built') || query.includes('work') || query.includes('apps') || query.includes('showcase') || query.includes('best project')) {
-    return "David has developed 5+ projects, including:\n\n1. **EcoTrail (2026)** — Sustainable Transport Planner & Green Journey Optimizer\n2. **Intevra (2026)** — AI Interview Fraud Detection System (National Hackathon Finalist)\n3. **Aether (2026)** — Immersive Regional Weather Experience Application (React + Framer Motion)\n4. **MediSense AI (2026)** — Machine Learning Disease Prediction System (Python + Scikit-learn)\n5. **Equora (2023)** — High-Performance Python Mathematical & Symbolic Equation Solver\n\nYou can explore each project interactively in the **Projects** section!";
+    return "David has developed 7+ featured software projects, including:\n\n1. **EcoTrail (2026)** — Sustainable Transport Planner & Green Journey Optimizer\n2. **Intevra (2026)** — AI Interview Fraud Detection System (National Hackathon Finalist)\n3. **FolioBind (2026)** — Versatile Document Merger (PDF, DOCX, PPTX)\n4. **Aether (2026)** — Immersive Regional Weather Experience Application\n5. **MediSense AI (2026)** — Machine Learning Disease Prediction System\n6. **chip8-emulator (2026)** — Hardware-Accurate CHIP-8 Virtual Machine Emulator in C++/SDL2\n7. **Equora (2023)** — High-Performance Python Mathematical & Symbolic Equation Solver\n\nYou can explore each project interactively in the **Projects** section!";
   }
 
   // 11. Academic Record & Education
@@ -513,6 +531,42 @@ export const sendChatMessage = async (
     return "Please enter a question or topic to explore!";
   }
 
+  // 1. Try Direct Client-side Gemini SDK if API Key is configured
+  const client = getAIClient();
+  if (client) {
+    try {
+      const contents = [
+        ...history.slice(-6).map((msg) => ({
+          role: msg.role === "user" ? ("user" as const) : ("model" as const),
+          parts: [{ text: msg.text }]
+        })),
+        { role: "user" as const, parts: [{ text: trimmed }] }
+      ];
+
+      for (const model of MODELS_TO_TRY) {
+        try {
+          const response = await client.models.generateContent({
+            model,
+            contents,
+            config: {
+              systemInstruction: SYSTEM_INSTRUCTION,
+              maxOutputTokens: 250
+            }
+          });
+
+          if (response.text?.trim()) {
+            return response.text.trim();
+          }
+        } catch {
+          // Continue to next model fallback
+        }
+      }
+    } catch {
+      // Proceed to next strategy
+    }
+  }
+
+  // 2. Try proxy / server endpoint (/api/gemini) safely without throwing on non-JSON
   try {
     const response = await fetch("/api/gemini", {
       method: "POST",
@@ -528,19 +582,24 @@ export const sendChatMessage = async (
       })
     });
 
-    const data = await response.json();
-
-    if (response.ok && data.text?.trim()) {
-      return data.text.trim();
+    const contentType = response.headers.get("content-type") || "";
+    if (response.ok && contentType.includes("application/json")) {
+      const rawText = await response.text();
+      if (rawText && rawText.trim()) {
+        try {
+          const data = JSON.parse(rawText);
+          if (data && typeof data.text === "string" && data.text.trim()) {
+            return data.text.trim();
+          }
+        } catch {
+          // JSON parse failed; proceed to offline engine
+        }
+      }
     }
-
-    // Gemini/Worker failed → use offline engine
-    return getOfflinePortfolioAnswer(trimmed, history);
-
-  } catch (error) {
-    console.error("Gemini request failed:", error);
-
-    // Network/connection failure → use offline engine
-    return getOfflinePortfolioAnswer(trimmed, history);
+  } catch {
+    // Network or worker unavailable; proceed to offline engine
   }
+
+  // 3. Fallback to comprehensive offline knowledge engine
+  return getOfflinePortfolioAnswer(trimmed, history);
 };
