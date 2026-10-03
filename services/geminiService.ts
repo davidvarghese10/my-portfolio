@@ -81,7 +81,7 @@ FEATURED PROJECTS:
    • Features: Multi-modal anomaly detection analyzing facial posture, eye gaze, multiple voices, background acoustic discrepancies, and browser focus/window switching.
    • Recognition: National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology).
 3. FolioBind (2026) — Category: Document Utility
-   • Overview: A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format.
+   • Overview: Advanced multiple PDF, DOCX, PPTX files merger.
    • Live Application: https://davidvarghese10.github.io/folio-bind/
 4. Aether (2026) — Category: Interactive Web & UI Engineering
    • Overview: Immersive Regional Weather Experience Application.
@@ -94,7 +94,7 @@ FEATURED PROJECTS:
    • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
    • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
 6. chip8-emulator (2026) — Category: Systems & C++
-   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling.
+   • Overview: A virtual emulator of chip8 system with retro games like tetris, pong and pacman. Implemented in C++ with SDL2 for rendering and input handling.
    • GitHub: https://github.com/davidvarghese10/chip8-emulator.git
 7. Equora (2023) — Category: Python & Algorithms
    • Overview: High-performance mathematical and symbolic equation solver in Python.
@@ -455,8 +455,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
   if (
     query.includes('hire') || query.includes('job') || query.includes('intern') ||
     query.includes('freelance') || query.includes('opportunity') || query.includes('collaborat') ||
-    query.includes('work with') || query.includes('why should i hire') || query.includes('strengths') ||
-    query.includes('resume') || query.includes('cv')
+    query.includes('work with') || query.includes('why should i hire') || query.includes('strengths')
   ) {
     return "**Why Work with David Varghese?**\n\n• **Academic Distinction**: Flawless 10.00 / 10.00 SGPA in B.Tech CSE at Rajagiri.\n• **Proven Hackathon Execution**: National Level Finalist at Hacksus with Intevra; 3rd Prize winner at Vibe Night.\n• **Strong Algorithmic Foundation**: Deep DSA expertise in C/Java and regular problem-solving on LeetCode (`david_1000`).\n• **Security & Full-Stack Rigor**: 41+ verified certifications (IBM, Cisco, Microsoft, HP).\n\nDavid is open to software engineering internships, technical collaborations, and hackathon teams! Reach him at **david3005.scd@gmail.com**.";
   }
