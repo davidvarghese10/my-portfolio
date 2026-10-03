@@ -7,9 +7,15 @@ interface HeaderProps {
   activePage: PageTab;
   onNavigate: (page: PageTab) => void;
   isHidden?: boolean;
+  isTabLoaded?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ activePage, onNavigate, isHidden = false }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  activePage, 
+  onNavigate, 
+  isHidden = false,
+  isTabLoaded = true,
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNav = (page: PageTab) => {
@@ -58,19 +64,22 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate, isHidden = fals
           <span className="text-white">Varghese</span>
         </button>
 
-        {/* Selected Tab Display at Center Top (hidden on Home, Mobile, and while Menu is Open) */}
-        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center pointer-events-none">
+        {/* Selected Tab Display at Center Top (hidden on Home, 404, while Menu is Open, and only appears after spherical animation when elements load) */}
+        <div className="flex absolute left-1/2 -translate-x-1/2 items-center pointer-events-none">
           <AnimatePresence mode="wait">
-            {activePage !== 'home' && !menuOpen && (
+            {!menuOpen && activePage !== '404' && activePage !== 'home' && isTabLoaded && (
               <motion.div
                 key={activePage}
                 initial={{ opacity: 0, scale: 0.9, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 4 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-[#00f3ff] bg-[#00f3ff]/10 shadow-[0_0_15px_rgba(0,243,255,0.25)] border border-[#00f3ff]/30 backdrop-blur-md pointer-events-auto"
+                className="flex items-center justify-center px-4 py-1 md:py-1.5 rounded-full text-[11px] md:text-xs font-bold uppercase tracking-widest text-[#00f3ff] bg-[#00f3ff]/10 shadow-[0_0_15px_rgba(0,243,255,0.25)] border border-[#00f3ff]/30 backdrop-blur-md pointer-events-auto"
               >
-                <span>{activeLabel}</span>
+                {/* Tab name text centered without left gap */}
+                <span className="inline-block text-center">
+                  {activeLabel}
+                </span>
               </motion.div>
             )}
           </AnimatePresence>

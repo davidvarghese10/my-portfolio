@@ -27,26 +27,46 @@ export const PROJECTS: Project[] = [
     category: "AI & Security",
     year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=10",
-    description: "AI integrated interview fraud detection system."
+    description: "AI integrated interview fraud detection system.",
+    link: "https://github.com/davidvarghese10/ai-for-hiring-3.git"
   },
   {
     id: 3,
+    title: "FolioBind",
+    category: "Document Utility",
+    year: "2026",
+    image: "https://picsum.photos/800/600?grayscale&random=60",
+    description: "A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format."
+  },
+  {
+    id: 4,
     title: "Aether",
     category: "Interactive Web",
     year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=20",
-    description: "Immersive Regional Weather Experience Application."
+    description: "Immersive Regional Weather Experience Application.",
+    link: "https://github.com/davidvarghese10/Aether.git"
   },
   {
-    id: 4,
+    id: 5,
     title: "MediSense AI",
     category: "Healthcare AI",
     year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=30",
-    description: "A disease prediction system based on the symptoms provided."
+    description: "A disease prediction system based on the symptoms provided.",
+    link: "https://github.com/davidvarghese10/medisense-ai.git"
   },
   {
-    id: 5,
+    id: 6,
+    title: "chip8-emulator",
+    category: "Systems & C++",
+    year: "2026",
+    image: "https://picsum.photos/800/600?grayscale&random=70",
+    description: "Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling.",
+    link: "https://github.com/davidvarghese10/chip8-emulator.git"
+  },
+  {
+    id: 7,
     title: "Equora",
     category: "Python & Algorithms",
     year: "2023",
@@ -59,9 +79,10 @@ export const SKILLS_DATA: SkillData[] = [
   { subject: 'Python & AI', A: 95, fullMark: 100 },
   { subject: 'React & TS', A: 90, fullMark: 100 },
   { subject: 'OOP in Java', A: 88, fullMark: 100 },
-  { subject: 'C Programming', A: 92, fullMark: 100 },
+  { subject: 'C & C++', A: 92, fullMark: 100 },
   { subject: 'DSA', A: 90, fullMark: 100 },
+  { subject: 'MySQL', A: 88, fullMark: 100 },
   { subject: 'Cybersecurity', A: 85, fullMark: 100 },
-  { subject: 'Cloud & Tools', A: 80, fullMark: 100 },
-  { subject: 'UI / UX Design', A: 85, fullMark: 100 },
+  { subject: 'Cloud & Tools', A: 90, fullMark: 100 },
+  { subject: 'UI / UX Design', A: 98, fullMark: 100 },
 ];

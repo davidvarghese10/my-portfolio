@@ -484,7 +484,12 @@ const App: React.FC = () => {
       </div>
       
       <div className="relative z-10 md:cursor-none min-h-screen flex flex-col justify-between">
-        <Header activePage={activePage} onNavigate={handleNavigate} isHidden={isCertificateModalOpen} />
+        <Header 
+          activePage={activePage} 
+          onNavigate={handleNavigate} 
+          isHidden={isCertificateModalOpen} 
+          isTabLoaded={isContentReady && !isTabTransitioning}
+        />
         
         <main ref={mainContentRef} className="flex-grow transition-transform duration-75 origin-center">
           <AnimatePresence mode="wait">

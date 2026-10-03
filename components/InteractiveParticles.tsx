@@ -318,9 +318,40 @@ export const InteractiveParticles: React.FC<InteractiveParticlesProps> = ({
       }
     };
 
+    let lastWidth = window.innerWidth;
+    let lastHeight = window.innerHeight;
+
     const handleResize = () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      // Mobile address bar collapsing or expanding during scroll changes height slightly without width change
+      const isMobileScrollResize = newWidth === lastWidth && Math.abs(newHeight - lastHeight) < 160;
+
+      if (isMobileScrollResize) {
+        width = newWidth;
+        height = newHeight;
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        lastHeight = newHeight;
+        return;
+      }
+
+      // If genuine orientation or large screen resize occurred, scale existing particles proportionally
+      if (particles.length > 0 && width > 0 && height > 0) {
+        const scaleX = newWidth / width;
+        const scaleY = newHeight / height;
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].x *= scaleX;
+          particles[i].y *= scaleY;
+        }
+      }
+
+      lastWidth = newWidth;
+      lastHeight = newHeight;
       initDimensions();
-      initParticles();
     };
 
     // Register all sensor listeners immediately (Android Chrome / standard browsers activate immediately)

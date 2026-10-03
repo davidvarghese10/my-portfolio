@@ -90,7 +90,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             // About Me
           </div>
           <p className="text-neutral-300 text-sm md:text-base font-normal leading-relaxed">
-            I’m a CSE student and an aspiring software developer with an interest in cybersecurity and emerging technologies. I enjoy building practical projects, participating in hackathons, and exploring new tools and technologies. I’m always looking to improve my technical and problem-solving skills and turn ideas into useful solutions.
+            I’m a CSE student and an aspiring software developer passionate about technology, problem-solving, and innovation. My interests span frontend development, UI/UX exploration, Android app development, cybersecurity, and emerging technologies. I enjoy building practical projects, participating in hackathons, and experimenting with new tools and technologies. I’m always eager to learn, take on new challenges, and turn creative ideas into impactful solutions.
           </p>
         </motion.div>
       </div>
