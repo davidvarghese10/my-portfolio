@@ -21,10 +21,8 @@ He has a perfect 10.00 / 10.00 SGPA in his first two semesters.
 Featured projects:
 - EcoTrail — sustainable transport planner for eco-friendly journeys and transit optimization.
 - Intevra — AI-integrated interview fraud detection and integrity monitoring platform.
-- FolioBind - A website where you can merge multiple PDF, DOCX, PPTX files into one single file.
 - Aether — immersive regional weather experience application built with React and TypeScript.
 - MediSense AI — machine-learning disease prediction system.
-- Chip8 Emulator - A C++-based CHIP-8 emulator capable of running classic games like Tetris, Pong, and Pac-Man.
 - Equora — Python-based mathematical and symbolic equation solver.
 
 Technical skills include Python, Java, C/C++, TypeScript, JavaScript, React, Tailwind CSS, Node.js, SQL, cybersecurity, machine learning, and DSA.

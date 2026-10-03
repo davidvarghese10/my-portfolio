@@ -94,7 +94,7 @@ FEATURED PROJECTS:
    • Tech Stack: Python, Scikit-learn, statistical data preprocessing pipelines.
    • Features: Multi-symptom probability scoring, predictive diagnostic insights, and transparent risk factor breakdown.
 6. chip8-emulator (2026) — Category: Systems & C++
-   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling. It features Tetris, Pong and Pacman games.
+   • Overview: Hardware-accurate CHIP-8 virtual machine emulator implemented in C++ with SDL2 for rendering and input handling.
    • GitHub: https://github.com/davidvarghese10/chip8-emulator.git
 7. Equora (2023) — Category: Python & Algorithms
    • Overview: High-performance mathematical and symbolic equation solver in Python.
@@ -232,7 +232,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
     query === 'help' || query.includes('commands') || query.includes('menu') || query.includes('topics') ||
     query.includes('what should i ask') || query.includes('what can i ask')
   ) {
-    return "Here are the main areas you can explore with me:\n\n• **Featured Projects (7+)**: EcoTrail (sustainable transport planner), Intevra (AI interview fraud detection), FolioBind(PDF/DOCX/PPTX Merger). Aether (interactive weather), MediSense AI (disease predictor),Chip8 Emulator(Using SDL2, Make), Equora (equation solver)\n• **Academic Background**: B.Tech CSE at Rajagiri School of Engineering & Technology (10.00 SGPA), Devamatha CMI (96%), CMI Chalakudy (97.6%)\n• **Technical Toolkit**: Python, Java (OOP), C Programming, DSA, React, TypeScript, Tailwind CSS, Cybersecurity, Machine Learning\n• **Industry Experience**: 4-Week Technical Internship with Edunet Foundation & IBM SkillsBuild\n• **Certifications**: 41 total accreditations across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE, Google\n• **Hackathons & Honors**: Vibe Night 3rd Prize, Hacksus National Finalist, Smart India Hackathon (SIH), LeetCode (`david_1000`)\n• **Contact & Socials**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub, LeetCode";
+    return "Here are the main areas you can explore with me:\n\n• **Featured Projects (5+)**: EcoTrail (sustainable transport planner), Intevra (AI interview fraud detection), Aether (interactive weather), MediSense AI (disease predictor), Equora (equation solver)\n• **Academic Background**: B.Tech CSE at Rajagiri School of Engineering & Technology (10.00 SGPA), Devamatha CMI (96%), CMI Chalakudy (97.6%)\n• **Technical Toolkit**: Python, Java (OOP), C Programming, DSA, React, TypeScript, Tailwind CSS, Cybersecurity, Machine Learning\n• **Industry Experience**: 4-Week Technical Internship with Edunet Foundation & IBM SkillsBuild\n• **Certifications**: 41 total accreditations across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE, Google\n• **Hackathons & Honors**: Vibe Night 3rd Prize, Hacksus National Finalist, Smart India Hackathon (SIH), LeetCode (`david_1000`)\n• **Contact & Socials**: Email (`david3005.scd@gmail.com`), LinkedIn, GitHub, LeetCode";
   }
 
   // 6. Gratitude, Compliments & Praise
@@ -272,7 +272,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
     const facts = [
       "💡 **Fun Fact**: David holds a perfect 10.00 / 10.00 SGPA across his initial semesters in Computer Science at Rajagiri School of Engineering & Technology!",
       "💡 **Fun Fact**: David's project **Intevra** monitors multiple multi-modal integrity cues simultaneously—such as facial posture, eye gaze, and background acoustic anomalies—to detect remote interview fraud in real time!",
-      "💡 **Fun Fact**: David has built 7+ featured software projects, including **EcoTrail** (sustainable transport planner) and **Aether** (interactive weather)!",
+      "💡 **Fun Fact**: David has built 5+ featured software projects, including **EcoTrail** (sustainable transport planner) and **Aether** (interactive weather)!",
       "💡 **Fun Fact**: David has earned 41 professional certifications from top organizations like IBM, Cisco, Microsoft, HP, and Deloitte!"
     ];
     return facts[Math.floor(Math.random() * facts.length)];
@@ -291,7 +291,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
 
   // FolioBind
   if (query.includes('foliobind') || query.includes('document merger') || query.includes('merge pdf') || query.includes('pdf docx')) {
-    return "**FolioBind (2026)** is a versatile document merger utility.\n\n• **Core Purpose**: Combines multiple PDF, DOCX, and PPTX files into a single unified document in your preferred supported format.\n• **Live Application**: [FolioBind](https://davidvarghese10.github.io/folio-bind/)\n• **Capabilities**: Fast document composition, cross-format document conversion, clean output formatting, and intuitive user workflow.";
+    return "**FolioBind (2026)** is a versatile document merger utility.\n\n• **Core Purpose**: Combines multiple PDF, DOCX, and PPTX files into a single unified document in your preferred supported format.\n• **Capabilities**: Fast document composition, cross-format document conversion, clean output formatting, and intuitive user workflow.";
   }
 
   // Aether
@@ -515,7 +515,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
   return `I'm **Livoq**, David Varghese's AI assistant! 
 
 Here are some topics you can ask me about:
-• **Featured Projects (7+)**: EcoTrail (sustainable transport planner), Intevra (AI fraud detection), Aether (interactive weather), MediSense AI, Equora, FolioBind
+• **Featured Projects (5+)**: EcoTrail (sustainable transport planner), Intevra (AI fraud detection), Aether (interactive weather), MediSense AI, Equora
 • **Academic Record**: Perfect 10.00 SGPA at Rajagiri (RSET), Class XII (96.0%), Class X (97.6%)
 • **Certifications**: 41+ credentials across IBM, Cisco, Microsoft, HP, Infosys, Deloitte, IEEE
 • **Technical Skills**: Python, Java (OOP), C/DSA, React, TypeScript, Cybersecurity
