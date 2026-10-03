@@ -17,13 +17,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&family=Oswald:wght@400;500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Caveat:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&family=Oswald:wght@400;500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       :root {
         --neon-blue: #00f3ff;
       }
       
-      /* Custom cursor exclusively for pointer-enabled desktop devices */
+      /* Custom cursor exclusively for pointer-enabled desktop device */
       @media (hover: hover) and (pointer: fine) {
         html, body, *, a, button, input, textarea, .hover-target {
           cursor: none !important;
@@ -63,28 +63,24 @@
         box-shadow: none !important;
       }
       
-      /* Apple-style Liquid Glass Text Effect */
+      /* Apple-style Liquid Glass Text Effect (GPU-optimized: diagonal blue light animation without heavy drop-shadow filter) */
       .liquid-glass-text {
-        color: rgba(255, 255, 255, 0.1); /* Transparent base */
+        color: rgba(255, 255, 255, 0.1);
         background: linear-gradient(
           135deg, 
-          rgba(255,255,255,0.9) 0%, 
-          rgba(255,255,255,0.4) 25%, 
+          rgba(255,255,255,0.92) 0%, 
+          rgba(255,255,255,0.42) 25%, 
           #00f3ff 50%, 
-          rgba(255,255,255,0.4) 75%, 
-          rgba(255,255,255,0.9) 100%
+          rgba(255,255,255,0.42) 75%, 
+          rgba(255,255,255,0.92) 100%
         );
         background-size: 200% 200%;
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
-        
-        /* Soft inner glow simulation */
-        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3));
-        
         animation: glass-shine 4s ease-in-out infinite;
       }
-      
+
       @keyframes glass-shine {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -97,65 +93,56 @@
         border: 1px solid rgba(0, 243, 255, 0.45);
         box-shadow: 
           inset 1px 1px 1.5px rgba(255, 255, 255, 0.7),
-          inset -1px -1px 2px rgba(0, 243, 255, 0.2),
-          0 0 5px rgba(0, 243, 255, 0.25);
+          0 0 4px rgba(0, 243, 255, 0.25);
         border-radius: 50%;
         pointer-events: none;
         z-index: 9999;
+        will-change: transform;
+      }
+
+      /* Darker Blue Liquid Glass Cursor for Light Backgrounds (404 Page) */
+      .glass-cursor-dark {
+        background: rgba(2, 102, 200, 0.14);
+        border: 1.5px solid rgba(3, 105, 161, 0.88);
+        box-shadow: 
+          inset 1px 1px 1.5px rgba(255, 255, 255, 0.85),
+          inset -1px -1px 2px rgba(3, 105, 161, 0.35),
+          0 2px 6px rgba(2, 102, 200, 0.35);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        will-change: transform;
       }
 
       /* Liquid Glass Button for AI Chat */
       .liquid-glass-button {
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        background: rgba(8, 12, 18, 0.78);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.15);
         box-shadow: 
-          inset 0 0 12px rgba(255, 255, 255, 0.05),
-          0 8px 32px rgba(0, 0, 0, 0.4);
+          inset 0 0 10px rgba(255, 255, 255, 0.04),
+          0 6px 20px rgba(0, 0, 0, 0.4);
         color: #00f3ff;
-        transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+        transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
       }
 
       .liquid-glass-button:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(14, 22, 32, 0.88);
         box-shadow: 
-          inset 0 0 20px rgba(255, 255, 255, 0.1),
-          0 0 25px rgba(0, 243, 255, 0.4);
+          inset 0 0 14px rgba(255, 255, 255, 0.08),
+          0 0 18px rgba(0, 243, 255, 0.35);
         border-color: rgba(0, 243, 255, 0.4);
         color: #fff;
       }
 
-      /* SVG Filter Utility */
       .liquid-hover {
-        /* Ensure GPU acceleration for smoothness */
         transform: translateZ(0);
-        will-change: filter;
-      }
-      
-      .liquid-hover:hover {
-        filter: url(#liquid-distortion);
       }
     </style>
-  <script type="module" crossorigin src="./assets/index-C5z-yDS5.js"></script>
+  <script type="module" crossorigin src="./assets/index-SqDPSfPl.js"></script>
 </head>
   <body>
     <div id="root"></div>
-
-    <!-- Global SVG Filters -->
-    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
-      <defs>
-        <!-- 
-          Optimized for minimal distortion ("crushing") while keeping fluid motion.
-          Low baseFrequency = larger waves. Scale = 1 for gentle displacement.
-        -->
-        <filter id="liquid-distortion" x="-50%" y="-50%" width="200%" height="200%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.002" numOctaves="1" result="noise" seed="1">
-             <animate attributeName="baseFrequency" dur="12s" values="0.002;0.003;0.002" repeatCount="indefinite" />
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </defs>
-    </svg>
   </body>
 </html>
