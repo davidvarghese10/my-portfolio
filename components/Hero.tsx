@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { PageTab } from '../types';
+import ParachuteDownloadButton from './ParachuteDownloadButton';
 
 interface HeroProps {
   onNavigate?: (page: PageTab) => void;
@@ -92,6 +93,17 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           <p className="text-neutral-300 text-sm md:text-base font-normal leading-relaxed">
             I’m a CSE student and an aspiring software developer passionate about technology, problem-solving, and innovation. My interests span frontend development, UI/UX exploration, Android app development, cybersecurity, and emerging technologies. I enjoy building practical projects, participating in hackathons, and experimenting with new tools and technologies. I’m always eager to learn, take on new challenges, and turn creative ideas into impactful solutions.
           </p>
+        </motion.div>
+
+        {/* Download Resume Button with Parachute Animation from Video */}
+        <motion.div
+          style={{ y: badgeY, opacity: badgeOpacity }}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.16 }}
+          className="mt-8 ml-0 md:ml-24 flex items-center"
+        >
+          <ParachuteDownloadButton />
         </motion.div>
       </div>
 

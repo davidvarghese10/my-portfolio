@@ -82,6 +82,7 @@ FEATURED PROJECTS:
    • Recognition: National Level Hackathon Finalist at Hacksus (Rajagiri School of Engineering & Technology).
 3. FolioBind (2026) — Category: Document Utility
    • Overview: A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format.
+   • Live Application: https://davidvarghese10.github.io/folio-bind/
 4. Aether (2026) — Category: Interactive Web & UI Engineering
    • Overview: Immersive Regional Weather Experience Application.
    • GitHub: https://github.com/davidvarghese10/Aether.git
@@ -290,7 +291,7 @@ export const getOfflinePortfolioAnswer = (msg: string, history: ChatMessage[] = 
 
   // FolioBind
   if (query.includes('foliobind') || query.includes('document merger') || query.includes('merge pdf') || query.includes('pdf docx')) {
-    return "**FolioBind (2026)** is a versatile document merger utility.\n\n• **Core Purpose**: Combines multiple PDF, DOCX, and PPTX files into a single unified document in your preferred supported format.\n• **Capabilities**: Fast document composition, cross-format document conversion, clean output formatting, and intuitive user workflow.";
+    return "**FolioBind (2026)** is a versatile document merger utility.\n\n• **Core Purpose**: Combines multiple PDF, DOCX, and PPTX files into a single unified document in your preferred supported format.\n• **Live Application**: [FolioBind](https://davidvarghese10.github.io/folio-bind/)\n• **Capabilities**: Fast document composition, cross-format document conversion, clean output formatting, and intuitive user workflow.";
   }
 
   // Aether

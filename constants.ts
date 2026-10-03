@@ -36,7 +36,8 @@ export const PROJECTS: Project[] = [
     category: "Document Utility",
     year: "2026",
     image: "https://picsum.photos/800/600?grayscale&random=60",
-    description: "A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format."
+    description: "A versatile document merger that combines multiple PDF, DOCX, and PPTX files into a single document in your preferred supported format.",
+    link: "https://davidvarghese10.github.io/folio-bind/"
   },
   {
     id: 4,
