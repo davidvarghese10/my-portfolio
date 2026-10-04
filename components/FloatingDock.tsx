@@ -45,7 +45,7 @@ const DOCK_ITEMS: DockItemData[] = [
   },
   {
     title: 'Instagram',
-    href: 'https://instagram.com',
+    href: 'https://instagram.com/d_a_v_i_d_s_c_d',
     icon: <Instagram size={21} strokeWidth={1.75} />,
     brandColor: 'hover:!text-[#E1306C] hover:!border-[#E1306C]/80 hover:bg-[#E1306C]/15',
     glowColor: 'rgba(225, 48, 108, 0.5)',
